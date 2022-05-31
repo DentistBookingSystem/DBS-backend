@@ -25,4 +25,7 @@ public interface ServiceSv {
     boolean existsById(Integer integer);
 
     Service deleteService(int id);
+
+    // load danh service có status bằng 1, active
+    List<Service> loadAllActiveService();
 }

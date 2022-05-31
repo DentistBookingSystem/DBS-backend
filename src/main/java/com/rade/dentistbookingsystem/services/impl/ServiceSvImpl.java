@@ -8,6 +8,7 @@ import com.rade.dentistbookingsystem.services.ServiceSv;
 import com.rade.dentistbookingsystem.services.ServiceTypeSv;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,5 +93,18 @@ public class ServiceSvImpl implements ServiceSv {
         }
         return null;
 
+    }
+
+    // load danh service có status bằng 1, active
+    @Override
+    public List<Service> loadAllActiveService() {
+        List<Service> activeList = new ArrayList<>();
+        List<Service> serviceList = serviceRepo.findAll();
+        for (Service service : serviceList) {
+            if (service.getStatus() == 1) {
+                activeList.add(service);
+            }
+        }
+        return activeList;
     }
 }

@@ -83,6 +83,10 @@ public class ServiceController {
         return serviceSv.findByServiceTypeId(id);
     }
 
+    @GetMapping("service/list")
+    public List<Service> loadActiveService() {
+        return serviceSv.loadAllActiveService();
+    }
 
     @PostMapping(value = "/service/add-image")
     public ResponseEntity<?> addServiceImg(@RequestParam MultipartFile url) throws Exception {
