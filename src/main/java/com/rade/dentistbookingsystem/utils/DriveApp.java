@@ -56,7 +56,6 @@ public class DriveApp {
 
     public static void main(String[] args) throws IOException, GeneralSecurityException {
         System.out.println("CREDENTIALS_FOLDER: " + CREDENTIALS_FOLDER.getAbsolutePath());
-
         // 1: Create CREDENTIALS_FOLDER
         if (!CREDENTIALS_FOLDER.exists()) {
             CREDENTIALS_FOLDER.mkdirs();

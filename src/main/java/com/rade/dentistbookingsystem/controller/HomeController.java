@@ -29,4 +29,6 @@ public class HomeController {
     public HomeComponent list(Model model){
         return new HomeComponent(serviceTypeSv.findAll(), branchService.findAll());
     }
+
+
 }

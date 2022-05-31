@@ -51,4 +51,15 @@ public class Service implements Serializable {
     @OneToMany(mappedBy = "service")
     @JsonIgnore
     private Set<Feedback> feedbackSet;
+
+
+    public Service(ServiceType byId, String name, String url, String description, short status, float min_price, float max_price) {
+        this.serviceType = byId;
+        this.name = name;
+        this.url = url;
+        this.description = description;
+        this.status = status;
+        this.min_price = min_price;
+        this.max_price = max_price;
+    }
 }

@@ -1,6 +1,7 @@
 package com.rade.dentistbookingsystem.services;
 
 import com.rade.dentistbookingsystem.domain.ServiceType;
+import com.rade.dentistbookingsystem.model.ServiceTypeDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -24,4 +25,12 @@ public interface ServiceTypeSv {
     ServiceType getById(Integer id);
 
     <S extends ServiceType> S save(S entity);
+
+    ServiceType insert(ServiceTypeDTO serviceTypeDTO);
+
+    boolean existsById(Integer integer);
+
+    Optional<ServiceType> findById(Integer integer);
+
+    ServiceType edit(ServiceTypeDTO serviceTypeDTO, int id);
 }

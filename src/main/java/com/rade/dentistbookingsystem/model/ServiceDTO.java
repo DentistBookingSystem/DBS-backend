@@ -4,18 +4,44 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.*;
 import java.io.Serializable;
 
-@AllArgsConstructor
+
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
-public class ServiceDTO  implements Serializable {
+public class ServiceDTO implements Serializable {
+
     private int id;
+    @NotNull(message = "Service type id is required")
     private int service_type_id;
+
+    @NotNull(message = "Service type name is required")
+    @NotBlank(message = "Service type name is required")
+    @NotEmpty(message = "Service type name is required")
+    @Size(min = 8, max = 30, message = "Service name's length from 8 to 30")
     private String name;
+
+    //    @NotNull(message = "Service image is required")
+//    @NotEmpty(message = "Service image is required")
+    private String url;
+
+    @NotNull(message = "Service description is required")
+    @NotBlank(message = "Service description is required")
+    @NotEmpty(message = "Service description is required")
     private String description;
-    private int status;
+
+    @NotNull(message = "Service status must be defined")
+    private short status;
+
+    @NotNull(message = "Service min price is required")
+    @Min(value = 1, message = " Min price must be  greater than 0")
     private float min_price;
+
+    @NotNull(message = "Service max price is required")
+    @Min(value = 1, message = " Max price must be  greater than 0")
     private float max_price;
+
 
 }

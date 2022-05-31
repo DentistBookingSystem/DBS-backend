@@ -11,4 +11,6 @@ public interface ServiceTypeRepo extends JpaRepository<ServiceType, Integer> {
 
     @Query(value = "SELECT * FROM Service WHERE service_type_id = ?1", nativeQuery = true)
     ServiceType findId(Integer id);
+
+
 }

@@ -1,8 +1,10 @@
 package com.rade.dentistbookingsystem.services.impl;
 
 import com.rade.dentistbookingsystem.domain.ServiceType;
+import com.rade.dentistbookingsystem.model.ServiceTypeDTO;
 import com.rade.dentistbookingsystem.repository.ServiceTypeRepo;
 import com.rade.dentistbookingsystem.services.ServiceTypeSv;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -50,6 +52,43 @@ public class ServiceTypeSvImpl implements ServiceTypeSv {
     public void deleteById(Integer id) {
         serviceTypeRepo.deleteById(id);
     }
-    
-    
+
+
+    @Override
+    public ServiceType insert(ServiceTypeDTO serviceTypeDTO) {
+        ServiceType serviceType = new ServiceType(serviceTypeDTO.getName(), serviceTypeDTO.getDescription());
+        return save(serviceType);
+
+    }
+
+    @Override
+    public boolean existsById(Integer integer) {
+        return serviceTypeRepo.existsById(integer);
+    }
+
+
+    @Override
+    public Optional<ServiceType> findById(Integer integer) {
+        return serviceTypeRepo.findById(integer);
+    }
+
+    @Override
+    public ServiceType edit(ServiceTypeDTO serviceTypeDTO, int id) {
+        Optional<ServiceType> serviceTypeData = findById(id);
+        if (serviceTypeData.isPresent()) {
+            ServiceType serviceType = serviceTypeData.get();
+            serviceType.setName(serviceTypeDTO.getName());
+            serviceType.setDescription(serviceTypeDTO.getDescription());
+
+            return save(serviceType);
+        }
+        return null;
+
+    }
+
+    public <S extends ServiceType> List<S> findAll(Example<S> example) {
+        return serviceTypeRepo.findAll(example);
+    }
+
+
 }

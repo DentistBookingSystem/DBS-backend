@@ -10,4 +10,6 @@ public interface ServiceRepo extends JpaRepository<Service, Integer> {
     public List<Service> findByServiceType(ServiceType serviceType);
 
     public List<Service> findByServiceTypeId(int id);
+
+
 }

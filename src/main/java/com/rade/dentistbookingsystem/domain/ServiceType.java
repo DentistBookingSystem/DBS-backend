@@ -27,4 +27,9 @@ public class ServiceType implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "serviceType", cascade = CascadeType.ALL)
     private Set<Service> serviceSet;
+
+    public ServiceType(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }
