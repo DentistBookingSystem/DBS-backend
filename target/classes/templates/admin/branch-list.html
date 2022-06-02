@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Page branch list for admin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <a href="/admin/branch/add">Add a branch</a><br>
+    <th:block th:each="branch : ${branchList}">
+        <img th:src="@{${'https://drive.google.com/uc?id=' + branch.url}}">
+        <p th:text="${branch.name}"></p>
+        <p th:text="${branch.district.name}"></p>
+        <p th:text="${branch.district.province.name}"></p>
+        <p th:text="${#dates.format(branch.open_time, 'HH:mm')}+' - '+${#dates.format(branch.close_time, 'HH:mm')}"></p>
+        <p th:text="${branch.status}"></p>
+        <a th:href="'admin/branch/edit/'+${branch.name}">Edit</a><br>
+    </th:block>
+</body>
+</html>

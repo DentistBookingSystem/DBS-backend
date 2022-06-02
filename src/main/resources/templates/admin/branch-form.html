@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Branch form</title>
+</head>
+<body>
+<form action="/admin/branch/add" enctype='multipart/form-data' method="post" th:object="${branchDTO}">
+    <table>
+        <tr>
+            <td>Name</td>
+            <td><input id="name" name="name" th:field="*{name}" th:value="*{name}"/></td>
+            <td id="name-error" th:errors="*{name}" th:if="${#fields.hasErrors('name')}"></td>
+        </tr>
+        <tr>
+            <td>Province</td>
+            <td>
+                <select>
+                    <option value="">Select province</option>
+                    <option th:each="province : ${provinceList}"
+                            th:text="${province.name}"
+                            th:value="${province.id}">
+                    </option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>District</td>
+            <td>
+                <select id="district_id" name="district_id" th:field="*{district_id}">
+                    <option value="0">Select district</option>
+                    <option th:each="district : ${districtList}"
+                            th:selected="(${district.id} == *{district_id})"
+                            th:text="${district.name}"
+                            th:value="${district.id}">
+                    </option>
+                </select>
+            </td>
+            <td id="district_id-error" th:errors="*{district_id}" th:if="${#fields.hasErrors('district_id')}"></td>
+        </tr>
+        <tr>
+            <td>Open time</td>
+            <td><input name="open_time" th:field="*{open_time}" th:value="*{open_time}" type="time"/></td>
+            <td id="open_time-error" th:errors="*{open_time}" th:if="${#fields.hasErrors('open_time')}"></td>
+        </tr>
+        <tr>
+            <td>Close time</td>
+            <td><input name="close_time" th:field="*{close_time}" th:value="*{close_time}" type="time"/></td>
+            <td id="close_time-error" th:errors="*{close_time}" th:if="${#fields.hasErrors('close_time')}"></td>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td>
+                <input name="status" th:checked="(0 == *{status})" th:field="*{status}" th:value="0" type="radio"/>Stopped
+                working<br>
+                <input name="status" th:checked="(1 == *{status})" th:field="*{status}" th:value="1" type="radio"/>Still
+                working<br>
+            </td>
+            <td id="status-error" th:errors="*{status}" th:if="${#fields.hasErrors('status')}"></td>
+        </tr>
+        <tr>
+            <td><img th:if="${branchDTO.url != null}" th:src="@{${'https://drive.google.com/uc?id=' + branchDTO.url}}">
+            </td>
+            <td><input th:field="*{url}" th:value="*{url}" type="hidden"></td>
+            <td>Branch's image</td>
+            <td>: <input type="reset" value="Reset"><input name="photo" type="file"/></td>
+            <td th:text="${urlError}"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Submit"/></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
