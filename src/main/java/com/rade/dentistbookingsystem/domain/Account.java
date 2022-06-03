@@ -40,7 +40,7 @@ public class Account implements Serializable {
     private String email;
 
     @ManyToOne
-    @JsonIgnore
+   // @JsonIgnore
     @JoinColumn(name = "district_id", nullable = false)
     private District district;
 

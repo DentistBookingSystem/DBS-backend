@@ -20,7 +20,6 @@ public class District implements Serializable {
     private int id;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "province_id")
     private Province province;
 

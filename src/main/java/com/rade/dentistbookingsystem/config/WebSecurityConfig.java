@@ -66,11 +66,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-                .antMatchers("/rade/auth/login").permitAll()
+                .antMatchers("/rade/auth/login", "/rade/account/registration").permitAll()
                 .antMatchers(
                         "/rade/appointment",
                         "/rade/home",
-                        "/rade/service/**").access("not( hasRole('ADMIN') )")
+                        "/rade/service/**", "rade/account/registration").access("not( hasRole('ADMIN') )")
                 .antMatchers("/rade/admin/**").hasAnyAuthority("ROLE_ADMIN")
 //                .antMatchers("/user/*").hasAuthority("ROLE_USER")
                 .anyRequest().authenticated();
@@ -85,5 +85,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 );
 
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.cors();
     }
 }
