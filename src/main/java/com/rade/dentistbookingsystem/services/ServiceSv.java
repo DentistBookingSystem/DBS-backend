@@ -3,6 +3,7 @@ package com.rade.dentistbookingsystem.services;
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.domain.ServiceType;
 import com.rade.dentistbookingsystem.model.ServiceDTO;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,4 +36,9 @@ public interface ServiceSv {
     //List<Object> loadAllServiceComponents();
 
     List<Service> loadServicesByName(String name);
+
+    Page<Service> findAllWithPagination();
+
+    // Pagation and sort by fields
+    Page<Service> findAllWithPaginationAndSorting(String field);
 }

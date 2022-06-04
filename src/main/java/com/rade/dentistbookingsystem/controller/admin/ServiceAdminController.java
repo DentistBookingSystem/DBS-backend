@@ -6,6 +6,7 @@ import com.rade.dentistbookingsystem.services.GoogleDriveFileService;
 import com.rade.dentistbookingsystem.services.ServiceSv;
 import com.rade.dentistbookingsystem.services.ServiceTypeSv;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,19 +35,12 @@ public class ServiceAdminController {
     }
 
 
-    @PostMapping(value = "add-image")
-    public ResponseEntity<?> addServiceImg(@RequestParam MultipartFile url) throws Exception {
-        String id = googleDriveFileService.uploadFile(url, "image", true);
-        if (id != null)
-            return ResponseEntity.ok(id);
-        else
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-    }
-
     @PostMapping(value = "add-service")
-    public ResponseEntity<?> addService(@Valid @RequestBody ServiceDTO serviceDTO) throws Exception {
+    public ResponseEntity<?> addService(@Valid @RequestPart("serviceDTO") ServiceDTO serviceDTO, @RequestPart MultipartFile url) throws Exception {
         try {
-
+            System.out.println(url);
+            String imageUrl = googleDriveFileService.uploadFile(url, "image", true);
+            serviceDTO.setUrl(imageUrl);
             return ResponseEntity.ok(serviceSv.insert(serviceDTO));
 
         } catch (Exception e) {
@@ -56,6 +50,30 @@ public class ServiceAdminController {
 
 
     }
+
+
+    @PostMapping(value = "add-image")
+    public ResponseEntity<?> addServiceImg(@RequestParam MultipartFile url) throws Exception {
+        String id = googleDriveFileService.uploadFile(url, "image", true);
+        if (id != null)
+            return ResponseEntity.ok(id);
+        else
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    }
+
+//    @PostMapping(value = "add-service")
+//    public ResponseEntity<?> addService(@Valid @RequestBody ServiceDTO serviceDTO) throws Exception {
+//        try {
+//
+//            return ResponseEntity.ok(serviceSv.insert(serviceDTO));
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+//
+//
+//    }
 
     @RolesAllowed({"ROLE_ADMIN"})
     @GetMapping("edit/{id}")
@@ -93,5 +111,15 @@ public class ServiceAdminController {
         return serviceSv.findAll();
     }
 
+    // Pagination
+    @GetMapping("page")
+    public Page<Service> findAllWithPagination() {
+        return serviceSv.findAllWithPagination();
+    }
 
+    @GetMapping("page/{field}")
+    public Page<Service> findAllWithPagination(@PathVariable String field) {
+        return serviceSv.findAllWithPaginationAndSorting(field);
+    }
 }
+
