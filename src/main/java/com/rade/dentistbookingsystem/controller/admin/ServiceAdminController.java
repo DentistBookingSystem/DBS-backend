@@ -39,8 +39,11 @@ public class ServiceAdminController {
     public ResponseEntity<?> addService(@Valid @RequestPart("serviceDTO") ServiceDTO serviceDTO, @RequestPart MultipartFile url) throws Exception {
         try {
             System.out.println(url);
+            System.out.println(serviceDTO.toString());
             String imageUrl = googleDriveFileService.uploadFile(url, "image", true);
             serviceDTO.setUrl(imageUrl);
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa " + imageUrl);
+
             return ResponseEntity.ok(serviceSv.insert(serviceDTO));
 
         } catch (Exception e) {

@@ -127,14 +127,14 @@ public class ServiceSvImpl implements ServiceSv {
     // Pagination
     @Override
     public Page<Service> findAllWithPagination() {
-        Page<Service> servicePage = serviceRepo.findAll(PageRequest.of(0, 5));
+        Page<Service> servicePage = serviceRepo.findAll(PageRequest.of(1, 5));
         return servicePage;
     }
 
     // Pagation and sort by fields
     @Override
     public Page<Service> findAllWithPaginationAndSorting(String field) {
-        Page<Service> servicePage = serviceRepo.findAll(PageRequest.of(0, 5).withSort(Sort.by(field)));
+        Page<Service> servicePage = serviceRepo.findAll(PageRequest.of(1, 5).withSort(Sort.by(field)));
         return servicePage;
     }
 

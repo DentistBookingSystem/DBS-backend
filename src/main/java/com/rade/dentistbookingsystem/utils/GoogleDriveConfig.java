@@ -63,7 +63,7 @@ public class GoogleDriveConfig {
         // Build flow and trigger user authorization request.
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
+                .setDataStoreFactory(new FileDataStoreFactory(CREDENTIALS_FOLDER))
                 .setAccessType("offline")
                 .build();
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8081).build(); // PORT URI OF GOOGLE SERVICE
