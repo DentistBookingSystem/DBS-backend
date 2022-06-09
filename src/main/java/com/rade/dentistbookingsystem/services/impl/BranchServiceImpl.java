@@ -90,4 +90,9 @@ public class BranchServiceImpl implements BranchService {
     public Branch findId(int id) {
         return branchRepo.findId(id);
     }
+
+    @Override
+    public List<Branch> findByStatus(int status) {
+        return branchRepo.findByStatus(status);
+    }
 }

@@ -32,4 +32,6 @@ public interface BranchService {
     Branch findByUrl(String url);
 
     Branch findId(int id);
+
+    List<Branch> findByStatus(int available);
 }
