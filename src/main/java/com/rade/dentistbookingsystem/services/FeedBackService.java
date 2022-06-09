@@ -3,13 +3,20 @@ package com.rade.dentistbookingsystem.services;
 import com.rade.dentistbookingsystem.domain.Feedback;
 import com.rade.dentistbookingsystem.model.FeedbackDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
 
 public interface FeedBackService {
-    Page<Feedback> findAllWithPagination();
+    abstract Feedback save(FeedbackDTO feedbackDTO);
 
-    Feedback updateStatus(int id, int status) throws Exception;
+    Page<Feedback> findAll(Pageable pageable);
 
-    Feedback addFeedback(FeedbackDTO feedbackDTO) throws ParseException;
+    Feedback check(Integer status, Integer id);
+
+    List<Feedback> findByServiceIdAndStatus(int id, int status, Pageable pageable);
+
+    List<Feedback> filterFeedback(String phone, int status, int service_id, String time, Pageable pageable);
+
 }

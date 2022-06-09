@@ -12,8 +12,9 @@ import java.util.Date;
 @Component
 public class JwtTokenUtil {
 
-    private static final long EXPIRE_DURATION = 24 * 60 * 60 * 1000; // 20 miniute
-    private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
+    private static final long EXPIRE_DURATION = 20 * 60 * 1000; // 20 miniute
+
+
     private String SECRET_KEY = "hihhi";
 
     public String generateAccessToken(AccountDetail user) {
@@ -27,6 +28,9 @@ public class JwtTokenUtil {
                 .compact();
 
     }
+
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
 
     public boolean validateAccessToken(String token) {
         try {

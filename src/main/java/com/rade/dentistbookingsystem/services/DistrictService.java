@@ -8,4 +8,6 @@ public interface DistrictService {
     District getById(Integer integer);
 
     List<District> findAll();
+
+    List<District> findByProvinceId(Integer id);
 }

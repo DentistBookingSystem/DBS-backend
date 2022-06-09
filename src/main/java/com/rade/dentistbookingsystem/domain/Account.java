@@ -40,7 +40,6 @@ public class Account implements Serializable {
     private String email;
 
     @ManyToOne
-   // @JsonIgnore
     @JoinColumn(name = "district_id", nullable = false)
     private District district;
 
@@ -49,14 +48,13 @@ public class Account implements Serializable {
     private short status;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Appointment> appointmentSet;
-
+    
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Discount> discountSet;

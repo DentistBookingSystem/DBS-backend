@@ -4,8 +4,7 @@ public class AuthResponse {
     private String phone;
     private String accessToken;
 
-    public AuthResponse() {
-    }
+    public AuthResponse() { }
 
     public AuthResponse(String phone, String accessToken) {
         this.phone = phone;

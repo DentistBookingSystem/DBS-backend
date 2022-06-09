@@ -1,6 +1,7 @@
 package com.rade.dentistbookingsystem.repository;
 
 import com.rade.dentistbookingsystem.domain.Appointment;
+import com.rade.dentistbookingsystem.domain.ServiceType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

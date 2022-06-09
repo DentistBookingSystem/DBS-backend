@@ -60,7 +60,7 @@ public class GoogleFileManager {
     }
 
     // Set permission drive file
-    private Permission setPermission(String type, String role) {
+    private Permission setPermission(String type, String role){
         Permission permission = new Permission();
         permission.setType(type);
         permission.setRole(role);
@@ -85,7 +85,7 @@ public class GoogleFileManager {
                         )
                         .setFields("id").execute();
 
-                if (!type.equals("private") && !role.equals("private")) {
+                if (!type.equals("private") && !role.equals("private")){
                     // Call Set Permission drive
                     googleDriveConfig.getInstance().permissions().create(uploadFile.getId(), setPermission(type, role)).execute();
                 }
@@ -146,6 +146,7 @@ public class GoogleFileManager {
             } else {
                 query = query + " and '" + parentId + "' in parents";
             }
+
             result = service.files().list().setQ(query)
                     .setSpaces("drive")
                     .setFields("nextPageToken, files(id, name)")

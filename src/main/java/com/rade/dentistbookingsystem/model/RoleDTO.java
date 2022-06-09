@@ -9,7 +9,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class RoleDTO implements Serializable {
+public class RoleDTO  implements Serializable {
     private int id;
     private String name;
 }

@@ -9,7 +9,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ProvinceDTO implements Serializable {
+public class ProvinceDTO  implements Serializable {
 
     private int id;
     private String name;

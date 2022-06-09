@@ -1,5 +1,4 @@
 package com.rade.dentistbookingsystem.services.impl;
-
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.model.AppointmentDTO;
@@ -22,22 +21,22 @@ public class AppointmentServiceImpl implements AppointmentService {
     private AccountService accountService;
     @Autowired
     private BranchService branchService;
-
     public AppointmentServiceImpl(AppointmentRepo appointmentRepo) {
         this.appointmentRepo = appointmentRepo;
     }
 
     @Override
-    public Appointment save(AppointmentDTO appointmentDTO) {
+    public Appointment save(AppointmentDTO appointmentDTO){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH");
         Account account;
-        if (appointmentDTO.getAccount_id() == null) {
+        if(appointmentDTO.getAccount_id() == null){
             account = null;
-        } else {
+        }
+        else{
             account = accountService.findId(appointmentDTO.getAccount_id());
         }
-        try {
+        try{
             Appointment appointment = new Appointment(
                     account,
                     branchService.findId(appointmentDTO.getBranch_id()),
@@ -49,7 +48,8 @@ public class AppointmentServiceImpl implements AppointmentService {
                     new Date()
             );
             return appointmentRepo.save(appointment);
-        } catch (Exception e) {
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
         return null;
@@ -59,6 +59,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Page<Appointment> findAll(Pageable pageable) {
         return appointmentRepo.findAll(pageable);
     }
+
 
 
     @Override

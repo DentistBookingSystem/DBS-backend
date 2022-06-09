@@ -10,11 +10,9 @@ import java.util.List;
 @Service
 public class ProvinceServiceImpl implements ProvinceService {
     ProvinceRepo provinceRepo;
-
     public ProvinceServiceImpl(ProvinceRepo provinceRepo) {
         this.provinceRepo = provinceRepo;
     }
-
     @Override
     public List<Province> findAll() {
         return provinceRepo.findAll();

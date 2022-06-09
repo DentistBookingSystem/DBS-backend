@@ -21,12 +21,10 @@ public class Feedback implements Serializable {
 
     // Feedback vs service
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "service_id")
     private Service service;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "account_id")
     private Account account;
 
@@ -34,9 +32,17 @@ public class Feedback implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date time;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "nvarchar(MAX)")
     private String content;
 
     @Column(nullable = false)
     private int status;
+
+    public Feedback(Service service, Account account, Date time, String content, int status){
+        this.service = service;
+        this.account = account;
+        this.time = time;
+        this.content = content;
+        this.status = status;
+    }
 }

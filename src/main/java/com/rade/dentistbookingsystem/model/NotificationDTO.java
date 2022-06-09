@@ -9,7 +9,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class NotificationDTO implements Serializable {
+public class NotificationDTO  implements Serializable {
     private int id;
     private String description;
     private String status;

@@ -34,7 +34,7 @@ public class AppointmentDetail implements Serializable {
     @JoinColumn(name = "discount_id")
     private Discount discount;
 
-    public AppointmentDetail(Appointment appointment, Service service, Doctor doctor, Discount discount) {
+    public AppointmentDetail(Appointment appointment, Service service, Doctor doctor, Discount discount){
         this.id = new AppointmentDetailKey(service.getId(), appointment.getId());
         this.appointment = appointment;
         this.service = service;

@@ -18,14 +18,14 @@ public class District implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
+    
     @ManyToOne
     @JoinColumn(name = "province_id")
     private Province province;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "nvarchar(30)")
     private String name;
-
+    
     @OneToMany(mappedBy = "district", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Account> accountSet;

@@ -13,4 +13,6 @@ public interface AccountService {
     Account view(String phone);
 
     Account edit(AccountDTO accountDTO) throws Exception;
+
+    Account findByPhone(String phone);
 }

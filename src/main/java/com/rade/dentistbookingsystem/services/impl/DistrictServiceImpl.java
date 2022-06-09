@@ -22,4 +22,9 @@ public class DistrictServiceImpl implements DistrictService {
     public List<District> findAll() {
         return districtRepo.findAll();
     }
+
+    @Override
+    public List<District> findByProvinceId(Integer id) {
+        return districtRepo.findByProvinceId(id);
+    }
 }

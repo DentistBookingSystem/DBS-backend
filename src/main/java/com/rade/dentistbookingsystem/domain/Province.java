@@ -18,8 +18,8 @@ public class Province implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Column(nullable = false)
+    
+    @Column(nullable = false, name = "name", columnDefinition = "nvarchar(30)", unique = true)
     private String name;
 
     @JsonIgnore

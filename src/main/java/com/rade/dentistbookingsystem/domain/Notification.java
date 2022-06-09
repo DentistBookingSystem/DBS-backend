@@ -23,10 +23,15 @@ public class Notification implements Serializable {
     private String description;
 
     @Column(nullable = false)
-    private String status;
+    private int status;
 
     //account notififcation
     @OneToMany(mappedBy = "notification")
     @JsonIgnore
     private Set<AccountNotification> accountNotificationSet;
+
+    public Notification(String description, int status){
+        this.description = description;
+        this.status = status;
+    }
 }

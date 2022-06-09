@@ -2,23 +2,20 @@ package com.rade.dentistbookingsystem.controller;
 
 import com.rade.dentistbookingsystem.componentform.AppointmentComponent;
 import com.rade.dentistbookingsystem.componentform.ServiceDiscountComponent;
-import com.rade.dentistbookingsystem.domain.Appointment;
-import com.rade.dentistbookingsystem.domain.AppointmentDetail;
-import com.rade.dentistbookingsystem.domain.Service;
+import com.rade.dentistbookingsystem.domain.*;
 import com.rade.dentistbookingsystem.error.AppointmentError;
-import com.rade.dentistbookingsystem.jsonresponse.JsonAppointment;
+import com.rade.dentistbookingsystem.componentform.JsonAppointment;
 import com.rade.dentistbookingsystem.model.AppointmentDTO;
 import com.rade.dentistbookingsystem.services.*;
+import com.rade.dentistbookingsystem.services.DiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 
 @RestController
+@CrossOrigin
 @RequestMapping("rade/appointment")
 public class AppointmentController {
     @Autowired
@@ -35,9 +32,10 @@ public class AppointmentController {
     AppointmentService appointmentService;
     @Autowired
     AppointmentDetailService appointmentDetailService;
-
+    @Autowired
+    AccountService accountService;
     @PostMapping("")
-    public AppointmentComponent makeAppointment(@RequestBody String branch_id) {
+    public AppointmentComponent makeAppointment(@RequestBody String branch_id){
         int id = Integer.parseInt(branch_id);
         ArrayList<ServiceDiscountComponent> serviceDiscountComponentList = new ArrayList<>();
         for (Service service : serviceSv.findAll()) {
@@ -47,17 +45,23 @@ public class AppointmentController {
             ));
         }
         return new AppointmentComponent(
-                new AppointmentDTO(id),
-                new AppointmentError(),
-                serviceDiscountComponentList,
-                serviceTypeSv.findAll(),
-                branchService.findId(id),
-                doctorService.findByBranchId(id)
+        new AppointmentDTO(id),
+        new AppointmentError(),
+        serviceDiscountComponentList,
+        serviceTypeSv.findAll(),
+        branchService.findId(id),
+        doctorService.findByBranchId(id)
         );
     }
 
     @PostMapping("make")
-    public void makeAppointment(@RequestBody @Valid JsonAppointment jsonAppointment) {
+    public void makeAppointment(@RequestBody @Valid JsonAppointment jsonAppointment){
+        Account account = accountService.findByPhone(jsonAppointment.getAppointmentDTO().getPhone());
+        if(account != null){
+            jsonAppointment.getAppointmentDTO().setAccount_id(account.getId());
+            jsonAppointment.getAppointmentDTO().setPhone(account.getPhone());
+            jsonAppointment.getAppointmentDTO().setName(account.getFull_name());
+        }
         Appointment appointment = appointmentService.save(jsonAppointment.getAppointmentDTO());
         int noOfServiceId = jsonAppointment.getServiceIdList().length;
         for (int i = 0; i < noOfServiceId; i++) {

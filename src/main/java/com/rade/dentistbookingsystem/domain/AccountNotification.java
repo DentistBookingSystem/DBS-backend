@@ -26,4 +26,9 @@ public class AccountNotification implements Serializable {
     @JoinColumn(name = "notification_id")
     private Notification notification;
 
+    public AccountNotification(Account account, Notification notification){
+        this.id = new AccountNotificationKey(account.getId(), notification.getId());
+        this.account = account;
+        this.notification = notification;
+    }
 }

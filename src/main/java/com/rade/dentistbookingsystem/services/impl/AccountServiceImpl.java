@@ -7,6 +7,7 @@ import com.rade.dentistbookingsystem.repository.DistrictRepo;
 import com.rade.dentistbookingsystem.repository.RoleRepo;
 import com.rade.dentistbookingsystem.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -82,5 +83,9 @@ public class AccountServiceImpl implements AccountService {
             account.setGender(accountDTO.getGender());
             return save(account);
         }
+    }
+
+    public Account findByPhone(String phone) {
+        return accountRepo.findByPhone(phone);
     }
 }

@@ -15,18 +15,16 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "Appointment")
-public class Appointment implements Serializable, Comparable<Appointment> {
+public class Appointment implements Serializable, Comparable<Appointment>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "account_id", nullable = true)
     private Account account;
 
-    @ManyToOne()
-    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "branch_id", nullable = false)
     private Branch branch;
 
@@ -35,7 +33,7 @@ public class Appointment implements Serializable, Comparable<Appointment> {
 
     @Column(name = "phone", length = 10)
     private String phone;
-
+    
     @Column(name = "appointment_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date date;
@@ -55,7 +53,7 @@ public class Appointment implements Serializable, Comparable<Appointment> {
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
     private Set<AppointmentDetail> appointmentDetailSet;
 
-    public Appointment(Account account, Branch branch, String guest_name, String phone, Date date, Date time, int status, Date time_making) {
+    public Appointment(Account account, Branch branch, String guest_name, String phone, Date date, Date time, int status, Date time_making){
         this.account = account;
         this.branch = branch;
         this.guest_name = guest_name;
