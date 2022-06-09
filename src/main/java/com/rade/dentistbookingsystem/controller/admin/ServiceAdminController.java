@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,11 +39,13 @@ public class ServiceAdminController {
     @PostMapping(value = "add-service")
     public ResponseEntity<?> addService(@Valid @RequestPart("serviceDTO") ServiceDTO serviceDTO, @RequestPart MultipartFile url) throws Exception {
         try {
-            System.out.println(url);
-            System.out.println(serviceDTO.toString());
+            if (serviceDTO.getMax_price() < serviceDTO.getMin_price())
+                throw new ValidationException("Min price must < max price");
+
+
             String imageUrl = googleDriveFileService.uploadFile(url, "image", true);
             serviceDTO.setUrl(imageUrl);
-            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa " + imageUrl);
+
 
             return ResponseEntity.ok(serviceSv.insert(serviceDTO));
 

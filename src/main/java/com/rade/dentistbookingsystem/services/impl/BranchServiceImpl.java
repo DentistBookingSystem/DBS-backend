@@ -10,13 +10,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ValidationException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class BranchServiceImpl implements BranchService {
-    private BranchRepo branchRepo;
+    private final BranchRepo branchRepo;
 
     @Autowired
     private DistrictService districtService;
@@ -33,21 +35,32 @@ public class BranchServiceImpl implements BranchService {
         return branchRepo.findAll(pageable);
     }
 
-    public Branch save(BranchDTO branchDTO) {
+    @Override
+    public <S extends Branch> S save(S entity) {
+        return branchRepo.save(entity);
+    }
+
+    @Override
+    public Branch saveBranch(BranchDTO branchDTO) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         try {
+
+            Date openTime = sdf.parse(branchDTO.getOpen_time());
+            Date closeTime = sdf.parse(branchDTO.getClose_time());
+            if (openTime.after(closeTime)) throw new ValidationException("Open time and close time are invalid");
             Branch branch = new Branch(
                     branchDTO.getName(),
                     districtService.getById(branchDTO.getDistrict_id()),
-                    sdf.parse(branchDTO.getOpen_time()),
-                    sdf.parse(branchDTO.getClose_time()),
+                    openTime,
+                    closeTime,
                     branchDTO.getStatus(),
                     branchDTO.getUrl());
-            return branchRepo.save(branch);
+            return save(branch);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+
     }
 
     public Optional<Branch> findById(Integer id) {
