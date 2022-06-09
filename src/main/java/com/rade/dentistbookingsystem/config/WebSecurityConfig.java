@@ -16,10 +16,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.servlet.http.HttpServletResponse;
 
 @Configuration
+@CrossOrigin
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         jsr250Enabled = true,
@@ -27,14 +29,12 @@ import javax.servlet.http.HttpServletResponse;
         securedEnabled = true
 )
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    JwtTokenFilter jwtTokenFilter;
-
     @Bean
     public UserDetailsService userDetailsService() {
         return new AccountDetailServiceImpl();
     }
-
+    @Autowired
+    JwtTokenFilter jwtTokenFilter;
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -53,7 +53,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
     }
-
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -66,13 +65,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-                .antMatchers("/rade/auth/login", "/rade/account/registration").permitAll()
+                .antMatchers("/rade/auth/login","/rade/province",
+                        "/rade/district/**").permitAll()
                 .antMatchers(
                         "/rade/appointment",
+                        "/rade/appointment/**",
                         "/rade/home",
-                        "/rade/service/**", "rade/account/registration").access("not( hasRole('ADMIN') )")
-                .antMatchers("/rade/admin/**").hasAnyAuthority("ROLE_ADMIN")
-//                .antMatchers("/user/*").hasAuthority("ROLE_USER")
+                        "/rade/service/**",
+                        "/rade/account/**",
+                        "/rade/account").access("not( hasRole('ADMIN') )")
+               .antMatchers("/rade/admin/**").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/rade/patient/**").hasAuthority("ROLE_USER")
                 .anyRequest().authenticated();
         http.exceptionHandling()
                 .authenticationEntryPoint(

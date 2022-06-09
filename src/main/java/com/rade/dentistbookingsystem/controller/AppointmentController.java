@@ -34,9 +34,8 @@ public class AppointmentController {
     AppointmentDetailService appointmentDetailService;
     @Autowired
     AccountService accountService;
-    @PostMapping("")
-    public AppointmentComponent makeAppointment(@RequestBody String branch_id){
-        int id = Integer.parseInt(branch_id);
+    @GetMapping("{branch_id}")
+    public AppointmentComponent makeAppointment(@PathVariable int branch_id){
         ArrayList<ServiceDiscountComponent> serviceDiscountComponentList = new ArrayList<>();
         for (Service service : serviceSv.findAll()) {
             serviceDiscountComponentList.add(new ServiceDiscountComponent(
@@ -45,12 +44,12 @@ public class AppointmentController {
             ));
         }
         return new AppointmentComponent(
-        new AppointmentDTO(id),
+        new AppointmentDTO(branch_id),
         new AppointmentError(),
         serviceDiscountComponentList,
         serviceTypeSv.findAll(),
-        branchService.findId(id),
-        doctorService.findByBranchId(id)
+        branchService.findId(branch_id),
+        doctorService.findByBranchId(branch_id)
         );
     }
 
