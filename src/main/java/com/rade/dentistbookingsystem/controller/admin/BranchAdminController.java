@@ -45,8 +45,9 @@ public class BranchAdminController {
         try {
             String imageUrl = googleDriveFileService.uploadFile(url, "image", true);
             branchDTO.setUrl(imageUrl);
-
-            return ResponseEntity.ok(branchService.saveBranch(branchDTO));
+            Branch branch = branchService.saveBranch(branchDTO);
+            if (branch == null) throw new Exception();
+            return ResponseEntity.ok(branch);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,6 +56,21 @@ public class BranchAdminController {
 
     }
 
+    @PostMapping("update/{id}")
+    public ResponseEntity<?> addBranch(@Valid @RequestPart BranchDTO branchDTO, @RequestPart MultipartFile url, @PathVariable int id) {
+        try {
+            String imageUrl = googleDriveFileService.uploadFile(url, "image", true);
+            branchDTO.setUrl(imageUrl);
+            Branch branch = branchService.updateBranch(branchDTO, id);
+            if (branch == null) throw new Exception();
+            return ResponseEntity.ok(branch);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+
+    }
 
 
 }

@@ -24,6 +24,8 @@ public interface BranchService {
 
     Branch saveBranch(BranchDTO branchDTO);
 
+    Branch updateBranch(BranchDTO branchDTO, int id);
+
     Optional<Branch> findById(Integer id);
 
 

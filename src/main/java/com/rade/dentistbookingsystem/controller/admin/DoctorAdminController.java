@@ -5,11 +5,13 @@ import com.rade.dentistbookingsystem.domain.Doctor;
 import com.rade.dentistbookingsystem.model.DoctorDTO;
 import com.rade.dentistbookingsystem.services.BranchService;
 import com.rade.dentistbookingsystem.services.DoctorService;
+import com.rade.dentistbookingsystem.services.GoogleDriveFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,9 @@ public class DoctorAdminController {
 
     @Autowired
     BranchService branchService;
+
+    @Autowired
+    GoogleDriveFileService googleDriveFileService;
 
     @GetMapping()
     public Optional<Doctor> findById(@RequestParam int id) {
@@ -40,8 +45,10 @@ public class DoctorAdminController {
     }
 
     @PostMapping("add")
-    public ResponseEntity<?> insertDoctor(@RequestBody @Validated DoctorDTO doctorDTO) {
+    public ResponseEntity<?> insertDoctor(@RequestPart @Validated DoctorDTO doctorDTO, @RequestPart MultipartFile url) {
         try {
+            String imgUrl = googleDriveFileService.uploadFile(url, "image", true);
+            doctorDTO.setUrl(imgUrl);
             return ResponseEntity.ok(doctorService.addDoctor(doctorDTO));
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,8 +58,10 @@ public class DoctorAdminController {
     }
 
     @GetMapping("edit/{id}")
-    public ResponseEntity<?> insertDoctor(@RequestBody @Validated DoctorDTO doctorDTO, @PathVariable int id) {
+    public ResponseEntity<?> insertDoctor(@RequestPart @Validated DoctorDTO doctorDTO, @RequestPart MultipartFile url, @PathVariable int id) {
         try {
+            String imgUrl = googleDriveFileService.uploadFile(url, "image", true);
+            doctorDTO.setUrl(imgUrl);
             return ResponseEntity.ok(doctorService.editDoctor(doctorDTO, id));
         } catch (Exception e) {
             e.printStackTrace();

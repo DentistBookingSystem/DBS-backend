@@ -63,6 +63,34 @@ public class BranchServiceImpl implements BranchService {
 
     }
 
+    @Override
+    public Branch updateBranch(BranchDTO branchDTO, int id) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        try {
+            if (existsById(id) == false) {
+                throw new Exception("Branch not found");
+            } else {
+                Branch branch = branchRepo.getById(id);
+                Date openTime = sdf.parse(branchDTO.getOpen_time());
+                Date closeTime = sdf.parse(branchDTO.getClose_time());
+                if (openTime.after(closeTime)) throw new ValidationException("Open time and close time are invalid");
+                branch.setName(branchDTO.getName());
+                branch.setStatus(branchDTO.getStatus());
+                branch.setUrl(branchDTO.getUrl());
+                branch.setDistrict(districtService.getById(branchDTO.getDistrict_id()));
+                branch.setClose_time(closeTime);
+                branch.setOpen_time(openTime);
+                return save(branch);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
     public Optional<Branch> findById(Integer id) {
         return branchRepo.findById(id);
     }

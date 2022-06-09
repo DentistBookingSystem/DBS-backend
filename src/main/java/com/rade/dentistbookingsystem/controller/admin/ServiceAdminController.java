@@ -58,14 +58,14 @@ public class ServiceAdminController {
     }
 
 
-    @PostMapping(value = "add-image")
-    public ResponseEntity<?> addServiceImg(@RequestParam MultipartFile url) throws Exception {
-        String id = googleDriveFileService.uploadFile(url, "image", true);
-        if (id != null)
-            return ResponseEntity.ok(id);
-        else
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-    }
+//    @PostMapping(value = "add-image")
+//    public ResponseEntity<?> addServiceImg(@RequestParam MultipartFile url) throws Exception {
+//        String id = googleDriveFileService.uploadFile(url, "image", true);
+//        if (id != null)
+//            return ResponseEntity.ok(id);
+//        else
+//            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+//    }
 
 //    @PostMapping(value = "add-service")
 //    public ResponseEntity<?> addService(@Valid @RequestBody ServiceDTO serviceDTO) throws Exception {
@@ -83,9 +83,12 @@ public class ServiceAdminController {
 
     @RolesAllowed({"ROLE_ADMIN"})
     @GetMapping("edit/{id}")
-    public ResponseEntity<?> editService(@Valid @RequestBody ServiceDTO serviceDTO, @PathVariable int id) {
+    public ResponseEntity<?> editService(@Valid @RequestPart ServiceDTO serviceDTO, @RequestPart MultipartFile url, @PathVariable int id) {
         try {
 
+
+            String imageUrl = googleDriveFileService.uploadFile(url, "image", true);
+            serviceDTO.setUrl(imageUrl);
 
             return ResponseEntity.ok(serviceSv.edit(serviceDTO, id));
 
