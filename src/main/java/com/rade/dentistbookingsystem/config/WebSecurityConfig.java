@@ -65,14 +65,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-                .antMatchers("/rade/auth/login").permitAll()
+                .antMatchers("/rade/auth/login","/rade/province",
+                        "/rade/district/**").permitAll()
                 .antMatchers(
                         "/rade/appointment",
                         "/rade/appointment/**",
                         "/rade/home",
                         "/rade/service/**",
-                        "/rade/province",
-                        "/rade/district/**",
                         "/rade/account/**",
                         "/rade/account").access("not( hasRole('ADMIN') )")
                .antMatchers("/rade/admin/**").hasAnyAuthority("ROLE_ADMIN")
