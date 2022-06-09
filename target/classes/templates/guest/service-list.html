@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>TODO supply a title</title>
+  <meta charset="UTF-8"></meta>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+</head>
+<body>
+<div>Service list</div>
+<th:block th:each="service : ${serviceList}">
+  <!--            <div th:if="${condition}">
+                <p>TRUE</p>
+              </div>
+              <div th:unless="${condition}">
+                <p>FALSE</p>
+              </div>-->
+  <a href="#" th:text="${service.name}"></a><br>
+  <p th:text="${service.url}"></p>
+</th:block>
+</body>
+</html>

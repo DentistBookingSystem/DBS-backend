@@ -1,0 +1,40 @@
+package com.rade.dentistbookingsystem.services.impl;
+
+import com.rade.dentistbookingsystem.domain.Appointment;
+import com.rade.dentistbookingsystem.domain.Discount;
+import com.rade.dentistbookingsystem.domain.DiscountService;
+import com.rade.dentistbookingsystem.domain.Notification;
+import com.rade.dentistbookingsystem.repository.NotificationRepo;
+import com.rade.dentistbookingsystem.services.NotificationService;
+import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+
+@Service
+public class NotificationServiceImpl implements NotificationService {
+    NotificationRepo notificationRepo;
+    @Override
+    public Notification newDiscount(Discount discount){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        int status = 0;
+        String description = "Khuyến mãi mới" + discount.getName() + " trong thời gian giới hạn! " +
+                "Bắt đầu từ " + sdf.format(discount.getStart_date()) + " đến " + sdf.format(discount.getEnd_date()) + "! " +
+                "Ưu đãi " + discount.getPercentage() + "% áp dụng cho dịch vụ: ";
+        for(DiscountService discountService: discount.getDiscountServiceSet()){
+            description += discountService.getService().getName() + ", ";
+        }
+        description.substring(0, description.length() - 2);
+        description += ". Chi tiết khuyến mãi: " + discount.getDescription();
+        Notification notification = new Notification(
+                description,
+                status
+        );
+        return notificationRepo.save(notification);
+    }
+
+//    public Notification remindingAppointment(String phone){
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//        int status = 2;
+//        String description = "Nhắc bạn: bạn có lịch hẹn vao";
+//    }
+}
