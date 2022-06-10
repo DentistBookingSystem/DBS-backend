@@ -93,7 +93,7 @@ INSERT [dbo].[Service] ([id], [description], [max_price], [min_price], [name], [
 INSERT [dbo].[Service] ([id], [description], [max_price], [min_price], [name], [status], [url], [service_type_id]) VALUES (13, N'Niềng răng', 500000, 300000, N'Niềng răng', 1, N'1irxuDJYhlapxGywNzVasJ3yNGpujJ-Nq', 4)
 INSERT [dbo].[Service] ([id], [description], [max_price], [min_price], [name], [status], [url], [service_type_id]) VALUES (14, N'Trồng răng', 1000000, 700000, N'Trồng răng', 1, N'1WwaZbsTYUWrxfASy0Jj0Cpcdg8F6l5Gv', 3)
 INSERT [dbo].[Service] ([id], [description], [max_price], [min_price], [name], [status], [url], [service_type_id]) VALUES (16, N'Trám răng', 500000, 200000, N'Trám răng', 1, N'1mlm94VN0zuGF1MEmdgpZTWcgpErcRTNf', 2)
-INSERT [dbo].[Service] ([id], [description], [max_price], [min_price], [name], [status], [url], [service_type_id]) VALUES (17, N'Nhổ răng sâu', 30200000200000, N'Nhổ răng sâu', 1, N'1WGBwg8mKuf1PRM0ED_Ob5yGLSlcaZgZ2', 1)
+INSERT [dbo].[Service] ([id], [description], [max_price], [min_price], [name], [status], [url], [service_type_id]) VALUES (17, N'Nhổ răng sâu', 300000, 200000, N'Nhổ răng sâu', 1, N'1WGBwg8mKuf1PRM0ED_Ob5yGLSlcaZgZ2', 1)
 SET IDENTITY_INSERT [dbo].[Service] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Feedback] ON 
