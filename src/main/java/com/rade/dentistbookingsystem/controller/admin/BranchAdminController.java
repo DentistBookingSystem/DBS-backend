@@ -29,7 +29,7 @@ public class BranchAdminController {
     DistrictService districtService;
 
 
-    @GetMapping()
+    @GetMapping("list")
     public List<Branch> ListBranch() {
         return branchService.findAll();
     }

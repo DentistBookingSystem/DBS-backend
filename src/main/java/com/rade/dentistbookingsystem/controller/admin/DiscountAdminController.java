@@ -23,7 +23,7 @@ public class DiscountAdminController {
         return discountSv.findAllWithPagination();
     }
 
-    @GetMapping()
+    @GetMapping("list")
     public List<Discount> discountList() {
         return discountSv.findAll();
     }

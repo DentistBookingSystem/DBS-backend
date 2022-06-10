@@ -53,19 +53,6 @@ public class ServiceTypeAdminController {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
 
     }
-    // ko xoa đc vi là bảng gốc, tham chiếu cho service
-//    @GetMapping("delete/{id}")
-//        public ResponseEntity<?> deleteServiceType(@PathVariable int id){
-//        Optional<ServiceType> serviceType = serviceTypeSv.findById(id);
-//        if (serviceType.isPresent()) { // có tồn tại thì cho delete
-//            serviceTypeSv.deleteById(id);
-//            return ResponseEntity.ok(id);
-//
-//
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-//
-//        }
-//    }
+
 
 }

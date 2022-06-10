@@ -10,4 +10,6 @@ public interface DistrictService {
     List<District> findAll();
 
     List<District> findByProvinceId(Integer id);
+
+
 }

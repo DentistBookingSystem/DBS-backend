@@ -49,7 +49,9 @@ public class DoctorAdminController {
         try {
             String imgUrl = googleDriveFileService.uploadFile(url, "image", true);
             doctorDTO.setUrl(imgUrl);
-            return ResponseEntity.ok(doctorService.addDoctor(doctorDTO));
+            Doctor doctor = doctorService.addDoctor(doctorDTO);
+            if (doctor == null) throw new Exception();
+            return ResponseEntity.ok(doctor);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
@@ -62,7 +64,9 @@ public class DoctorAdminController {
         try {
             String imgUrl = googleDriveFileService.uploadFile(url, "image", true);
             doctorDTO.setUrl(imgUrl);
-            return ResponseEntity.ok(doctorService.editDoctor(doctorDTO, id));
+            Doctor doctor = doctorService.editDoctor(doctorDTO, id);
+            if (doctor == null) throw new Exception();
+            return ResponseEntity.ok(doctor);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
