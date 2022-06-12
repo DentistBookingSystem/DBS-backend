@@ -13,10 +13,9 @@ public class AppointmentDTO  implements Serializable {
     private int id;
     private Integer account_id;
     private int branch_id;
-    private String name;
-    private String phone;
+    private int doctor_id;
     private String date;
-    private String time;
+    private int shift;
     private int status;
 
     public AppointmentDTO(int branch_id){

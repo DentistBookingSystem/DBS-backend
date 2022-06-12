@@ -13,7 +13,5 @@ public class AppointmentDetailDTO implements Serializable {
     private int id;
     private int apponitment_id;
     private int service_id;
-    private int doctor_id;
     private int discount_id;
-
 }

@@ -28,19 +28,16 @@ public class Appointment implements Serializable, Comparable<Appointment>{
     @JoinColumn(name = "branch_id", nullable = false)
     private Branch branch;
 
-    @Column(name = "guest_name", columnDefinition = "nvarchar(30)")
-    private String guest_name;
+    @ManyToOne()
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
 
-    @Column(name = "phone", length = 10)
-    private String phone;
-    
     @Column(name = "appointment_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @Column(name = "appointment_time", nullable = false)
-    @Temporal(TemporalType.TIME)
-    private Date time;
+    @Column(name = "appointment_shift", nullable = false)
+    private int shift;
 
     @Column(name = "status", nullable = false)
     private int status;
@@ -53,13 +50,12 @@ public class Appointment implements Serializable, Comparable<Appointment>{
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
     private Set<AppointmentDetail> appointmentDetailSet;
 
-    public Appointment(Account account, Branch branch, String guest_name, String phone, Date date, Date time, int status, Date time_making){
+    public Appointment(Account account, Branch branch, Doctor doctor, Date date, int shift, int status, Date time_making){
         this.account = account;
         this.branch = branch;
-        this.guest_name = guest_name;
-        this.phone = phone;
+        this.doctor = doctor;
         this.date = date;
-        this.time = time;
+        this.shift = shift;
         this.status = status;
         this.time_making = time_making;
     }

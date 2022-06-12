@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class JsonAppointment {
     private AppointmentDTO appointmentDTO;
+    private String phone;
     private int[] serviceIdList;
-    private int[] doctorIdList;
 }

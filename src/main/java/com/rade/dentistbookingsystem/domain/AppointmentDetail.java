@@ -27,18 +27,13 @@ public class AppointmentDetail implements Serializable {
     private Appointment appointment;
 
     @ManyToOne()
-    @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
-
-    @ManyToOne()
     @JoinColumn(name = "discount_id")
     private Discount discount;
 
-    public AppointmentDetail(Appointment appointment, Service service, Doctor doctor, Discount discount){
+    public AppointmentDetail(Appointment appointment, Service service, Discount discount){
         this.id = new AppointmentDetailKey(service.getId(), appointment.getId());
         this.appointment = appointment;
         this.service = service;
-        this.doctor = doctor;
         this.discount = discount;
     }
 }

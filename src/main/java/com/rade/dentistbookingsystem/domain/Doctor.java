@@ -31,8 +31,4 @@ public class Doctor implements Serializable {
     @ManyToOne
     @JoinColumn(name = "branch_id", nullable = false)
     private Branch branch;
-
-    @OneToMany(mappedBy = "doctor")
-    @JsonIgnore
-    private Set<AppointmentDetail> appointmentDetailSet;
 }

@@ -6,6 +6,7 @@ import com.rade.dentistbookingsystem.repository.AppointmentRepo;
 import com.rade.dentistbookingsystem.services.AccountService;
 import com.rade.dentistbookingsystem.services.AppointmentService;
 import com.rade.dentistbookingsystem.services.BranchService;
+import com.rade.dentistbookingsystem.services.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
@@ -21,6 +23,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     private AccountService accountService;
     @Autowired
     private BranchService branchService;
+    @Autowired
+    private DoctorService doctorService;
     public AppointmentServiceImpl(AppointmentRepo appointmentRepo) {
         this.appointmentRepo = appointmentRepo;
     }
@@ -40,10 +44,9 @@ public class AppointmentServiceImpl implements AppointmentService {
             Appointment appointment = new Appointment(
                     account,
                     branchService.findId(appointmentDTO.getBranch_id()),
-                    appointmentDTO.getName(),
-                    appointmentDTO.getPhone(),
+                    doctorService.findId(appointmentDTO.getDoctor_id()),
                     dateFormat.parse(appointmentDTO.getDate()),
-                    timeFormat.parse(appointmentDTO.getTime()),
+                    appointmentDTO.getShift(),
                     0,
                     new Date()
             );
@@ -60,10 +63,22 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentRepo.findAll(pageable);
     }
 
+    @Override
+    public Appointment findId(int id) {
+        return appointmentRepo.findId(id);
+    }
 
+    @Override
+    public List<Appointment> checkShiftOfDoctor(int doctor_id, String time) {
+        return appointmentRepo.checkShiftOfDoctor(doctor_id, time);
+    }
 
     @Override
     public void check(Integer status, Integer id) {
         appointmentRepo.check(status, id);
+    }
+    @Override
+    public List<Appointment> findByAccountId(int account_id, Pageable pageable) {
+        return appointmentRepo.findByAccountId(account_id, pageable);
     }
 }
