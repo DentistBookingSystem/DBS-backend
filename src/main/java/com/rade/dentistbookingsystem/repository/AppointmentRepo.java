@@ -35,4 +35,15 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
             nativeQuery = true)
     List<Appointment> checkShiftOfDoctor(@Param("doctor_id") int doctor_id,
                                   @Param("time") String time);
+
+    @Query(value =
+            "SELECT Appointment.* " +
+                    "FROM Appointment " +
+                    "WHERE doctor_id = :doctor_id AND " +
+                    "status = 0 AND " +
+                    "appointment_date = :time",
+            nativeQuery = true)
+    List<Appointment> checkShiftOfDoctorOneDay(
+                                        @Param("doctor_id") int doctor_id,
+                                        @Param("time") String time);
 }

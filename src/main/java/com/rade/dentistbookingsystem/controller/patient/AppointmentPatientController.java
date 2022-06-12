@@ -113,9 +113,22 @@ public class AppointmentPatientController {
                 }
             }
             if(!isExist){
-                shiftBookedByDateList.add(new ShiftBookedByDate(appointment.getDate(), appointment.getShift()));
+                shiftBookedByDateList.add(new ShiftBookedByDate(sdf.format(appointment.getDate()), appointment.getShift()));
             }
         }
         return shiftBookedByDateList;
+    }
+
+    @PostMapping("check-doctor")
+    public ShiftBookedByDate checkShiftOfDoctorOneDay(@RequestBody DoctorAndDate doctorAndDate) throws ParseException {
+        boolean isExist;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = doctorAndDate.getDate();
+        List<Appointment> appointmentList = appointmentService.checkShiftOfDoctorOneDay(doctorAndDate.getDoctor_id(), date);
+        ShiftBookedByDate shiftBookedByDate = new ShiftBookedByDate(date);
+        for (Appointment appointment : appointmentList) {
+            shiftBookedByDate.getShiftList().add(appointment.getShift());
+        }
+        return shiftBookedByDate;
     }
 }

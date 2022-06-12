@@ -12,12 +12,17 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class ShiftBookedByDate {
-    Date date;
+    String date;
     ArrayList<Integer> shiftList;
 
-    public ShiftBookedByDate(Date date, int shift) {
+    public ShiftBookedByDate(String date, int shift) {
         this.date = date;
         shiftList = new ArrayList<>();
         shiftList.add(shift);
+    }
+
+    public ShiftBookedByDate(String date) {
+        this.date = date;
+        shiftList = new ArrayList<>();
     }
 }

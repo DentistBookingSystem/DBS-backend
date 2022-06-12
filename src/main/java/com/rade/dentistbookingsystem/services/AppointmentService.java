@@ -18,6 +18,8 @@ public interface AppointmentService {
 
     List<Appointment> checkShiftOfDoctor(int doctor_id, String time);
 
+    List<Appointment> checkShiftOfDoctorOneDay(int doctor_id, String time);
+
     void check(Integer status, Integer id);
 
     List<Appointment> findByAccountId(int account_id, Pageable pageable);

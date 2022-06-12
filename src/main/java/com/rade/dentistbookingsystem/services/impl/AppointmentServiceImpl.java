@@ -73,6 +73,12 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentRepo.checkShiftOfDoctor(doctor_id, time);
     }
 
+
+    @Override
+    public List<Appointment> checkShiftOfDoctorOneDay(int doctor_id, String time) {
+        return appointmentRepo.checkShiftOfDoctorOneDay(doctor_id, time);
+    }
+
     @Override
     public void check(Integer status, Integer id) {
         appointmentRepo.check(status, id);
