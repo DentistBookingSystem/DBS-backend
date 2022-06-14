@@ -3,9 +3,9 @@ package com.rade.dentistbookingsystem.services.impl;
 import com.rade.dentistbookingsystem.domain.Feedback;
 import com.rade.dentistbookingsystem.model.FeedbackDTO;
 import com.rade.dentistbookingsystem.repository.AccountRepo;
-import com.rade.dentistbookingsystem.repository.FeedBackRepo;
+import com.rade.dentistbookingsystem.repository.FeedbackRepo;
 import com.rade.dentistbookingsystem.repository.ServiceRepo;
-import com.rade.dentistbookingsystem.services.FeedBackService;
+import com.rade.dentistbookingsystem.services.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class FeedbackServiceImpl implements FeedBackService {
-    FeedBackRepo feedBackRepo;
+public class FeedbackServiceImpl implements FeedbackService {
+    FeedbackRepo feedBackRepo;
 
     @Autowired
     ServiceRepo serviceRepo;
@@ -25,7 +25,7 @@ public class FeedbackServiceImpl implements FeedBackService {
     @Autowired
     AccountRepo accountRepo;
 
-    public FeedbackServiceImpl(FeedBackRepo feedBackRepo) {
+    public FeedbackServiceImpl(FeedbackRepo feedBackRepo) {
         this.feedBackRepo = feedBackRepo;
     }
 

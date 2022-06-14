@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Date;
 import java.util.List;
 
 public interface AppointmentService {
@@ -23,4 +24,6 @@ public interface AppointmentService {
     void check(Integer status, Integer id);
 
     List<Appointment> findByAccountId(int account_id, Pageable pageable);
+
+    Appointment findByShiftAndDateAndDoctorId(int appointment_shift, Date appointment_date, int doctor_id);
 }

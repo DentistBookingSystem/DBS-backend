@@ -2,7 +2,7 @@ package com.rade.dentistbookingsystem.controller.admin;
 
 import com.rade.dentistbookingsystem.componentform.StatusForFeedback;
 import com.rade.dentistbookingsystem.domain.Feedback;
-import com.rade.dentistbookingsystem.services.FeedBackService;
+import com.rade.dentistbookingsystem.services.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("rade/admin/feedback")
 public class FeedbackAdminController {
     @Autowired
-    FeedBackService feedBackService;
+    FeedbackService feedBackService;
 
     @GetMapping("{i}")
     public Page<Feedback> getFeedbackList(@PathVariable Integer i){

@@ -2,15 +2,13 @@ package com.rade.dentistbookingsystem.controller;
 
 import com.rade.dentistbookingsystem.componentform.ServiceFeedback;
 import com.rade.dentistbookingsystem.domain.Service;
-import com.rade.dentistbookingsystem.services.FeedBackService;
+import com.rade.dentistbookingsystem.services.FeedbackService;
 import com.rade.dentistbookingsystem.services.ServiceSv;
 import com.rade.dentistbookingsystem.services.ServiceTypeSv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ public class ServiceController {
     @Autowired
     ServiceSv serviceSv;
     @Autowired
-    FeedBackService feedBackService;
+    FeedbackService feedBackService;
     @Autowired
     ServiceTypeSv serviceTypeSv;
     @GetMapping("{id}")

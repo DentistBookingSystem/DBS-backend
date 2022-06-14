@@ -63,9 +63,20 @@ public class AppointmentPatientController {
     @PostMapping("make")
     public ResponseEntity<?> makeAppointment(@RequestBody @Valid JsonAppointment jsonAppointment){
         try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Account account = accountService.findByPhone(jsonAppointment.getPhone());
             if(account != null){
                 jsonAppointment.getAppointmentDTO().setAccount_id(account.getId());
+                if(jsonAppointment.getAppointmentDTO().getDoctor_id() == 0){
+                    String date = jsonAppointment.getAppointmentDTO().getDate();
+                    int branch_id = jsonAppointment.getAppointmentDTO().getBranch_id();
+                    jsonAppointment.getAppointmentDTO().setDoctor_id(doctorService.findDoctorIdLeastShiftOneDay(date, branch_id).get(0));
+                }
+                if (appointmentService.findByShiftAndDateAndDoctorId(
+                        jsonAppointment.getAppointmentDTO().getShift(),
+                        sdf.parse(jsonAppointment.getAppointmentDTO().getDate()),
+                        jsonAppointment.getAppointmentDTO().getDoctor_id()
+                ) != null) return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
                 Appointment appointment = appointmentService.save(jsonAppointment.getAppointmentDTO());
                 int noOfServiceId = jsonAppointment.getServiceIdList().length;
                 for (int i = 0; i < noOfServiceId; i++) {
@@ -122,13 +133,39 @@ public class AppointmentPatientController {
     @PostMapping("check-doctor")
     public ShiftBookedByDate checkShiftOfDoctorOneDay(@RequestBody DoctorAndDate doctorAndDate) throws ParseException {
         boolean isExist;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        int [] shift;
+        int noOfShift = doctorService.countByBranchId(doctorAndDate.getBranch_id());
+        if(doctorAndDate.getDoctor_id() == 0){
+            shift = new int[]{
+                    noOfShift,
+                    noOfShift,
+                    noOfShift,
+                    noOfShift,
+                    noOfShift,
+                    noOfShift
+            };
+        }
+        else{
+            shift = new int[]{
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1
+            };
+        }
         String date = doctorAndDate.getDate();
         List<Appointment> appointmentList = appointmentService.checkShiftOfDoctorOneDay(doctorAndDate.getDoctor_id(), date);
         ShiftBookedByDate shiftBookedByDate = new ShiftBookedByDate(date);
         for (Appointment appointment : appointmentList) {
-            shiftBookedByDate.getShiftList().add(appointment.getShift());
+            shift[appointment.getShift()-1] = shift[appointment.getShift()-1] - 1;
+        }
+        for (int i = 0; i < 6; i++) {
+            if (shift[i] > 0) shiftBookedByDate.getShiftList().add(i + 1);
         }
         return shiftBookedByDate;
     }
+
+
 }

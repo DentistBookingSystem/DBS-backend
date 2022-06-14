@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class DoctorAndDate {
-    private int branch_id;
-    private int doctor_id;
-    private String date;
+public class PageForFeedback {
+    private int service_id;
+    private int page;
 }

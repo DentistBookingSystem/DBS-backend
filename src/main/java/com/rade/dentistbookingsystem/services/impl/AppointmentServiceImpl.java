@@ -87,4 +87,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<Appointment> findByAccountId(int account_id, Pageable pageable) {
         return appointmentRepo.findByAccountId(account_id, pageable);
     }
+    @Override
+    public Appointment findByShiftAndDateAndDoctorId(int appointment_shift, Date appointment_date, int doctor_id) {
+        return appointmentRepo.findByShiftAndDateAndDoctorId(appointment_shift, appointment_date, doctor_id);
+    }
 }

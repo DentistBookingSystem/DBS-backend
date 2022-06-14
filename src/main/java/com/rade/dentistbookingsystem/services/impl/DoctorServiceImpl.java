@@ -3,7 +3,6 @@ package com.rade.dentistbookingsystem.services.impl;
 import com.rade.dentistbookingsystem.domain.Doctor;
 import com.rade.dentistbookingsystem.repository.DoctorRepo;
 import com.rade.dentistbookingsystem.services.DoctorService;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,5 +20,15 @@ public class DoctorServiceImpl implements DoctorService {
 
     public Doctor findId(Integer id) {
         return doctorRepo.findId(id);
+    }
+
+    @Override
+    public int countByBranchId(int branch_id) {
+        return doctorRepo.countByBranchId(branch_id);
+    }
+
+    @Override
+    public List<Integer> findDoctorIdLeastShiftOneDay(String time, int branch_id) {
+        return doctorRepo.findDoctorIdLeastShiftOneDay(time, branch_id);
     }
 }

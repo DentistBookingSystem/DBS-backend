@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -39,11 +40,14 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     @Query(value =
             "SELECT Appointment.* " +
                     "FROM Appointment " +
-                    "WHERE doctor_id = :doctor_id AND " +
+                    "WHERE " +
+                    "(doctor_id = :doctor_id OR :doctor_id = 0) AND " +
                     "status = 0 AND " +
                     "appointment_date = :time",
             nativeQuery = true)
     List<Appointment> checkShiftOfDoctorOneDay(
                                         @Param("doctor_id") int doctor_id,
                                         @Param("time") String time);
+
+    Appointment findByShiftAndDateAndDoctorId(int appointment_shift, Date appointment_date, int doctor_id);
 }
