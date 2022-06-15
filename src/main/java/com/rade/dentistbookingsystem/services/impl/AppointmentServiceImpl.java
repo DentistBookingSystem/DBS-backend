@@ -91,4 +91,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Appointment findByShiftAndDateAndDoctorId(int appointment_shift, Date appointment_date, int doctor_id) {
         return appointmentRepo.findByShiftAndDateAndDoctorId(appointment_shift, appointment_date, doctor_id);
     }
+
+    @Override
+    public Appointment findByAccountAndStatus(Account account, int status) {
+        return appointmentRepo.findByAccountAndStatus(account, status);
+    }
 }

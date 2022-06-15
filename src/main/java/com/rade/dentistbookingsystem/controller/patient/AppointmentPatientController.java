@@ -65,6 +65,10 @@ public class AppointmentPatientController {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Account account = accountService.findByPhone(jsonAppointment.getPhone());
+            if(account.getStatus() == 2)
+                return ResponseEntity.status(HttpStatus.LOCKED).build();
+            if(appointmentService.findByAccountAndStatus(account, 0) != null)
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
             if(account != null){
                 jsonAppointment.getAppointmentDTO().setAccount_id(account.getId());
                 if(jsonAppointment.getAppointmentDTO().getDoctor_id() == 0){
@@ -79,6 +83,7 @@ public class AppointmentPatientController {
                 ) != null) return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
                 Appointment appointment = appointmentService.save(jsonAppointment.getAppointmentDTO());
                 int noOfServiceId = jsonAppointment.getServiceIdList().length;
+                if (noOfServiceId == 0) return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
                 for (int i = 0; i < noOfServiceId; i++) {
                     AppointmentDetail appointmentDetail = new AppointmentDetail(
                             appointment,
@@ -96,9 +101,9 @@ public class AppointmentPatientController {
 
     @PostMapping("history")
     public List<Appointment> getHistoryList(@RequestBody PhoneAndPage phoneAndPage){
-        String phone = phoneAndPage.getData()[0];
+        String phone = phoneAndPage.getPhone();
         int account_id = accountService.findByPhone(phone).getId();
-        int page = Integer.parseInt(phoneAndPage.getData()[1]);
+        int page = phoneAndPage.getPage();
         Pageable pageable = PageRequest.of(page - 1, 3, Sort.by("id").descending());
         return appointmentService.findByAccountId(account_id, pageable);
     }

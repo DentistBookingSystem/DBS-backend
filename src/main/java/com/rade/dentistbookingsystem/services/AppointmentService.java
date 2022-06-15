@@ -1,5 +1,7 @@
 package com.rade.dentistbookingsystem.services;
 
+import com.rade.dentistbookingsystem.componentform.JsonAppointment;
+import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.model.AppointmentDTO;
 import org.springframework.data.domain.Page;
@@ -14,7 +16,6 @@ public interface AppointmentService {
 
     Page<Appointment> findAll(Pageable pageable);
 
-    @Query(value = "SELECT Appointment.* FROM Appointment  WHERE id = ?1", nativeQuery = true)
     Appointment findId(int id);
 
     List<Appointment> checkShiftOfDoctor(int doctor_id, String time);
@@ -26,4 +27,7 @@ public interface AppointmentService {
     List<Appointment> findByAccountId(int account_id, Pageable pageable);
 
     Appointment findByShiftAndDateAndDoctorId(int appointment_shift, Date appointment_date, int doctor_id);
+
+    Appointment findByAccountAndStatus(Account account, int status);
 }
+

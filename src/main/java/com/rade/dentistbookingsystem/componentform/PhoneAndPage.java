@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class PhoneAndPage {
-    private String[] data;
+    private String phone;
+    private int page;
 }

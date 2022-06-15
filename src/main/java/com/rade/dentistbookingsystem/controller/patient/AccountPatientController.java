@@ -1,4 +1,4 @@
-package com.rade.dentistbookingsystem.controller;
+package com.rade.dentistbookingsystem.controller.patient;
 
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.model.AccountDTO;
@@ -8,23 +8,28 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @CrossOrigin
-@RequestMapping("rade/account")
-public class AccountController {
+@RequestMapping("rade/patient/account")
+public class AccountPatientController {
     @Autowired
     AccountService accountService;
 
+    @GetMapping("profile")
+    public Account viewProfile(@RequestParam String phone) {
 
-    @PostMapping("registration")
-    public ResponseEntity<?> register(@RequestBody AccountDTO accountDTO) {
+        return accountService.view(phone);
+    }
+
+    @PostMapping("profile/edit")
+    public ResponseEntity<?> edit(@RequestBody AccountDTO accountDTO) {
         try {
-            accountService.registerNewUserAccount(accountDTO);
-            return ResponseEntity.ok("Register successfully");
+            return ResponseEntity.ok(accountService.edit(accountDTO));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not register");
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 }
+
+
