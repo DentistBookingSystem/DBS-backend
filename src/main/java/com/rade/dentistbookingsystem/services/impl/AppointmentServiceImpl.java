@@ -101,4 +101,15 @@ public class AppointmentServiceImpl implements AppointmentService {
     public int countByAccountIdAndStatus(int account_id, int status) {
         return appointmentRepo.countByAccountIdAndStatus(account_id, status);
     }
+
+
+    @Override
+    public boolean checkAppointmentToCancel(int id) {
+        return appointmentRepo.checkAppointmentToCancel(id);
+    }
+
+    @Override
+    public void deleteById(int id) {
+        appointmentRepo.deleteById(id);
+    }
 }

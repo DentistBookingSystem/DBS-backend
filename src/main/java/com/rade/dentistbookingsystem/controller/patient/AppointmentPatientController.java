@@ -172,5 +172,18 @@ public class AppointmentPatientController {
         return shiftBookedByDate;
     }
 
-
+    @GetMapping("cancel/{id}")
+    public ResponseEntity<?> cancelAppointment(@PathVariable Integer id){
+        try{
+            if(appointmentService.checkAppointmentToCancel(id)){
+                appointmentService.deleteById(id);
+                return ResponseEntity.status(HttpStatus.OK).build();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    }
 }

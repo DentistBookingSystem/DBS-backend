@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Date;
 import java.util.List;
@@ -54,4 +55,19 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     Appointment findByAccountAndStatus(Account account, int status);
 
     int countByAccountIdAndStatus(int account_id, int status);
+
+    @Query(value =
+            "SELECT " +
+            "CASE WHEN EXISTS (" +
+                    "SELECT a.*, DATEDIFF(MINUTE, a.time_making, GETDATE()) " +
+                    "FROM Appointment a " +
+                    "WHERE a.id = :id AND a.status = 0 AND DATEDIFF(MINUTE, a.time_making, GETDATE()) <= 3 " +
+                    ") " +
+                    "THEN 'TRUE' " +
+                    "ELSE 'FALSE' " +
+                    "END",
+            nativeQuery = true)
+    boolean checkAppointmentToCancel(@Param("id") int id);
+    @Transactional
+    void deleteById(int id);
 }

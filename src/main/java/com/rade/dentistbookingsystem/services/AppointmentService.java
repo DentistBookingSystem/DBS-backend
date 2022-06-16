@@ -31,5 +31,9 @@ public interface AppointmentService {
     Appointment findByAccountAndStatus(Account account, int status);
 
     int countByAccountIdAndStatus(int account_id, int status);
+
+    boolean checkAppointmentToCancel(int id);
+
+    void deleteById(int id);
 }
 
