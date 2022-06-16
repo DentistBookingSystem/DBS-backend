@@ -3,6 +3,8 @@ package com.rade.dentistbookingsystem.services;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.model.AccountDTO;
 
+import java.util.Optional;
+
 public interface AccountService {
     Account findId(int id);
 
@@ -15,4 +17,6 @@ public interface AccountService {
     Account edit(AccountDTO accountDTO) throws Exception;
 
     Account findByPhone(String phone);
+
+    Optional<Account> findById(Integer integer);
 }

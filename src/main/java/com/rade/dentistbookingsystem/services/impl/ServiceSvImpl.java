@@ -37,8 +37,14 @@ public class ServiceSvImpl implements ServiceSv {
 
     @Override
     public Service insert(ServiceDTO serviceDTO) throws Exception {
-        Service service = new Service(
-                serviceTypeSv.getById(serviceDTO.getService_type_id()), serviceDTO.getName(), serviceDTO.getUrl(), serviceDTO.getDescription(), serviceDTO.getStatus(), serviceDTO.getMin_price(), serviceDTO.getMax_price());
+        Service service = new Service();
+        service.setName(serviceDTO.getName());
+        service.setStatus(serviceDTO.getStatus());
+        service.setDescription(serviceDTO.getDescription());
+        service.setMin_price(serviceDTO.getMin_price());
+        service.setMax_price(serviceDTO.getMax_price());
+        service.setUrl(serviceDTO.getUrl());
+        service.setServiceType(serviceTypeSv.findById(serviceDTO.getService_type_id()).orElseThrow(() -> new RuntimeException("Service type id not found")));
         return save(service);
 
 

@@ -40,6 +40,7 @@ public class ServiceAdminController {
     @PostMapping(value = "add-service")
     public ResponseEntity<?> addService(@Valid @RequestPart("serviceDTO") ServiceDTO serviceDTO, @RequestPart MultipartFile url) throws Exception {
         try {
+
             if (serviceDTO.getMax_price() < serviceDTO.getMin_price())
                 throw new ValidationException("Min price must < max price");
 
