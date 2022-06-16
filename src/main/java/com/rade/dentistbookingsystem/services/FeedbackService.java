@@ -18,4 +18,5 @@ public interface FeedbackService {
 
     List<Feedback> filterFeedback(String phone, int status, int service_id, String time, Pageable pageable);
 
+    int countByAccountIdAndStatus(int account_id, int status);
 }

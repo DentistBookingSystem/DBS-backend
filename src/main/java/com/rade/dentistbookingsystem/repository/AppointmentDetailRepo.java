@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface AppointmentDetailRepo extends JpaRepository<AppointmentDetail, Integer> {
     List<AppointmentDetail> findByAppointmentId(int appointment_id);
+
+
 }

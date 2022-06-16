@@ -27,4 +27,6 @@ public interface FeedbackRepo extends JpaRepository<Feedback, Integer> {
                                   @Param("service_id") int service_id,
                                   @Param("time") String time,
                                   Pageable pageable);
+
+    int countByAccountIdAndStatus(int account_id, int status);
 }

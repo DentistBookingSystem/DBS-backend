@@ -1,17 +1,18 @@
 package com.rade.dentistbookingsystem.services.impl;
 
+import com.rade.dentistbookingsystem.componentform.AccountAndViolationTimes;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.model.AccountDTO;
-import com.rade.dentistbookingsystem.repository.AccountRepo;
-import com.rade.dentistbookingsystem.repository.DistrictRepo;
-import com.rade.dentistbookingsystem.repository.RoleRepo;
+import com.rade.dentistbookingsystem.repository.*;
 import com.rade.dentistbookingsystem.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -20,6 +21,12 @@ public class AccountServiceImpl implements AccountService {
     BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     RoleRepo roleRepo;
+
+    @Autowired
+    AppointmentRepo appointmentRepo;
+
+    @Autowired
+    FeedbackRepo feedbackRepo;
 
     @Autowired
     DistrictRepo districtRepo;
@@ -83,6 +90,23 @@ public class AccountServiceImpl implements AccountService {
             account.setGender(accountDTO.getGender());
             return save(account);
         }
+    }
+
+
+    @Override
+    public List<AccountAndViolationTimes> findViolatedAccountsAndViolationTimes(Pageable pageable) {
+        List<Account> accountList = accountRepo.findAccountViolated(pageable);
+        List<AccountAndViolationTimes> accountAndViolationTimesList = new ArrayList<>();
+        for (Account account : accountList) {
+            int violationTimes =
+                    appointmentRepo.countByAccountIdAndStatus(account.getId(), 2) +
+                    feedbackRepo.countByAccountIdAndStatus(account.getId(), 2);                ;
+            accountAndViolationTimesList.add(new AccountAndViolationTimes(
+                    account,
+                    violationTimes
+            ));
+        }
+        return accountAndViolationTimesList;
     }
 
     public Account findByPhone(String phone) {

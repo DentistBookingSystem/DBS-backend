@@ -68,4 +68,9 @@ public class FeedbackServiceImpl implements FeedbackService {
     public List<Feedback> filterFeedback(String phone, int status, int service_id, String time, Pageable pageable) {
         return feedBackRepo.filterFeedback(phone, status, service_id, time, pageable);
     }
+
+    @Override
+    public int countByAccountIdAndStatus(int account_id, int status) {
+        return feedBackRepo.countByAccountIdAndStatus(account_id, status);
+    }
 }

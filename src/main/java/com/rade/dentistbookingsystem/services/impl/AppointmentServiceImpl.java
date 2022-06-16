@@ -96,4 +96,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Appointment findByAccountAndStatus(Account account, int status) {
         return appointmentRepo.findByAccountAndStatus(account, status);
     }
+
+    @Override
+    public int countByAccountIdAndStatus(int account_id, int status) {
+        return appointmentRepo.countByAccountIdAndStatus(account_id, status);
+    }
 }

@@ -68,7 +68,7 @@ public class AppointmentPatientController {
             if(account.getStatus() == 2)
                 return ResponseEntity.status(HttpStatus.LOCKED).build();
             if(appointmentService.findByAccountAndStatus(account, 0) != null)
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+                return ResponseEntity.status(HttpStatus.GONE).build();
             if(account != null){
                 jsonAppointment.getAppointmentDTO().setAccount_id(account.getId());
                 if(jsonAppointment.getAppointmentDTO().getDoctor_id() == 0){
