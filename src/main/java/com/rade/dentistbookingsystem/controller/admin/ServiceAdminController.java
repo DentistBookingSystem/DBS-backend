@@ -4,7 +4,9 @@ import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.model.ServiceDTO;
 import com.rade.dentistbookingsystem.services.GoogleDriveFileService;
 import com.rade.dentistbookingsystem.services.ServiceSv;
+import com.rade.dentistbookingsystem.services.ServiceTypeSv;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -20,35 +24,32 @@ import java.util.List;
 public class ServiceAdminController {
     @Autowired
     ServiceSv serviceSv;
-
+    @Autowired
+    ServiceTypeSv serviceTypeSv;
     @Autowired
     GoogleDriveFileService googleDriveFileService;
 
 
     // những hàm cho service
-    @GetMapping("{id}")
-    public List<Service> findByID(@PathVariable int id) {
-        return serviceSv.findByServiceTypeId(id);
+    @GetMapping()
+    public Optional<Service> findByID(@RequestParam int id) {
+        return serviceSv.findById(id);
     }
 
-    @GetMapping("list")
-    public List<Service> loadActiveService() {
-        return serviceSv.loadAllActiveService();
-    }
-
-    @PostMapping(value = "add-image")
-    public ResponseEntity<?> addServiceImg(@RequestParam MultipartFile url) throws Exception {
-        String id = googleDriveFileService.uploadFile(url, "image", true);
-        if (id != null)
-            return ResponseEntity.ok(id);
-        else
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-    }
 
     @PostMapping(value = "add-service")
-    public ResponseEntity<?> addService(@Valid @RequestBody ServiceDTO serviceDTO) throws Exception {
+    public ResponseEntity<?> addService(@Valid @RequestPart("serviceDTO") ServiceDTO serviceDTO, @RequestPart MultipartFile url) throws Exception {
         try {
+            if (serviceDTO.getMax_price() < serviceDTO.getMin_price())
+                throw new ValidationException("Min price must < max price");
+
+
+            String imageUrl = googleDriveFileService.uploadFile(url, "image", true);
+            serviceDTO.setUrl(imageUrl);
+
+
             return ResponseEntity.ok(serviceSv.insert(serviceDTO));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,16 +57,48 @@ public class ServiceAdminController {
 
 
     }
+
+
+//    @PostMapping(value = "add-image")
+//    public ResponseEntity<?> addServiceImg(@RequestParam MultipartFile url) throws Exception {
+//        String id = googleDriveFileService.uploadFile(url, "image", true);
+//        if (id != null)
+//            return ResponseEntity.ok(id);
+//        else
+//            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+//    }
+
+//    @PostMapping(value = "add-service")
+//    public ResponseEntity<?> addService(@Valid @RequestBody ServiceDTO serviceDTO) throws Exception {
+//        try {
+//
+//            return ResponseEntity.ok(serviceSv.insert(serviceDTO));
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+//
+//
+//    }
 
     @RolesAllowed({"ROLE_ADMIN"})
     @GetMapping("edit/{id}")
-    public ResponseEntity<?> editService(@Valid @RequestBody ServiceDTO serviceDTO, @PathVariable int id) {
+    public ResponseEntity<?> editService(@Valid @RequestPart ServiceDTO serviceDTO, @RequestPart MultipartFile url, @PathVariable int id) {
         try {
+
+
+            String imageUrl = googleDriveFileService.uploadFile(url, "image", true);
+            serviceDTO.setUrl(imageUrl);
+
             return ResponseEntity.ok(serviceSv.edit(serviceDTO, id));
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+
     }
 
     @GetMapping("delete/{id}")
@@ -79,4 +112,23 @@ public class ServiceAdminController {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
+
+    // Hàm trả về ServiceComponent cho admin bao gồm servcie va service type
+
+
+    @GetMapping("list")
+    public List<Service> loadServiceComponent() {
+        return serviceSv.findAll();
+    }
+
+    // Pagination
+    @GetMapping("page")
+    public Page<Service> findAllWithPagination() {
+        return serviceSv.findAllWithPagination();
+    }
+
+    @GetMapping("page/{field}")
+    public Page<Service> findAllWithPagination(@PathVariable String field) {
+        return serviceSv.findAllWithPaginationAndSorting(field);
+    }
 }

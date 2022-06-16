@@ -20,9 +20,13 @@ public interface BranchService {
 
     Page<Branch> findAll(Pageable pageable);
 
-    Optional<Branch> findById(Integer id);
+    <S extends Branch> S save(S entity);
 
-    Branch save(BranchDTO branchDTO);
+    Branch saveBranch(BranchDTO branchDTO);
+
+    Branch updateBranch(BranchDTO branchDTO, int id);
+
+    Optional<Branch> findById(Integer id);
 
     Branch findByName(String name);
 

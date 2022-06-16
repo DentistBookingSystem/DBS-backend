@@ -1,13 +1,11 @@
 package com.rade.dentistbookingsystem.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,6 +25,9 @@ public class Doctor implements Serializable {
 
     @Column(nullable = false, columnDefinition = "varchar(MAX)")
     private String url;
+
+    @Column(nullable = false)
+    private int status;
 
     @ManyToOne
     @JoinColumn(name = "branch_id", nullable = false)

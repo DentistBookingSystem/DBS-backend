@@ -7,6 +7,9 @@ import com.rade.dentistbookingsystem.repository.ServiceRepo;
 import com.rade.dentistbookingsystem.services.ServiceSv;
 import com.rade.dentistbookingsystem.services.ServiceTypeSv;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,5 +113,20 @@ public class ServiceSvImpl implements ServiceSv {
     @Override
     public List<Service> findByServiceTypeIdAndStatus(int id, short status) {
         return serviceRepo.findByServiceTypeIdAndStatus(id, status);
+    }
+
+
+    @Override
+    public Page<Service> findAllWithPagination() {
+        Page<Service> servicePage = serviceRepo.findAll(PageRequest.of(1, 5));
+        return servicePage;
+    }
+
+    // Pagation and sort by fields
+
+    @Override
+    public Page<Service> findAllWithPaginationAndSorting(String field) {
+        Page<Service> servicePage = serviceRepo.findAll(PageRequest.of(1, 5).withSort(Sort.by(field)));
+        return servicePage;
     }
 }
