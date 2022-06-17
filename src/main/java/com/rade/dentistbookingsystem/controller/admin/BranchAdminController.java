@@ -40,10 +40,27 @@ public class BranchAdminController {
         return branchService.findId(id);
     }
 
+//    @PostMapping("add")
+//    public ResponseEntity<?> addBranch(@Valid @RequestPart BranchDTO branchDTO, @RequestPart MultipartFile url) {
+//        try {
+//            String imageUrl = googleDriveFileService.uploadFile(url, "image", true);
+//            branchDTO.setUrl(imageUrl);
+//            Branch branch = branchService.saveBranch(branchDTO);
+//            if (branch == null) throw new Exception();
+//            return ResponseEntity.ok(branch);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+//
+//    }
+
     @PostMapping("add")
-    public ResponseEntity<?> addBranch(@Valid @RequestPart BranchDTO branchDTO, @RequestPart MultipartFile url) {
+    public ResponseEntity<?> addBranch(@RequestParam MultipartFile img,
+                                       @Valid @ModelAttribute("branchDTO") BranchDTO branchDTO) {
         try {
-            String imageUrl = googleDriveFileService.uploadFile(url, "image", true);
+            String imageUrl = googleDriveFileService.uploadFile(img, "image", true);
             branchDTO.setUrl(imageUrl);
             Branch branch = branchService.saveBranch(branchDTO);
             if (branch == null) throw new Exception();
@@ -57,9 +74,10 @@ public class BranchAdminController {
     }
 
     @PostMapping("update/{id}")
-    public ResponseEntity<?> updateBranch(@Valid @RequestPart BranchDTO branchDTO, @RequestPart MultipartFile url, @PathVariable int id) {
+    public ResponseEntity<?> updateBranch(@RequestParam MultipartFile img,
+                                          @Valid @ModelAttribute("branchDTO") BranchDTO branchDTO, @PathVariable int id) {
         try {
-            String imageUrl = googleDriveFileService.uploadFile(url, "image", true);
+            String imageUrl = googleDriveFileService.uploadFile(img, "image", true);
             branchDTO.setUrl(imageUrl);
             Branch branch = branchService.updateBranch(branchDTO, id);
             if (branch == null) throw new Exception();
