@@ -38,6 +38,8 @@ public class ServiceDTO  implements Serializable {
     @Min(value = 1, message = " Min price must be  greater than 0")
     private float min_price;
 
+    @NotNull(message = "Service estimated time is required")
+    private float estimated_time;
     @NotNull(message = "Service max price is required")
     @Min(value = 1, message = " Max price must be  greater than 0")
     private float max_price;

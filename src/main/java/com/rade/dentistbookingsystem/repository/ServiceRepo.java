@@ -12,6 +12,8 @@ public interface ServiceRepo extends JpaRepository<Service, Integer> {
 
     public List<Service> findByServiceTypeId(int id);
 
+    public Service findByName(String name);
+
     @Query(value = "SELECT * FROM Service WHERE id = ?1", nativeQuery = true)
     Service findId(Integer id);
 

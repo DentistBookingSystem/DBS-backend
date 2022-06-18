@@ -22,7 +22,7 @@ public interface ServiceSv {
     Service findId(Integer id);
     Optional<Service> findById(Integer integer);
 
-    Service edit(ServiceDTO serviceDTO, int id);
+    Service edit(ServiceDTO serviceDTO);
 
     boolean existsById(Integer integer);
 

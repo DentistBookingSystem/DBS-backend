@@ -1,6 +1,8 @@
 package com.rade.dentistbookingsystem.services.impl;
 
 import com.rade.dentistbookingsystem.domain.ServiceType;
+import com.rade.dentistbookingsystem.exceptions.DuplicateRecordException;
+import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.ServiceTypeDTO;
 import com.rade.dentistbookingsystem.repository.ServiceTypeRepo;
 import com.rade.dentistbookingsystem.services.ServiceTypeSv;
@@ -56,8 +58,12 @@ public class ServiceTypeSvImpl implements ServiceTypeSv {
 
     @Override
     public ServiceType insert(ServiceTypeDTO serviceTypeDTO) {
-        ServiceType serviceType = new ServiceType(serviceTypeDTO.getName(), serviceTypeDTO.getDescription());
-        return save(serviceType);
+
+        if (serviceTypeRepo.findByName(serviceTypeDTO.getName()) == null) {
+            ServiceType serviceType = new ServiceType(serviceTypeDTO.getName(), serviceTypeDTO.getDescription());
+            return save(serviceType);
+        } else throw new DuplicateRecordException("Service type name has been use");
+
 
     }
 
@@ -81,8 +87,8 @@ public class ServiceTypeSvImpl implements ServiceTypeSv {
             serviceType.setDescription(serviceTypeDTO.getDescription());
 
             return save(serviceType);
-        }
-        return null;
+        } else throw new NotFoundException("Service type not found");
+
 
     }
 
