@@ -2,11 +2,16 @@ package com.rade.dentistbookingsystem.services.impl;
 
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.domain.ServiceType;
+import com.rade.dentistbookingsystem.exceptions.DuplicateRecordException;
+import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.ServiceDTO;
 import com.rade.dentistbookingsystem.repository.ServiceRepo;
 import com.rade.dentistbookingsystem.services.ServiceSv;
 import com.rade.dentistbookingsystem.services.ServiceTypeSv;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +39,22 @@ public class ServiceSvImpl implements ServiceSv {
 
     @Override
     public Service insert(ServiceDTO serviceDTO) throws Exception {
-        Service service = new Service(
-                serviceTypeSv.getById(serviceDTO.getService_type_id()), serviceDTO.getName(), serviceDTO.getUrl(), serviceDTO.getDescription(), serviceDTO.getStatus(), serviceDTO.getMin_price(), serviceDTO.getMax_price());
+        if (serviceRepo.findByName(serviceDTO.getName()) != null)
+            throw new DuplicateRecordException("This service name has bean use");
+
+        Service service = new Service();
+        service.setName(serviceDTO.getName());
+        service.setStatus(serviceDTO.getStatus());
+        service.setDescription(serviceDTO.getDescription());
+        service.setMin_price(serviceDTO.getMin_price());
+        service.setMax_price(serviceDTO.getMax_price());
+        service.setUrl(serviceDTO.getUrl());
+        service.setEstimated_time(serviceDTO.getEstimated_time());
+        service.setServiceType(serviceTypeSv.findById(serviceDTO.getService_type_id()).orElseThrow(() -> new NotFoundException("Service type id not found")));
         return save(service);
 
 
     }
-
 
     public Service findId(Integer id) {
         return serviceRepo.findId(id);
@@ -61,8 +75,8 @@ public class ServiceSvImpl implements ServiceSv {
     }
 
     @Override
-    public Service edit(ServiceDTO serviceDTO, int id) {
-        Optional<Service> serviceData = findById(id);
+    public Service edit(ServiceDTO serviceDTO) {
+        Optional<Service> serviceData = findById(serviceDTO.getId());
         if (serviceData.isPresent()) {
             Service service = serviceData.get();
             service.setName(serviceDTO.getName());
@@ -70,10 +84,10 @@ public class ServiceSvImpl implements ServiceSv {
             service.setStatus(serviceDTO.getStatus());
             service.setMin_price(serviceDTO.getMin_price());
             service.setMax_price(serviceDTO.getMax_price());
-
+            service.setServiceType(serviceTypeSv.findById(serviceDTO.getService_type_id()).orElseThrow(() -> new NotFoundException("Service type id not found")));
+            service.setEstimated_time(serviceDTO.getEstimated_time());
             return save(service);
-        }
-        return null;
+        } else throw new NotFoundException("Service is not found");
 
     }
 
@@ -89,8 +103,8 @@ public class ServiceSvImpl implements ServiceSv {
             Service service = serviceData.get();
             service.setStatus((short) 0);
             return save(service);
-        }
-        return null;
+        } else throw new NotFoundException("Service is not found");
+
 
     }
 
@@ -110,5 +124,20 @@ public class ServiceSvImpl implements ServiceSv {
     @Override
     public List<Service> findByServiceTypeIdAndStatus(int id, short status) {
         return serviceRepo.findByServiceTypeIdAndStatus(id, status);
+    }
+
+
+    @Override
+    public Page<Service> findAllWithPagination() {
+        Page<Service> servicePage = serviceRepo.findAll(PageRequest.of(1, 5));
+        return servicePage;
+    }
+
+    // Pagation and sort by fields
+
+    @Override
+    public Page<Service> findAllWithPaginationAndSorting(String field) {
+        Page<Service> servicePage = serviceRepo.findAll(PageRequest.of(1, 5).withSort(Sort.by(field)));
+        return servicePage;
     }
 }

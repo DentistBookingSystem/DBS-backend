@@ -4,13 +4,29 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class DoctorDTO  implements Serializable {
+public class DoctorDTO implements Serializable {
+
     private int id;
-    private int name;
+    @NotNull(message = "Name of doctor is require")
+    @NotEmpty(message = "Description of doctor is require")
+    private String name;
+
+    @NotNull(message = "Description of doctor is require")
+    @NotEmpty(message = "Description of doctor is require")
     private String description;
+
+    private String url;
+
+    @NotNull(message = "Branch is require")
+    private int branch_id;
+
+    private int status;
+
 }

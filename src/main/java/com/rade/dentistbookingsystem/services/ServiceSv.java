@@ -3,6 +3,7 @@ package com.rade.dentistbookingsystem.services;
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.domain.ServiceType;
 import com.rade.dentistbookingsystem.model.ServiceDTO;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,7 +22,7 @@ public interface ServiceSv {
     Service findId(Integer id);
     Optional<Service> findById(Integer integer);
 
-    Service edit(ServiceDTO serviceDTO, int id);
+    Service edit(ServiceDTO serviceDTO);
 
     boolean existsById(Integer integer);
 
@@ -31,4 +32,8 @@ public interface ServiceSv {
     List<Service> loadAllActiveService();
 
     List<Service> findByServiceTypeIdAndStatus(int id, short status);
+
+    Page<Service> findAllWithPagination();
+
+    Page<Service> findAllWithPaginationAndSorting(String field);
 }
