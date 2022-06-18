@@ -5,10 +5,7 @@ import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.model.AppointmentDTO;
 import com.rade.dentistbookingsystem.repository.AppointmentRepo;
-import com.rade.dentistbookingsystem.services.AccountService;
-import com.rade.dentistbookingsystem.services.AppointmentService;
-import com.rade.dentistbookingsystem.services.BranchService;
-import com.rade.dentistbookingsystem.services.DoctorService;
+import com.rade.dentistbookingsystem.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +19,8 @@ import java.util.List;
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
     AppointmentRepo appointmentRepo;
+    @Autowired
+    ServiceSv serviceSv;
     @Autowired
     private AccountService accountService;
     @Autowired
@@ -98,9 +97,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 //    public List<TimeOptionByDate> checkTimeOptionOfDoctorByDate(DoctorAndDate doctorAndDate){
 //        List<TimeOptionByDate> timeOptionByDateList = new ArrayList<>();
 //        List<Appointment> appointmentList;
+//        if(doctorAndDate.getService_id().length == 0) return null;
+//        float totalTime = 0;
 //        if(doctorAndDate.getDoctor_id() != 0){
 //            appointmentList = appointmentRepo.findByDoctorIdAndTime(doctorAndDate.getDoctor_id(), doctorAndDate.getDate());
-//
+//            for (int service_id: doctorAndDate.getService_id()) {
+//                totalTime = totalTime + serviceSv.findId(service_id).getEstimated_time();
+//            }
 //        }
 //    }
 }
