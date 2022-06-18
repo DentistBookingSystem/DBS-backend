@@ -3,13 +3,11 @@ package com.rade.dentistbookingsystem.controller.admin;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping("rade/admin/account")
 public class AccountAdminController {
 

@@ -2,9 +2,9 @@ package com.rade.dentistbookingsystem.controller.admin;
 
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.model.ServiceDTO;
-import com.rade.dentistbookingsystem.services.GoogleDriveFileService;
 import com.rade.dentistbookingsystem.services.ServiceSv;
 import com.rade.dentistbookingsystem.services.ServiceTypeSv;
+import com.rade.dentistbookingsystem.utils.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -12,9 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +25,7 @@ public class ServiceAdminController {
     @Autowired
     ServiceTypeSv serviceTypeSv;
     @Autowired
-    GoogleDriveFileService googleDriveFileService;
+    ImageService imageService;
 
 
     // những hàm cho service
@@ -37,41 +35,17 @@ public class ServiceAdminController {
     }
 
 
-    @PostMapping(value = "add-service")
-    public ResponseEntity<?> addService(@Valid @RequestPart("serviceDTO") ServiceDTO serviceDTO, @RequestPart MultipartFile url) throws Exception {
-        try {
-
-            if (serviceDTO.getMax_price() < serviceDTO.getMin_price())
-                throw new ValidationException("Min price must < max price");
-
-
-            String imageUrl = googleDriveFileService.uploadFile(url, "image", true);
-            serviceDTO.setUrl(imageUrl);
-
-
-            return ResponseEntity.ok(serviceSv.insert(serviceDTO));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-
-
-    }
-
-
-//    @PostMapping(value = "add-image")
-//    public ResponseEntity<?> addServiceImg(@RequestParam MultipartFile url) throws Exception {
-//        String id = googleDriveFileService.uploadFile(url, "image", true);
-//        if (id != null)
-//            return ResponseEntity.ok(id);
-//        else
-//            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-//    }
-
 //    @PostMapping(value = "add-service")
-//    public ResponseEntity<?> addService(@Valid @RequestBody ServiceDTO serviceDTO) throws Exception {
+//    public ResponseEntity<?> addService(@Valid @RequestPart("serviceDTO") ServiceDTO serviceDTO, @RequestPart MultipartFile url) throws Exception {
 //        try {
+//
+//            if (serviceDTO.getMax_price() < serviceDTO.getMin_price())
+//                throw new ValidationException("Min price must < max price");
+//
+//
+//            String imageUrl = googleDriveFileService.uploadFile(url, "image", true);
+//            serviceDTO.setUrl(imageUrl);
+//
 //
 //            return ResponseEntity.ok(serviceSv.insert(serviceDTO));
 //
@@ -83,34 +57,45 @@ public class ServiceAdminController {
 //
 //    }
 
-    @RolesAllowed({"ROLE_ADMIN"})
-    @GetMapping("edit/{id}")
-    public ResponseEntity<?> editService(@Valid @RequestPart ServiceDTO serviceDTO, @RequestPart MultipartFile url, @PathVariable int id) {
-        try {
+
+    @PostMapping(value = "add-image")
+    public ResponseEntity<?> addServiceImg(@RequestParam MultipartFile url) throws Exception {
+        String id = imageService.validateAndDownload(url);
+        if (id != null)
+            return ResponseEntity.ok(id); // lấy id gán vào cột url của serviceDTO sẽ gửi lên requeest
+        else
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    }
+
+    @PostMapping(value = "add-service")
+    public ResponseEntity<?> addService(@Valid @RequestBody ServiceDTO serviceDTO) throws Exception {
 
 
-            String imageUrl = googleDriveFileService.uploadFile(url, "image", true);
-            serviceDTO.setUrl(imageUrl);
-
-            return ResponseEntity.ok(serviceSv.edit(serviceDTO, id));
+        return ResponseEntity.ok(serviceSv.insert(serviceDTO));
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        // return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+
+
+    }
+
+
+    @PostMapping("edit")
+    public ResponseEntity<?> editService(@Valid @RequestBody ServiceDTO serviceDTO) {
+
+
+        return ResponseEntity.ok(serviceSv.edit(serviceDTO));
+
 
     }
 
     @GetMapping("delete/{id}")
     public ResponseEntity<?> deleteService(@PathVariable int id) {
-        try {
 
-            return ResponseEntity.ok(serviceSv.deleteService(id));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+
+        return ResponseEntity.ok(serviceSv.deleteService(id));
+
+
     }
 
 

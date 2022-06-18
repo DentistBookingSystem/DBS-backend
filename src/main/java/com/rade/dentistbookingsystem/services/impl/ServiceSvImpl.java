@@ -2,6 +2,7 @@ package com.rade.dentistbookingsystem.services.impl;
 
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.domain.ServiceType;
+import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.ServiceDTO;
 import com.rade.dentistbookingsystem.repository.ServiceRepo;
 import com.rade.dentistbookingsystem.services.ServiceSv;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,7 +46,7 @@ public class ServiceSvImpl implements ServiceSv {
         service.setMin_price(serviceDTO.getMin_price());
         service.setMax_price(serviceDTO.getMax_price());
         service.setUrl(serviceDTO.getUrl());
-        service.setServiceType(serviceTypeSv.findById(serviceDTO.getService_type_id()).orElseThrow(() -> new RuntimeException("Service type id not found")));
+        service.setServiceType(serviceTypeSv.findById(serviceDTO.getService_type_id()).orElseThrow(() -> new NotFoundException("Service type id not found")));
         return save(service);
 
 
@@ -70,19 +72,24 @@ public class ServiceSvImpl implements ServiceSv {
     }
 
     @Override
-    public Service edit(ServiceDTO serviceDTO, int id) {
-        Optional<Service> serviceData = findById(id);
+    public Service edit(ServiceDTO serviceDTO) {
+        Optional<Service> serviceData = findById(serviceDTO.getId());
         if (serviceData.isPresent()) {
+            if (serviceDTO.getMin_price() >= serviceDTO.getMax_price())
+                throw new ValidationException("Min price must <= max price");
+
             Service service = serviceData.get();
             service.setName(serviceDTO.getName());
             service.setDescription(serviceDTO.getDescription());
             service.setStatus(serviceDTO.getStatus());
             service.setMin_price(serviceDTO.getMin_price());
             service.setMax_price(serviceDTO.getMax_price());
+            service.setServiceType(serviceTypeSv.findById(serviceDTO.getService_type_id()).orElseThrow(() -> new NotFoundException("Service type id not found")));
+
 
             return save(service);
-        }
-        return null;
+        } else throw new NotFoundException("Can not find service");
+
 
     }
 
@@ -98,8 +105,8 @@ public class ServiceSvImpl implements ServiceSv {
             Service service = serviceData.get();
             service.setStatus((short) 0);
             return save(service);
-        }
-        return null;
+        } else throw new NotFoundException("Service is not found");
+
 
     }
 
@@ -124,15 +131,13 @@ public class ServiceSvImpl implements ServiceSv {
 
     @Override
     public Page<Service> findAllWithPagination() {
-        Page<Service> servicePage = serviceRepo.findAll(PageRequest.of(1, 5));
-        return servicePage;
+        return serviceRepo.findAll(PageRequest.of(1, 5));
     }
 
     // Pagation and sort by fields
 
     @Override
     public Page<Service> findAllWithPaginationAndSorting(String field) {
-        Page<Service> servicePage = serviceRepo.findAll(PageRequest.of(1, 5).withSort(Sort.by(field)));
-        return servicePage;
+        return serviceRepo.findAll(PageRequest.of(1, 5).withSort(Sort.by(field)));
     }
 }

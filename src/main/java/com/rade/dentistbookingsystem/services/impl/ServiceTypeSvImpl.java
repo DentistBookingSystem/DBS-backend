@@ -1,6 +1,7 @@
 package com.rade.dentistbookingsystem.services.impl;
 
 import com.rade.dentistbookingsystem.domain.ServiceType;
+import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.ServiceTypeDTO;
 import com.rade.dentistbookingsystem.repository.ServiceTypeRepo;
 import com.rade.dentistbookingsystem.services.ServiceTypeSv;
@@ -81,8 +82,8 @@ public class ServiceTypeSvImpl implements ServiceTypeSv {
             serviceType.setDescription(serviceTypeDTO.getDescription());
 
             return save(serviceType);
-        }
-        return null;
+        } else throw new NotFoundException("Service type not found");
+
 
     }
 

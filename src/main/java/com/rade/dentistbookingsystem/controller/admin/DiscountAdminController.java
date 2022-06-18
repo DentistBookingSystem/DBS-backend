@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -43,7 +44,7 @@ public class DiscountAdminController {
     }
 
     @PostMapping("/add")
-    // @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> addDiscount(@RequestBody DiscountServiceComponent discountServiceComponent) {
         try {
 
@@ -51,6 +52,31 @@ public class DiscountAdminController {
             int serviceList[] = discountServiceComponent.getServiceIDList();
             if (serviceList != null) {
                 System.out.println(discountID);
+                for (int i = 0; i < serviceList.length; i++) {
+                    DiscountServiceDTO discountServiceDTO = new DiscountServiceDTO();
+                    discountServiceDTO.setDiscount_id(discountID);
+                    System.out.println(serviceList[i]);
+                    discountServiceDTO.setService_id(serviceList[i]);
+                    return ResponseEntity.ok(discountSv.addServiceDiscount(discountServiceDTO));
+                }
+
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+
+    }
+
+    @PostMapping("/update")
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<?> updateDiscount(@RequestBody DiscountServiceComponent discountServiceComponent) {
+        try {
+
+            int discountID = discount.addDiscount(discountServiceComponent.getDiscountDTO()).getId();
+            int serviceList[] = discountServiceComponent.getServiceIDList();
+            if (serviceList != null) {
+
                 for (int i = 0; i < serviceList.length; i++) {
                     DiscountServiceDTO discountServiceDTO = new DiscountServiceDTO();
                     discountServiceDTO.setDiscount_id(discountID);
