@@ -41,15 +41,14 @@ public class Service implements Serializable {
     @Column(name = "max_price", nullable = false)
     private float max_price;
 
+    @Column(name = "estimated_time", nullable = false)
+    private int estimated_time;
+
     // Discount service
     @OneToMany(mappedBy = "service")
     @JsonIgnore
     private Set<DiscountService> discountServiceSet;
 
-    // service vs feedback
-    @OneToMany(mappedBy = "service")
-    @JsonIgnore
-    private Set<Feedback> feedbackSet;
 
     public Service(ServiceType byId, String name, String url, String description, short status, float min_price, float max_price) {
         this.serviceType = byId;

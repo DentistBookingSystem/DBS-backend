@@ -30,4 +30,6 @@ public interface DoctorRepo extends JpaRepository<Doctor, Integer> {
                 "GROUP BY Doctor.id " +
             ")", nativeQuery = true)
     List<Integer> findDoctorIdLeastShiftOneDay(@Param("time") String time, @Param("branch_id") int branch_id);
+
+
 }

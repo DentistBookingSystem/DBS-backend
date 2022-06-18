@@ -29,34 +29,34 @@ public class AppointmentServiceImpl implements AppointmentService {
         this.appointmentRepo = appointmentRepo;
     }
 
-    @Override
-    public Appointment save(AppointmentDTO appointmentDTO){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH");
-        Account account;
-        if(appointmentDTO.getAccount_id() == null){
-            account = null;
-        }
-        else{
-            account = accountService.findId(appointmentDTO.getAccount_id());
-        }
-        try{
-            Appointment appointment = new Appointment(
-                    account,
-                    branchService.findId(appointmentDTO.getBranch_id()),
-                    doctorService.findId(appointmentDTO.getDoctor_id()),
-                    dateFormat.parse(appointmentDTO.getDate()),
-                    appointmentDTO.getShift(),
-                    0,
-                    new Date()
-            );
-            return appointmentRepo.save(appointment);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    @Override
+//    public Appointment save(AppointmentDTO appointmentDTO){
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        SimpleDateFormat timeFormat = new SimpleDateFormat("HH");
+//        Account account;
+//        if(appointmentDTO.getAccount_id() == null){
+//            account = null;
+//        }
+//        else{
+//            account = accountService.findId(appointmentDTO.getAccount_id());
+//        }
+//        try{
+//            Appointment appointment = new Appointment(
+//                    account,
+//                    branchService.findId(appointmentDTO.getBranch_id()),
+//                    doctorService.findId(appointmentDTO.getDoctor_id()),
+//                    dateFormat.parse(appointmentDTO.getDate()),
+//                    dateFormat.parse(appointmentDTO.getTime()),
+//                    0,
+//                    new Date()
+//            );
+//            return appointmentRepo.save(appointment);
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     @Override
     public Page<Appointment> findAll(Pageable pageable) {
@@ -69,17 +69,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> checkShiftOfDoctor(int doctor_id, String time) {
-        return appointmentRepo.checkShiftOfDoctor(doctor_id, time);
-    }
-
-
-    @Override
-    public List<Appointment> checkShiftOfDoctorOneDay(int doctor_id, String time) {
-        return appointmentRepo.checkShiftOfDoctorOneDay(doctor_id, time);
-    }
-
-    @Override
     public void check(Integer status, Integer id) {
         appointmentRepo.check(status, id);
     }
@@ -87,21 +76,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<Appointment> findByAccountId(int account_id, Pageable pageable) {
         return appointmentRepo.findByAccountId(account_id, pageable);
     }
-    @Override
-    public Appointment findByShiftAndDateAndDoctorId(int appointment_shift, Date appointment_date, int doctor_id) {
-        return appointmentRepo.findByShiftAndDateAndDoctorId(appointment_shift, appointment_date, doctor_id);
-    }
 
     @Override
     public Appointment findByAccountAndStatus(Account account, int status) {
         return appointmentRepo.findByAccountAndStatus(account, status);
     }
-
-    @Override
-    public int countByAccountIdAndStatus(int account_id, int status) {
-        return appointmentRepo.countByAccountIdAndStatus(account_id, status);
-    }
-
 
     @Override
     public boolean checkAppointmentToCancel(int id) {

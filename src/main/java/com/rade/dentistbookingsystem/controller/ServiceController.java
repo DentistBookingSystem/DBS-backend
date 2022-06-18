@@ -21,25 +21,23 @@ public class ServiceController {
     @Autowired
     ServiceSv serviceSv;
     @Autowired
-    FeedbackService feedBackService;
-    @Autowired
     ServiceTypeSv serviceTypeSv;
-    @GetMapping("{id}")
-    public List<ServiceFeedback> list(@PathVariable int id){
-        short available = 1;
-        Pageable pageable = PageRequest.of(0, 3, Sort.by("id").descending());
-        List<Service> serviceList = serviceSv.findByServiceTypeIdAndStatus(id, available);
-        List<ServiceFeedback> serviceFeedbackList = new ArrayList<>();
-        for (Service service : serviceList) {
-            serviceFeedbackList.add(new ServiceFeedback(
-                    service,
-//                    feedBackService.findByServiceIdAndStatus(service.getId(), available, pageable)
-                    feedBackService.filterFeedback(null, available, service.getId(), null, pageable)
-            ));
-
-        }
-        return serviceFeedbackList;
-    }
+//    @GetMapping("{id}")
+//    public List<ServiceFeedback> list(@PathVariable int id){
+//        short available = 1;
+//        Pageable pageable = PageRequest.of(0, 3, Sort.by("id").descending());
+//        List<Service> serviceList = serviceSv.findByServiceTypeIdAndStatus(id, available);
+//        List<ServiceFeedback> serviceFeedbackList = new ArrayList<>();
+//        for (Service service : serviceList) {
+//            serviceFeedbackList.add(new ServiceFeedback(
+//                    service,
+////                    feedBackService.findByServiceIdAndStatus(service.getId(), available, pageable)
+//                    feedBackService.filterFeedback(null, available, service.getId(), null, pageable)
+//            ));
+//
+//        }
+//        return serviceFeedbackList;
+//    }
 
 
 }

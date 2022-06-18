@@ -11,7 +11,8 @@ import java.util.Date;
 @Data
 public class FeedbackDTO  implements Serializable {
     private int id;
-    private int service_id;
-    private String phone;
+    private int appointment_id;
     private String content;
+    private String time;
+    private int status;
 }

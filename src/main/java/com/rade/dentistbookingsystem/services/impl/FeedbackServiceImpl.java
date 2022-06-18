@@ -29,15 +29,15 @@ public class FeedbackServiceImpl implements FeedbackService {
         this.feedBackRepo = feedBackRepo;
     }
 
-    public Feedback save(FeedbackDTO feedbackDTO) {
-        Feedback feedback = new Feedback(
-            serviceRepo.findId(feedbackDTO.getService_id()),
-            accountRepo.findByPhone(feedbackDTO.getPhone()),
-            new Date(),
-            feedbackDTO.getContent(),
-            0);
-        return feedBackRepo.save(feedback);
-    }
+//    public Feedback save(FeedbackDTO feedbackDTO) {
+//        Feedback feedback = new Feedback(
+//            serviceRepo.findId(feedbackDTO.getService_id()),
+//            accountRepo.findByPhone(feedbackDTO.getPhone()),
+//            new Date(),
+//            feedbackDTO.getContent(),
+//            0);
+//        return feedBackRepo.save(feedback);
+//    }
 
     @Override
     public Page<Feedback> findAll(Pageable pageable) {
@@ -59,18 +59,18 @@ public class FeedbackServiceImpl implements FeedbackService {
         return null;
     }
 
-    @Override
-    public List<Feedback> findByServiceIdAndStatus(int id, int status, Pageable pageable) {
-        return feedBackRepo.findByServiceIdAndStatus(id, status, pageable);
-    }
+//    @Override
+//    public List<Feedback> findByServiceIdAndStatus(int id, int status, Pageable pageable) {
+//        return feedBackRepo.findByServiceIdAndStatus(id, status, pageable);
+//    }
 
-    @Override
-    public List<Feedback> filterFeedback(String phone, int status, int service_id, String time, Pageable pageable) {
-        return feedBackRepo.filterFeedback(phone, status, service_id, time, pageable);
-    }
+//    @Override
+//    public List<Feedback> filterFeedback(String phone, int status, int service_id, String time, Pageable pageable) {
+//        return feedBackRepo.filterFeedback(phone, status, service_id, time, pageable);
+//    }
 
-    @Override
-    public int countByAccountIdAndStatus(int account_id, int status) {
-        return feedBackRepo.countByAccountIdAndStatus(account_id, status);
-    }
+//    @Override
+//    public int countByAccountIdAndStatus(int account_id, int status) {
+//        return feedBackRepo.countByAccountIdAndStatus(account_id, status);
+//    }
 }

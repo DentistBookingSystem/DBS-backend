@@ -21,21 +21,19 @@ import java.util.List;
 @RequestMapping("rade/patient/feedback")
 public class FeedbackPatientController {
     @Autowired
-    FeedbackService feedbackService;
-    @Autowired
     AccountService accountService;
 
-    @PostMapping("send")
-    public ResponseEntity<?> sendFeedback(@RequestBody FeedbackDTO feedbackDTO){
-        try {
-            if(accountService.findByPhone(feedbackDTO.getPhone()).getStatus() == 2)
-                return ResponseEntity.status(HttpStatus.LOCKED).build();
-            return ResponseEntity.ok(feedbackService.save(feedbackDTO));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-    }
+//    @PostMapping("send")
+//    public ResponseEntity<?> sendFeedback(@RequestBody FeedbackDTO feedbackDTO){
+//        try {
+//            if(accountService.findByPhone(feedbackDTO.getPhone()).getStatus() == 2)
+//                return ResponseEntity.status(HttpStatus.LOCKED).build();
+//            return ResponseEntity.ok(feedbackService.save(feedbackDTO));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+//    }
 
 
 }

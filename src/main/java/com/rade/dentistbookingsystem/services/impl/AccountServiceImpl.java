@@ -26,9 +26,6 @@ public class AccountServiceImpl implements AccountService {
     AppointmentRepo appointmentRepo;
 
     @Autowired
-    FeedbackRepo feedbackRepo;
-
-    @Autowired
     DistrictRepo districtRepo;
 
     public AccountServiceImpl(AccountRepo accountRepo) {
@@ -99,8 +96,7 @@ public class AccountServiceImpl implements AccountService {
         List<AccountAndViolationTimes> accountAndViolationTimesList = new ArrayList<>();
         for (Account account : accountList) {
             int violationTimes =
-                    appointmentRepo.countByAccountIdAndStatus(account.getId(), 2) +
-                    feedbackRepo.countByAccountIdAndStatus(account.getId(), 2);                ;
+                    appointmentRepo.countByAccountIdAndStatus(account.getId(), 2);                ;
             accountAndViolationTimesList.add(new AccountAndViolationTimes(
                     account,
                     violationTimes

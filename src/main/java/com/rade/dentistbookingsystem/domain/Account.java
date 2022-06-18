@@ -59,13 +59,8 @@ public class Account implements Serializable {
     @JsonIgnore
     private Set<Discount> discountSet;
 
-    // account notification
     @OneToMany(mappedBy = "account")
     @JsonIgnore
-    private Set<AccountNotification> accountNotificationSet;
+    private Set<Notification> notificationSet;
 
-    // account vs feedback
-    @OneToMany(mappedBy = "account")
-    @JsonIgnore
-    private Set<Feedback> feedbackSet;
 }

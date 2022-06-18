@@ -11,18 +11,18 @@ import java.util.List;
 
 @AllArgsConstructor
 @Data
-public class ShiftBookedByDate {
+public class TimeOptionByDate {
     String date;
-    ArrayList<Integer> shiftList;
+    ArrayList<String> timeList;
 
-    public ShiftBookedByDate(String date, int shift) {
+    public TimeOptionByDate(String date, String time) {
         this.date = date;
-        shiftList = new ArrayList<>();
-        shiftList.add(shift);
+        timeList = new ArrayList<>();
+        timeList.add(time);
     }
 
-    public ShiftBookedByDate(String date) {
+    public TimeOptionByDate(String date) {
         this.date = date;
-        shiftList = new ArrayList<>();
+        timeList = new ArrayList<>();
     }
 }

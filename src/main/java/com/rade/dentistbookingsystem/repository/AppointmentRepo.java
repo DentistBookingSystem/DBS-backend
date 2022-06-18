@@ -50,8 +50,6 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                                         @Param("doctor_id") int doctor_id,
                                         @Param("time") String time);
 
-    Appointment findByShiftAndDateAndDoctorId(int appointment_shift, Date appointment_date, int doctor_id);
-
     Appointment findByAccountAndStatus(Account account, int status);
 
     int countByAccountIdAndStatus(int account_id, int status);

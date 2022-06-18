@@ -15,14 +15,12 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("rade/feedback")
 public class FeedbackController {
-    @Autowired
-    FeedbackService feedbackService;
-    @PostMapping("")
-    public List<Feedback> getFeedbackPage(@RequestBody PageForFeedback pageForFeedback){
-        short available = 1;
-        int page = pageForFeedback.getPage();
-        int service_id = pageForFeedback.getService_id();
-        Pageable pageable = PageRequest.of(pageForFeedback.getPage() - 1, 3, Sort.by("id").descending());
-        return feedbackService.filterFeedback(null, available, pageForFeedback.getService_id(), null, pageable);
-    }
+//    @PostMapping("")
+//    public List<Feedback> getFeedbackPage(@RequestBody PageForFeedback pageForFeedback){
+//        short available = 1;
+//        int page = pageForFeedback.getPage();
+//        int service_id = pageForFeedback.getService_id();
+//        Pageable pageable = PageRequest.of(pageForFeedback.getPage() - 1, 3, Sort.by("id").descending());
+//        return feedbackService.filterFeedback(null, available, pageForFeedback.getService_id(), null, pageable);
+//    }
 }

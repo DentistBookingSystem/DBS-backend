@@ -34,10 +34,10 @@ public class Appointment implements Serializable, Comparable<Appointment>{
 
     @Column(name = "appointment_date", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date date;
+    private Date appointment_date;
 
-    @Column(name = "appointment_shift", nullable = false)
-    private int shift;
+    @Column(name = "appointment_time", nullable = false)
+    private String appointment_time;
 
     @Column(name = "status", nullable = false)
     private int status;
@@ -50,12 +50,15 @@ public class Appointment implements Serializable, Comparable<Appointment>{
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
     private Set<AppointmentDetail> appointmentDetailSet;
 
-    public Appointment(Account account, Branch branch, Doctor doctor, Date date, int shift, int status, Date time_making){
+    @OneToOne(mappedBy = "appointment")
+    private Feedback feedback;
+
+    public Appointment(Account account, Branch branch, Doctor doctor, Date date, String time, int status, Date time_making){
         this.account = account;
         this.branch = branch;
         this.doctor = doctor;
-        this.date = date;
-        this.shift = shift;
+        this.appointment_date = date;
+        this.appointment_time = time;
         this.status = status;
         this.time_making = time_making;
     }

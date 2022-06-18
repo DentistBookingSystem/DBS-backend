@@ -15,22 +15,20 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RequestMapping("rade/admin/feedback")
 public class FeedbackAdminController {
-    @Autowired
-    FeedbackService feedBackService;
 
-    @GetMapping("{i}")
-    public Page<Feedback> getFeedbackList(@PathVariable Integer i){
-        if(i == null) i = 0;
-        return feedBackService.findAll(PageRequest.of(i, 20, Sort.by("id").descending()));
-    }
+//    @GetMapping("{i}")
+//    public Page<Feedback> getFeedbackList(@PathVariable Integer i){
+//        if(i == null) i = 0;
+//        return feedBackService.findAll(PageRequest.of(i, 20, Sort.by("id").descending()));
+//    }
 
-    @PostMapping("check")
-    public ResponseEntity<?> checkFeedback(@RequestBody StatusForFeedback statusForFeedback){
-        try {
-            return ResponseEntity.ok(feedBackService.check(statusForFeedback.getStatus(), statusForFeedback.getId()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-    }
+//    @PostMapping("check")
+//    public ResponseEntity<?> checkFeedback(@RequestBody StatusForFeedback statusForFeedback){
+//        try {
+//            return ResponseEntity.ok(feedBackService.check(statusForFeedback.getStatus(), statusForFeedback.getId()));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+//    }
 }

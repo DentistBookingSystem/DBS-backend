@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -19,16 +20,20 @@ public class Notification implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @ManyToOne
+    @JoinColumn(name = "account_id", nullable = true)
+    private Account account;
+
     @Column(nullable = false, columnDefinition = "nvarchar(max)")
     private String description;
+
+    @Column(name = "date", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date date;
 
     @Column(nullable = false)
     private int status;
 
-    //account notififcation
-    @OneToMany(mappedBy = "notification")
-    @JsonIgnore
-    private Set<AccountNotification> accountNotificationSet;
 
     public Notification(String description, int status){
         this.description = description;

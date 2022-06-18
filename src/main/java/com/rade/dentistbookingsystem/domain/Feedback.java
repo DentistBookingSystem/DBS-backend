@@ -19,14 +19,9 @@ public class Feedback implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    // Feedback vs service
-    @ManyToOne
-    @JoinColumn(name = "service_id")
-    private Service service;
-
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+    @OneToOne
+    @JoinColumn(name = "appointment_id", referencedColumnName = "id")
+    private Appointment appointment;
 
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
@@ -38,9 +33,8 @@ public class Feedback implements Serializable {
     @Column(nullable = false)
     private int status;
 
-    public Feedback(Service service, Account account, Date time, String content, int status){
-        this.service = service;
-        this.account = account;
+    public Feedback(Appointment appointment, Date time, String content, int status){
+        this.appointment = appointment;
         this.time = time;
         this.content = content;
         this.status = status;

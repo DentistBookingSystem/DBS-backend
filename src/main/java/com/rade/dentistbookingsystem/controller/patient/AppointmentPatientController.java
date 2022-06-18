@@ -42,7 +42,7 @@ public class AppointmentPatientController {
     @Autowired
     AccountService accountService;
     @GetMapping("{branch_id}")
-    public AppointmentComponent makeAppointment(@PathVariable int branch_id){
+    public AppointmentComponent chooseBranch(@PathVariable int branch_id){
         ArrayList<ServiceDiscountComponent> serviceDiscountComponentList = new ArrayList<>();
         for (Service service : serviceSv.findAll()) {
             serviceDiscountComponentList.add(new ServiceDiscountComponent(
@@ -74,24 +74,10 @@ public class AppointmentPatientController {
                 if(jsonAppointment.getAppointmentDTO().getDoctor_id() == 0){
                     String date = jsonAppointment.getAppointmentDTO().getDate();
                     int branch_id = jsonAppointment.getAppointmentDTO().getBranch_id();
-                    jsonAppointment.getAppointmentDTO().setDoctor_id(doctorService.findDoctorIdLeastShiftOneDay(date, branch_id).get(0));
+
                 }
-                if (appointmentService.findByShiftAndDateAndDoctorId(
-                        jsonAppointment.getAppointmentDTO().getShift(),
-                        sdf.parse(jsonAppointment.getAppointmentDTO().getDate()),
-                        jsonAppointment.getAppointmentDTO().getDoctor_id()
-                ) != null) return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-                Appointment appointment = appointmentService.save(jsonAppointment.getAppointmentDTO());
-                int noOfServiceId = jsonAppointment.getServiceIdList().length;
-                if (noOfServiceId == 0) return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-                for (int i = 0; i < noOfServiceId; i++) {
-                    AppointmentDetail appointmentDetail = new AppointmentDetail(
-                            appointment,
-                            serviceSv.findId(jsonAppointment.getServiceIdList()[i]),
-                            discountService.findAvailableByServiceId(jsonAppointment.getServiceIdList()[i]));
-                    appointmentDetailService.save(appointmentDetail);
-                }
-                return ResponseEntity.ok(appointment);
+
+                return ResponseEntity.ok(null);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -113,64 +99,6 @@ public class AppointmentPatientController {
         return appointmentService.findId(id);
     }
 
-    @GetMapping("check-doctor/{doctor_id}")
-    public ArrayList<ShiftBookedByDate> checkShiftOfDoctor(@PathVariable int doctor_id) throws ParseException {
-        boolean isExist;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDate = sdf.format(new Date());
-        List<Appointment> appointmentList = appointmentService.checkShiftOfDoctor(doctor_id, currentDate);
-        ArrayList<ShiftBookedByDate> shiftBookedByDateList = new ArrayList<>();
-        for (Appointment appointment : appointmentList) {
-            isExist = false;
-            for (ShiftBookedByDate shiftBookedByDate : shiftBookedByDateList) {
-                if(shiftBookedByDate.getDate().toString().equals(appointment.getDate().toString())){
-                    shiftBookedByDate.getShiftList().add(appointment.getShift());
-                    isExist = true;
-                }
-            }
-            if(!isExist){
-                shiftBookedByDateList.add(new ShiftBookedByDate(sdf.format(appointment.getDate()), appointment.getShift()));
-            }
-        }
-        return shiftBookedByDateList;
-    }
-
-    @PostMapping("check-doctor")
-    public ShiftBookedByDate checkShiftOfDoctorOneDay(@RequestBody DoctorAndDate doctorAndDate) throws ParseException {
-        boolean isExist;
-        int [] shift;
-        int noOfShift = doctorService.countByBranchId(doctorAndDate.getBranch_id());
-        if(doctorAndDate.getDoctor_id() == 0){
-            shift = new int[]{
-                    noOfShift,
-                    noOfShift,
-                    noOfShift,
-                    noOfShift,
-                    noOfShift,
-                    noOfShift
-            };
-        }
-        else{
-            shift = new int[]{
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1
-            };
-        }
-        String date = doctorAndDate.getDate();
-        List<Appointment> appointmentList = appointmentService.checkShiftOfDoctorOneDay(doctorAndDate.getDoctor_id(), date);
-        ShiftBookedByDate shiftBookedByDate = new ShiftBookedByDate(date);
-        for (Appointment appointment : appointmentList) {
-            shift[appointment.getShift()-1] = shift[appointment.getShift()-1] - 1;
-        }
-        for (int i = 0; i < 6; i++) {
-            if (shift[i] > 0) shiftBookedByDate.getShiftList().add(i + 1);
-        }
-        return shiftBookedByDate;
-    }
 
     @GetMapping("cancel/{id}")
     public ResponseEntity<?> cancelAppointment(@PathVariable Integer id){
@@ -186,4 +114,18 @@ public class AppointmentPatientController {
         }
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
+
+//    @PostMapping("check-doctor")
+//    public TimeOptionByDate checkTimeOptionOfDoctorByDate(@RequestBody DoctorAndDate doctorAndDate) throws ParseException {
+//        boolean isExist;
+//        String [] timeOption;
+//        if(doctorAndDate.getDoctor_id() == 0){
+//
+//        }
+//        else{
+//
+//        }
+//
+//        return shiftBookedByDate;
+//    }
 }
