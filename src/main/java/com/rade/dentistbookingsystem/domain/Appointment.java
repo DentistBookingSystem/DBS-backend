@@ -50,6 +50,7 @@ public class Appointment implements Serializable, Comparable<Appointment>{
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
     private Set<AppointmentDetail> appointmentDetailSet;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "appointment")
     private Feedback feedback;
 

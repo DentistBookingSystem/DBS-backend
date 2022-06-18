@@ -70,9 +70,9 @@ public class AppointmentPatientController {
             if(account == null)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             if(account.getStatus() == 2)
-                return ResponseEntity.status(HttpStatus.LOCKED).build();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             if(appointmentService.findByAccountAndStatus(account, 0) != null)
-                return ResponseEntity.status(HttpStatus.GONE).build();
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
             if (jsonAppointment.getServiceIdList().length == 0)
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
             Appointment appointment = appointmentService.checkValidAndSave(jsonAppointment);

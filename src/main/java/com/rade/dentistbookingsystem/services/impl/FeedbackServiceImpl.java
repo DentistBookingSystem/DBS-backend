@@ -5,7 +5,10 @@ import com.rade.dentistbookingsystem.model.FeedbackDTO;
 import com.rade.dentistbookingsystem.repository.AccountRepo;
 import com.rade.dentistbookingsystem.repository.FeedbackRepo;
 import com.rade.dentistbookingsystem.repository.ServiceRepo;
+import com.rade.dentistbookingsystem.services.AccountService;
+import com.rade.dentistbookingsystem.services.AppointmentService;
 import com.rade.dentistbookingsystem.services.FeedbackService;
+import com.rade.dentistbookingsystem.services.ServiceSv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,24 +23,25 @@ public class FeedbackServiceImpl implements FeedbackService {
     FeedbackRepo feedBackRepo;
 
     @Autowired
-    ServiceRepo serviceRepo;
+    ServiceSv serviceSv;
 
     @Autowired
-    AccountRepo accountRepo;
+    AccountService accountService;
+    @Autowired
+    AppointmentService appointmentService;
 
     public FeedbackServiceImpl(FeedbackRepo feedBackRepo) {
         this.feedBackRepo = feedBackRepo;
     }
-
-//    public Feedback save(FeedbackDTO feedbackDTO) {
-//        Feedback feedback = new Feedback(
-//            serviceRepo.findId(feedbackDTO.getService_id()),
-//            accountRepo.findByPhone(feedbackDTO.getPhone()),
-//            new Date(),
-//            feedbackDTO.getContent(),
-//            0);
-//        return feedBackRepo.save(feedback);
-//    }
+    @Override
+    public Feedback save(FeedbackDTO feedbackDTO) {
+        Feedback feedback = new Feedback(
+            appointmentService.findId(feedbackDTO.getAppointment_id()),
+            new Date(),
+            feedbackDTO.getContent(),
+            0);
+        return feedBackRepo.save(feedback);
+    }
 
     @Override
     public Page<Feedback> findAll(Pageable pageable) {
@@ -64,10 +68,10 @@ public class FeedbackServiceImpl implements FeedbackService {
 //        return feedBackRepo.findByServiceIdAndStatus(id, status, pageable);
 //    }
 
-//    @Override
-//    public List<Feedback> filterFeedback(String phone, int status, int service_id, String time, Pageable pageable) {
-//        return feedBackRepo.filterFeedback(phone, status, service_id, time, pageable);
-//    }
+    @Override
+    public List<Feedback> filterFeedback(String phone, int status, int service_id, String time, Pageable pageable) {
+        return feedBackRepo.filterFeedback(phone, status, service_id, time, pageable);
+    }
 
 //    @Override
 //    public int countByAccountIdAndStatus(int account_id, int status) {

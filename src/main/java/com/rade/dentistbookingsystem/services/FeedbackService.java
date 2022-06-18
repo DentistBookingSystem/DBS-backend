@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface FeedbackService {
-//    abstract Feedback save(FeedbackDTO feedbackDTO);
+    abstract Feedback save(FeedbackDTO feedbackDTO);
 
     Page<Feedback> findAll(Pageable pageable);
 //
@@ -16,7 +16,7 @@ public interface FeedbackService {
 //
 //    List<Feedback> findByServiceIdAndStatus(int id, int status, Pageable pageable);
 
-//    List<Feedback> filterFeedback(String phone, int status, int service_id, String time, Pageable pageable);
+    List<Feedback> filterFeedback(String phone, int status, int service_id, String time, Pageable pageable);
 
 //    int countByAccountIdAndStatus(int account_id, int status);
 }

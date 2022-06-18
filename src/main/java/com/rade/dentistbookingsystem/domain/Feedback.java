@@ -1,6 +1,5 @@
 package com.rade.dentistbookingsystem.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,14 +12,15 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "Feedback")
+@Table(name = "Feedback", uniqueConstraints={@UniqueConstraint(columnNames = {"appointment_id"})})
 public class Feedback implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @OneToOne
-    @JoinColumn(name = "appointment_id", referencedColumnName = "id")
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "appointment_id", referencedColumnName = "id", nullable = false)
     private Appointment appointment;
 
     @Column(nullable = false)

@@ -13,20 +13,21 @@ import java.util.List;
 public interface FeedbackRepo extends JpaRepository<Feedback, Integer> {
 //    List<Feedback> findByServiceIdAndStatus(int id, int status, Pageable pageable);
 
-//    @Query(value =
-//            "SELECT Feedback.* " +
-//            "FROM Feedback, Account a " +
-//            "WHERE Feedback.account_id = a.id AND " +
-//                "(a.phone LIKE '%:phone%'  OR :phone IS NULL) AND " +
-//                "(Feedback.status = :status OR :status = -1) AND " +
-//                "(Feedback.service_id = :service_id OR :service_id = -1) AND " +
-//                "(DATEDIFF(day, Feedback.time, :time) = 0 OR :time IS NULL)",
-//            nativeQuery = true)
-//    List<Feedback> filterFeedback(@Param("phone") String phone,
-//                                  @Param("status") int status,
-//                                  @Param("service_id") int service_id,
-//                                  @Param("time") String time,
-//                                  Pageable pageable);
+    @Query(value =
+            "SELECT Feedback.* \n" +
+            "FROM Feedback, Appointment ap, Account ac, Appointment_Detail ad \n" +
+            "WHERE Feedback.appointment_id = ap.id AND ap.account_id = ac.id AND ap.id = ad.appointment_id AND \n" +
+                    "(ac.phone LIKE '%:phone%'  OR :phone IS NULL) AND \n" +
+                    "(Feedback.status = :status OR :status = -1) AND \n" +
+                    "(ad.service_id = :service_id OR :service_id = 0) AND \n" +
+                    "(DATEDIFF(day, Feedback.time, :time) = 0 OR :time IS NULL) " +
+            "GROUP BY Feedback.id, Feedback.content, Feedback.appointment_id, Feedback.status, Feedback.time",
+            nativeQuery = true)
+    List<Feedback> filterFeedback(@Param("phone") String phone,
+                                  @Param("status") int status,
+                                  @Param("service_id") int service_id,
+                                  @Param("time") String time,
+                                  Pageable pageable);
 
 //    int countByAccountIdAndStatus(int account_id, int status);
 }
