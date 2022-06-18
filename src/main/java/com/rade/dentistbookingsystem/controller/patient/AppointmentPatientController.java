@@ -12,12 +12,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -61,26 +63,26 @@ public class AppointmentPatientController {
     }
 
     @PostMapping("make")
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
     public ResponseEntity<?> makeAppointment(@RequestBody @Valid JsonAppointment jsonAppointment){
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Account account = accountService.findByPhone(jsonAppointment.getPhone());
+            if(account == null)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             if(account.getStatus() == 2)
                 return ResponseEntity.status(HttpStatus.LOCKED).build();
             if(appointmentService.findByAccountAndStatus(account, 0) != null)
                 return ResponseEntity.status(HttpStatus.GONE).build();
-            if(account != null){
-                jsonAppointment.getAppointmentDTO().setAccount_id(account.getId());
-                if(jsonAppointment.getAppointmentDTO().getDoctor_id() == 0){
-                    String date = jsonAppointment.getAppointmentDTO().getDate();
-                    int branch_id = jsonAppointment.getAppointmentDTO().getBranch_id();
-
-                }
-
-                return ResponseEntity.ok(null);
+            if (jsonAppointment.getServiceIdList().length == 0)
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+            Appointment appointment = appointmentService.checkValidAndSave(jsonAppointment);
+            if (appointmentDetailService.save(appointment, jsonAppointment).size() == jsonAppointment.getServiceIdList().length){
+                return ResponseEntity.ok(appointment);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
@@ -115,11 +117,14 @@ public class AppointmentPatientController {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-//    @PostMapping("check-doctor")
-//    public TimeOptionByDate checkTimeOptionOfDoctorByDate(@RequestBody DoctorAndDate doctorAndDate) throws ParseException {
-//
-//
-//
-//        return shiftBookedByDate;
-//    }
+    @PostMapping("check-doctor")
+    public List<TimeOption> checkTimeOptionOfDoctorByDate(@RequestBody DoctorAndDate doctorAndDate) throws Exception {
+        List<TimeOption> timeOptionList = new ArrayList<>();
+        for (String stringOption : appointmentService.checkTimeOptionByDate(doctorAndDate)) {
+            TimeOption option = new TimeOption(stringOption);
+            timeOptionList.add(option);
+        }
+        Collections.sort(timeOptionList);
+        return timeOptionList;
+    }
 }

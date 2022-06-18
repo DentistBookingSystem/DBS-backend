@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.services;
 
+import com.rade.dentistbookingsystem.componentform.DoctorAndDate;
 import com.rade.dentistbookingsystem.componentform.JsonAppointment;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
@@ -13,6 +14,8 @@ import java.util.List;
 
 public interface AppointmentService {
 //    abstract Appointment save(AppointmentDTO appointmentDTO);
+
+    Appointment save(AppointmentDTO appointmentDTO);
 
     Page<Appointment> findAll(Pageable pageable);
 
@@ -28,5 +31,11 @@ public interface AppointmentService {
     boolean checkAppointmentToCancel(int id);
 
     void deleteById(int id);
+
+    List<String> checkTimeOptionOfDoctorByDate(DoctorAndDate doctorAndDate) throws Exception;
+
+    List<String> checkTimeOptionByDate(DoctorAndDate doctorAndDate) throws Exception;
+
+    Appointment checkValidAndSave(JsonAppointment jsonAppointment);
 }
 
