@@ -117,14 +117,8 @@ public class AppointmentPatientController {
 
 //    @PostMapping("check-doctor")
 //    public TimeOptionByDate checkTimeOptionOfDoctorByDate(@RequestBody DoctorAndDate doctorAndDate) throws ParseException {
-//        boolean isExist;
-//        String [] timeOption;
-//        if(doctorAndDate.getDoctor_id() == 0){
 //
-//        }
-//        else{
 //
-//        }
 //
 //        return shiftBookedByDate;
 //    }

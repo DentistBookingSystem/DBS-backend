@@ -42,7 +42,7 @@ public class Service implements Serializable {
     private float max_price;
 
     @Column(name = "estimated_time", nullable = false)
-    private int estimated_time;
+    private float estimated_time;
 
     // Discount service
     @OneToMany(mappedBy = "service")

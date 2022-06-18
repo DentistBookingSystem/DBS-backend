@@ -1,4 +1,6 @@
 package com.rade.dentistbookingsystem.services.impl;
+import com.rade.dentistbookingsystem.componentform.DoctorAndDate;
+import com.rade.dentistbookingsystem.componentform.TimeOptionByDate;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.model.AppointmentDTO;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -91,4 +94,13 @@ public class AppointmentServiceImpl implements AppointmentService {
     public void deleteById(int id) {
         appointmentRepo.deleteById(id);
     }
+
+//    public List<TimeOptionByDate> checkTimeOptionOfDoctorByDate(DoctorAndDate doctorAndDate){
+//        List<TimeOptionByDate> timeOptionByDateList = new ArrayList<>();
+//        List<Appointment> appointmentList;
+//        if(doctorAndDate.getDoctor_id() != 0){
+//            appointmentList = appointmentRepo.findByDoctorIdAndTime(doctorAndDate.getDoctor_id(), doctorAndDate.getDate());
+//
+//        }
+//    }
 }
