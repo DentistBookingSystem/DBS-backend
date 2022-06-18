@@ -9,7 +9,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class FeedbackDTO  implements Serializable {
+public class FeedbackDTO implements Serializable {
     private int id;
     private int appointment_id;
     private String content;

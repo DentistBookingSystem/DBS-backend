@@ -1,4 +1,4 @@
-package com.rade.dentistbookingsystem.controller;
+package com.rade.dentistbookingsystem.controller.patient;
 
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.services.ServiceSv;
@@ -9,14 +9,14 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("rade/service")
-public class ServiceController {
+@RequestMapping("rade/patient/service")
+public class ServicePatientController {
     @Autowired
     ServiceSv serviceSv;
 
-    @GetMapping("{serviceTypeId}")
-    public List<Service> getServiceByServiceTypeId(@PathVariable int serviceTypeId){
+    @GetMapping("{stId}")
+    public List<Service> getServiceByServiceTypeIdForPatient(@PathVariable int stId){
         short available = 1;
-        return serviceSv.findByServiceTypeIdAndStatus(serviceTypeId, available);
+        return serviceSv.findByServiceTypeIdAndStatus(stId, available);
     }
 }

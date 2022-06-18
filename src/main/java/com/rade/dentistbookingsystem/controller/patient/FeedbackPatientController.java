@@ -22,7 +22,8 @@ import java.util.List;
 public class FeedbackPatientController {
     @Autowired
     AccountService accountService;
-
+    @Autowired
+    FeedbackService feedbackService;
 //    @PostMapping("send")
 //    public ResponseEntity<?> sendFeedback(@RequestBody FeedbackDTO feedbackDTO){
 //        try {
