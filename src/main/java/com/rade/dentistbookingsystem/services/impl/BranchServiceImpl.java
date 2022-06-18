@@ -158,11 +158,13 @@ public class BranchServiceImpl implements BranchService {
             if (account.getDistrict().getId() == branch.getDistrict().getId()){
                 recommendList.add(2);
             }
-            else if (account.getDistrict().getProvince().getId() == branch.getDistrict().getId()) {
-                recommendList.add(1);
-            }
             else {
-                recommendList.add(0);
+                if (account.getDistrict().getProvince().getId() == branch.getDistrict().getProvince().getId()) {
+                    recommendList.add(1);
+                }
+                else {
+                    recommendList.add(0);
+                }
             }
         }
         return recommendList;
