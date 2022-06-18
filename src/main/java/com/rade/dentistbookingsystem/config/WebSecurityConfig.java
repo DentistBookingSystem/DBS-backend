@@ -77,7 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/rade/feedback",
                         "/rade/feedback/**",
                         "/rade/discount",
-                        "rade/discount/**").access("not( hasRole('ADMIN') )")
+                        "/rade/discount/**").access("not( hasRole('ADMIN') )")
                .antMatchers("/rade/admin/**").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers("/rade/patient/**").hasAuthority("ROLE_USER")
                 .anyRequest().authenticated();
