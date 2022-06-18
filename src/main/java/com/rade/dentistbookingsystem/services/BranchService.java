@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.services;
 
+import com.rade.dentistbookingsystem.componentform.JsonPhone;
 import com.rade.dentistbookingsystem.domain.Branch;
 import com.rade.dentistbookingsystem.model.BranchDTO;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,10 @@ public interface BranchService {
 
     Branch updateBranch(BranchDTO branchDTO, int id);
 
+    List<Branch> findByDistrictIdAndStatus(int district_id, int status);
+
+    List<Branch> findByProvinceIdAndStatus(int province_id, int status);
+
     Optional<Branch> findById(Integer id);
 
     Branch findByName(String name);
@@ -35,4 +40,8 @@ public interface BranchService {
     Branch findId(int id);
 
     List<Branch> findByStatus(int status);
+
+    List<Branch> getListForChoosing(JsonPhone jsonPhone);
+
+    List<Integer> getRecommendList(JsonPhone jsonPhone);
 }

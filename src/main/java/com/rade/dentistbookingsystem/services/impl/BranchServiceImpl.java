@@ -1,8 +1,11 @@
 package com.rade.dentistbookingsystem.services.impl;
 
+import com.rade.dentistbookingsystem.componentform.JsonPhone;
+import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Branch;
 import com.rade.dentistbookingsystem.model.BranchDTO;
 import com.rade.dentistbookingsystem.repository.BranchRepo;
+import com.rade.dentistbookingsystem.services.AccountService;
 import com.rade.dentistbookingsystem.services.BranchService;
 import com.rade.dentistbookingsystem.services.DistrictService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.ValidationException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -19,9 +23,10 @@ import java.util.Optional;
 @Service
 public class BranchServiceImpl implements BranchService {
     private BranchRepo branchRepo;
-
     @Autowired
-    private DistrictService districtService;
+    AccountService accountService;
+    @Autowired
+    DistrictService districtService;
 
     public BranchServiceImpl(BranchRepo branchRepo) {
         this.branchRepo = branchRepo;
@@ -86,6 +91,15 @@ public class BranchServiceImpl implements BranchService {
         return null;
     }
 
+    @Override
+    public List<Branch> findByDistrictIdAndStatus(int district_id, int status) {
+        return branchRepo.findByDistrictIdAndStatus(district_id, status);
+    }
+
+    @Override
+    public List<Branch> findByProvinceIdAndStatus(int province_id, int status) {
+        return branchRepo.findByProvinceIdAndStatus(province_id, status);
+    }
 
     public Optional<Branch> findById(Integer id) {
         return branchRepo.findById(id);
@@ -118,5 +132,39 @@ public class BranchServiceImpl implements BranchService {
     @Override
     public List<Branch> findByStatus(int status) {
         return branchRepo.findByStatus(status);
+    }
+    @Override
+    public List<Branch> getListForChoosing(JsonPhone jsonPhone){
+        int available = 1;
+        Account account = accountService.findByPhone(jsonPhone.getPhone());
+        List<Branch> branchList = new ArrayList<>();
+        if(account == null) return branchList;
+        branchList.addAll(findByDistrictIdAndStatus(account.getDistrict().getId(), available));
+        List<Branch> branchListByProvince = findByProvinceIdAndStatus(account.getDistrict().getProvince().getId(), available);
+        branchListByProvince.removeAll(branchList);
+        branchList.addAll(branchListByProvince);
+        List<Branch> branchListNotRecommend = findByStatus(available);
+        branchListNotRecommend.removeAll(branchList);
+        branchList.addAll(branchListNotRecommend);
+        return branchList;
+    }
+    @Override
+    public List<Integer> getRecommendList(JsonPhone jsonPhone){
+        Account account = accountService.findByPhone(jsonPhone.getPhone());
+        List<Integer> recommendList = new ArrayList<>();
+        if(account == null) return recommendList;
+        List<Branch> branchList = getListForChoosing(jsonPhone);
+        for (Branch branch : branchList) {
+            if (account.getDistrict().getId() == branch.getDistrict().getId()){
+                recommendList.add(2);
+            }
+            else if (account.getDistrict().getProvince().getId() == branch.getDistrict().getId()) {
+                recommendList.add(1);
+            }
+            else {
+                recommendList.add(0);
+            }
+        }
+        return recommendList;
     }
 }
