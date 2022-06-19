@@ -36,12 +36,6 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public List<Integer> findDoctorIdLeastShiftOneDay(String time, int branch_id) {
-        return doctorRepo.findDoctorIdLeastShiftOneDay(time, branch_id);
-    }
-
-
-    @Override
     public Optional<Doctor> findById(Integer integer) {
         return doctorRepo.findById(integer);
     }

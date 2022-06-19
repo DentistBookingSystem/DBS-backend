@@ -33,29 +33,50 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "FROM Appointment " +
                     "WHERE " +
                     "(doctor_id = :doctor_id OR :doctor_id = 0) AND " +
-                    "status = 0 AND " +
+                    "(status = 0 OR status = 4) AND " +
                     "appointment_date = :time",
             nativeQuery = true)
     List<Appointment> findByDoctorIdAndTime(
                                         @Param("doctor_id") int doctor_id,
                                         @Param("time") String time);
 
-    Appointment findByAccountAndStatus(Account account, int status);
+    Appointment findByAccountAndStatusIn(Account account, int[] status);
 
     int countByAccountIdAndStatus(int account_id, int status);
 
     @Query(value =
             "SELECT " +
-            "CASE WHEN EXISTS (" +
-                    "SELECT a.*, DATEDIFF(MINUTE, a.time_making, GETDATE()) " +
+                    "            CASE WHEN EXISTS ( " +
+                    "                    SELECT a.*, DATEDIFF(DAY, a.appointment_date, GETDATE())  " +
+                    "                    FROM Appointment a  " +
+                    "                    WHERE a.id = :id AND (a.status = 0 OR a.status = 4) AND " +
+                    "                    DATEDIFF(DAY, a.appointment_date, GETDATE()) <= 1 AND a.account_id = :account_id)  " +
+                    "                    THEN 'TRUE'  " +
+                    "                    ELSE 'FALSE'  " +
+                    "            END",
+            nativeQuery = true)
+    boolean checkAppointmentToCancel(@Param("id") int id, @Param("account_id") int account_id);
+
+    @Query(value =
+            "SELECT " +
+                    "CASE WHEN ( " +
+                    "SELECT COUNT (a.account_id) " +
                     "FROM Appointment a " +
-                    "WHERE a.id = :id AND a.status = 0 AND DATEDIFF(MINUTE, a.time_making, GETDATE()) <= 3 " +
-                    ") " +
+                    "WHERE a.account_id = :account_id AND (a.status = 3) AND DATEDIFF(DAY, a.appointment_date, GETDATE()) < 30 " +
+                    "GROUP BY a.account_id " +
+                    ") < 3 " +
                     "THEN 'TRUE' " +
                     "ELSE 'FALSE' " +
                     "END",
             nativeQuery = true)
-    boolean checkAppointmentToCancel(@Param("id") int id);
+    boolean checkCountAppointmentToCancel(@Param("account_id") int account_id);
+    @Modifying
     @Transactional
-    void deleteById(int id);
+    @Query(value =
+            "UPDATE Appointment SET status = 2 " +
+            "WHERE (status = 0 OR status = 4) AND DATEDIFF(MINUTE," +
+            "(CAST(appointment_date AS varchar) + ' ' + SUBSTRING(appointment_time, 0, 6) + ':00')," +
+            "GETDATE()) > 15",
+            nativeQuery = true)
+    void checkAllAppointmentToMarkAbsent();
 }

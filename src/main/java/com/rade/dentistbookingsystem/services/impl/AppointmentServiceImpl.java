@@ -12,10 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
@@ -74,18 +72,13 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Appointment findByAccountAndStatus(Account account, int status) {
-        return appointmentRepo.findByAccountAndStatus(account, status);
+    public Appointment findByAccountAndStatusIn(Account account, int[] status) {
+        return appointmentRepo.findByAccountAndStatusIn(account, status);
     }
 
     @Override
-    public boolean checkAppointmentToCancel(int id) {
-        return appointmentRepo.checkAppointmentToCancel(id);
-    }
-
-    @Override
-    public void deleteById(int id) {
-        appointmentRepo.deleteById(id);
+    public boolean checkAppointmentToCancel(int id, int account_id) {
+        return appointmentRepo.checkAppointmentToCancel(id, account_id);
     }
 
     @Override
@@ -241,5 +234,14 @@ public class AppointmentServiceImpl implements AppointmentService {
             return null;
         }
         return null;
+    }
+    @Override
+    public boolean checkCountAppointmentToCancel(int account_id) {
+        return appointmentRepo.checkCountAppointmentToCancel(account_id);
+    }
+
+    @Override
+    public void checkAllAppointmentToMarkAbsent() {
+        appointmentRepo.checkAllAppointmentToMarkAbsent();
     }
 }

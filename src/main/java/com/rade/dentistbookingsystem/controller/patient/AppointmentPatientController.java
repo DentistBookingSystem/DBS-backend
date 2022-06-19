@@ -71,7 +71,7 @@ public class AppointmentPatientController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             if(account.getStatus() == 2)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            if(appointmentService.findByAccountAndStatus(account, 0) != null)
+            if(appointmentService.findByAccountAndStatusIn(account, new int[]{0, 4}) != null)
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
             if (jsonAppointment.getServiceIdList().length == 0)
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
@@ -86,6 +86,30 @@ public class AppointmentPatientController {
         }
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
+
+    @PostMapping("make")
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
+    public ResponseEntity<?> updateAppointment(@RequestBody @Valid JsonAppointment jsonAppointment){
+        try {
+            Account account = accountService.findByPhone(jsonAppointment.getPhone());
+            if(account == null)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            if(account.getStatus() == 2)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            if(appointmentService.findByAccountAndStatusIn(account, new int[]{0, 4}) != null)
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+            Appointment appointment = appointmentService.checkValidAndSave(jsonAppointment);
+            if (appointmentDetailService.save(appointment, jsonAppointment).size() == jsonAppointment.getServiceIdList().length){
+                return ResponseEntity.ok(appointment);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    }
+
 
     @PostMapping("history")
     public List<Appointment> getHistoryList(@RequestBody PhoneAndPage phoneAndPage){
@@ -102,19 +126,34 @@ public class AppointmentPatientController {
     }
 
 
-    @GetMapping("cancel/{id}")
-    public ResponseEntity<?> cancelAppointment(@PathVariable Integer id){
+    @PostMapping("cancel")
+    public ResponseEntity<?> cancelAppointment(@RequestBody JsonPhoneAndAppointmentId jsonPhoneAndAppointmentId){
         try{
-            if(appointmentService.checkAppointmentToCancel(id)){
-                appointmentService.deleteById(id);
-                return ResponseEntity.status(HttpStatus.OK).build();
+            String phone = jsonPhoneAndAppointmentId.getPhone();;
+            int appointment_id = jsonPhoneAndAppointmentId.getAppointment_id();
+            Account account = accountService.findByPhone(phone);
+            if(!(account != null && account.getStatus() == 1))
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // tài khoản phải tồn tại và ko bị ban
+            Appointment appointment = appointmentService.findId(appointment_id);
+            if(!(appointment != null && appointment.getAccount().getId() == account.getId()))
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); //lịch cancel phải là của tài khoản đó
+            if(appointmentService.checkAppointmentToCancel(appointment_id, account.getId())){
+                if(appointmentService.checkCountAppointmentToCancel(account.getId())){
+                    appointmentService.check(3, appointment.getId());
+                    return ResponseEntity.status(HttpStatus.OK).build();
+                }
+                else {
+                    return ResponseEntity.status(HttpStatus.LOCKED).build(); //quá 3 cancel/tháng
+                }
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.GONE).build(); //quá hạn hoặc không có lịch hẹn đang chờ
             }
         }
         catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
     @PostMapping("check-doctor")
@@ -127,4 +166,6 @@ public class AppointmentPatientController {
         Collections.sort(timeOptionList);
         return timeOptionList;
     }
+
+
 }

@@ -13,8 +13,6 @@ public interface DoctorService {
 
     int countByBranchId(int branch_id);
 
-    List<Integer> findDoctorIdLeastShiftOneDay(String time, int branch_id);
-
     Optional<Doctor> findById(Integer integer);
 
     // Use for admin

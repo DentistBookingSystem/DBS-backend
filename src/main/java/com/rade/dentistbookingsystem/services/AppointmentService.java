@@ -26,16 +26,18 @@ public interface AppointmentService {
     List<Appointment> findByAccountId(int account_id, Pageable pageable);
 
 
-    Appointment findByAccountAndStatus(Account account, int status);
+    Appointment findByAccountAndStatusIn(Account account, int[] status);
 
-    boolean checkAppointmentToCancel(int id);
-
-    void deleteById(int id);
+    boolean checkAppointmentToCancel(int id, int account_id);
 
     List<String> checkTimeOptionOfDoctorByDate(DoctorAndDate doctorAndDate) throws Exception;
 
     List<String> checkTimeOptionByDate(DoctorAndDate doctorAndDate) throws Exception;
 
     Appointment checkValidAndSave(JsonAppointment jsonAppointment);
+
+    boolean checkCountAppointmentToCancel(int account_id);
+
+    void checkAllAppointmentToMarkAbsent();
 }
 

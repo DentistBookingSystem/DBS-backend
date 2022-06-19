@@ -17,19 +17,4 @@ public interface DoctorRepo extends JpaRepository<Doctor, Integer> {
     Doctor findId(Integer id);
 
     public int countByBranchId(int branch_id);
-
-    @Query(value =
-            "SELECT Doctor.id " +
-            "FROM Doctor LEFT JOIN Appointment a ON Doctor.id = a.doctor_id " +
-            "WHERE a.appointment_date = :time AND a.branch_id = :branch_id " +
-            "GROUP BY Doctor.id " +
-            "HAVING COUNT(a.appointment_shift) <= ALL ( " +
-                "SELECT COUNT(a.appointment_shift) " +
-                "FROM Doctor LEFT JOIN Appointment a ON Doctor.id = a.doctor_id " +
-                "WHERE a.appointment_date = :time AND a.branch_id = :branch_id " +
-                "GROUP BY Doctor.id " +
-            ")", nativeQuery = true)
-    List<Integer> findDoctorIdLeastShiftOneDay(@Param("time") String time, @Param("branch_id") int branch_id);
-
-
 }
