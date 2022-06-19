@@ -87,28 +87,28 @@ public class AppointmentPatientController {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    @PostMapping("make")
-    @Transactional(rollbackFor = {Exception.class, Throwable.class})
-    public ResponseEntity<?> updateAppointment(@RequestBody @Valid JsonAppointment jsonAppointment){
-        try {
-            Account account = accountService.findByPhone(jsonAppointment.getPhone());
-            if(account == null)
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            if(account.getStatus() == 2)
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            if(appointmentService.findByAccountAndStatusIn(account, new int[]{0, 4}) != null)
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-            Appointment appointment = appointmentService.checkValidAndSave(jsonAppointment);
-            if (appointmentDetailService.save(appointment, jsonAppointment).size() == jsonAppointment.getServiceIdList().length){
-                return ResponseEntity.ok(appointment);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-    }
+//    @PostMapping("make")
+//    @Transactional(rollbackFor = {Exception.class, Throwable.class})
+//    public ResponseEntity<?> updateAppointment(@RequestBody @Valid JsonAppointment jsonAppointment){
+//        try {
+//            Account account = accountService.findByPhone(jsonAppointment.getPhone());
+//            if(account == null)
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//            if(account.getStatus() == 2)
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//            if(appointmentService.findByAccountAndStatusIn(account, new int[]{0, 4}) != null)
+//                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+//            Appointment appointment = appointmentService.checkValidAndSave(jsonAppointment);
+//            if (appointmentDetailService.save(appointment, jsonAppointment).size() == jsonAppointment.getServiceIdList().length){
+//                return ResponseEntity.ok(appointment);
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+//        }
+//        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+//    }
 
 
     @PostMapping("history")
