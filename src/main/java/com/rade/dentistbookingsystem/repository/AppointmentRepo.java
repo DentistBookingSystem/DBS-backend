@@ -20,8 +20,8 @@ import java.util.List;
 public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     @Modifying
     @Transactional
-    @Query(value = "UPDATE Appointment SET Status = ?1 WHERE id = ?2", nativeQuery = true)
-    void check(Integer status, Integer id);
+    @Query(value = "UPDATE Appointment SET status = :status WHERE id = :id", nativeQuery = true)
+    void check(@Param("status") Integer status, @Param("id") Integer id);
 
     List<Appointment> findByAccountId(int account_id, Pageable pageable);
 

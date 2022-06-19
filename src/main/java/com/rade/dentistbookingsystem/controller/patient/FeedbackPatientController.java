@@ -48,12 +48,17 @@ public class FeedbackPatientController {
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
             if(!(content != null && !content.isEmpty()))
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-            return ResponseEntity.ok(feedbackService.save(feedbackAndPhone.getFeedbackDTO()));
+            Feedback feedback = feedbackService.save(feedbackAndPhone.getFeedbackDTO());
+            if (feedback != null){
+                appointmentService.check(5, feedback.getAppointment().getId());
+                return ResponseEntity.ok(feedback);
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
     }
-
-
 }

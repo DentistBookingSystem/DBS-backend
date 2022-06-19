@@ -87,29 +87,32 @@ public class AppointmentPatientController {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-//    @PostMapping("make")
-//    @Transactional(rollbackFor = {Exception.class, Throwable.class})
-//    public ResponseEntity<?> updateAppointment(@RequestBody @Valid JsonAppointment jsonAppointment){
-//        try {
-//            Account account = accountService.findByPhone(jsonAppointment.getPhone());
-//            if(account == null)
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//            if(account.getStatus() == 2)
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//            if(appointmentService.findByAccountAndStatusIn(account, new int[]{0, 4}) != null)
-//                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-//            Appointment appointment = appointmentService.checkValidAndSave(jsonAppointment);
-//            if (appointmentDetailService.save(appointment, jsonAppointment).size() == jsonAppointment.getServiceIdList().length){
-//                return ResponseEntity.ok(appointment);
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-//        }
-//        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-//    }
 
+
+    @PostMapping("update")
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
+    public ResponseEntity<?> updateAppointment(@RequestBody @Valid JsonAppointment jsonAppointment){
+        try {
+            Account account = accountService.findByPhone(jsonAppointment.getPhone());
+            if(account == null)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //ko tìm thấy account
+            if(account.getStatus() == 2)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //account bị ban
+            Appointment appointment = appointmentService.findId(jsonAppointment.getAppointmentDTO().getId());
+            if (!(appointment != null && appointment.getAccount().getId() == account.getId()))
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); //appointment không tồn tại (chung với tài khoản không khớp với appointment)
+            if(appointment.getStatus() != 0)
+                return ResponseEntity.status(HttpStatus.GONE).build(); //appointment phải là đang chờ và chưa được edit
+            if (appointmentService.checkValidAndSave(jsonAppointment) != null){
+                return ResponseEntity.ok(appointment);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    }
 
     @PostMapping("history")
     public List<Appointment> getHistoryList(@RequestBody PhoneAndPage phoneAndPage){

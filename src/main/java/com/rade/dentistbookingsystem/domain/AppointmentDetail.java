@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class AppointmentDetail implements Serializable {
     private Service service;
 
     @ManyToOne
+    @JsonIgnore
     @MapsId("appointment_id")
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;

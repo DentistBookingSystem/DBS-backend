@@ -142,7 +142,11 @@ public class AppointmentServiceImpl implements AppointmentService {
                 }
             }
             appointmentList = appointmentRepo.findByDoctorIdAndTime(doctorAndDate.getDoctor_id(), doctorAndDate.getDate());
+            Appointment tmp = null;
+            Integer appointment_id = doctorAndDate.getAppointment_id();
+            if(appointment_id != null) tmp = findId(appointment_id);
             for (Appointment appointment : appointmentList) {
+                if (tmp != null && appointment.getId() == tmp.getId()) continue;
                 timeOptionBooked.add(appointment.getAppointment_time());
             }
             for (String option : timeOptionByDateList) {
@@ -189,10 +193,10 @@ public class AppointmentServiceImpl implements AppointmentService {
             String time = jsonAppointment.getAppointmentDTO().getTime();
             int branch_id = jsonAppointment.getAppointmentDTO().getBranch_id();
             int [] service_id = jsonAppointment.getServiceIdList();
-
+            Integer appointment_id = jsonAppointment.getAppointmentDTO().getId();
             boolean valid = false;
             if(jsonAppointment.getAppointmentDTO().getDoctor_id() != 0){
-                DoctorAndDate doctorAndDate = new DoctorAndDate(branch_id, doctor_id, date, service_id);
+                DoctorAndDate doctorAndDate = new DoctorAndDate(appointment_id, branch_id, doctor_id, date, service_id);
                 for (String stringOption : checkTimeOptionByDate(doctorAndDate)) {
                     if (time.equals(stringOption)){
                         valid = true;
@@ -204,7 +208,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 List<Doctor> doctorList = doctorService.findByBranchId(branch_id);
                 List<Doctor> availableDoctorList = new ArrayList<>();
                 for (Doctor doctor : doctorList) {
-                    DoctorAndDate doctorAndDate = new DoctorAndDate(branch_id, doctor.getId(), date, service_id);
+                    DoctorAndDate doctorAndDate = new DoctorAndDate(appointment_id, branch_id, doctor.getId(), date, service_id);
                     for (String stringOption : checkTimeOptionByDate(doctorAndDate)) {
                         if (time.equals(stringOption)){
                             availableDoctorList.add(doctor);
