@@ -58,16 +58,21 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     boolean checkAppointmentToCancel(@Param("id") int id, @Param("account_id") int account_id);
 
     @Query(value =
-            "SELECT " +
-                    "CASE WHEN ( " +
-                    "SELECT COUNT (a.account_id) " +
-                    "FROM Appointment a " +
-                    "WHERE a.account_id = :account_id AND (a.status = 3) AND DATEDIFF(DAY, a.appointment_date, GETDATE()) < 30 " +
-                    "GROUP BY a.account_id " +
-                    ") < 3 " +
-                    "THEN 'TRUE' " +
-                    "ELSE 'FALSE' " +
-                    "END",
+            "SELECT  " +
+                    "                    CASE WHEN not exists (  " +
+                    "                    SELECT COUNT (a.account_id)  " +
+                    "                    FROM Appointment a  " +
+                    "                    WHERE a.account_id = :account_id AND (a.status = 3) AND DATEDIFF(DAY, a.appointment_date, GETDATE()) < 30  " +
+                    "                    GROUP BY a.account_id  " +
+                    "                    ) OR (  " +
+                    "                    SELECT COUNT (a.account_id)  " +
+                    "                    FROM Appointment a  " +
+                    "                    WHERE a.account_id = :account_id AND (a.status = 3) AND DATEDIFF(DAY, a.appointment_date, GETDATE()) < 30  " +
+                    "                    GROUP BY a.account_id  " +
+                    "                    ) < 3  " +
+                    "                    THEN 'TRUE'  " +
+                    "                    ELSE 'FALSE'  " +
+                    "                    END",
             nativeQuery = true)
     boolean checkCountAppointmentToCancel(@Param("account_id") int account_id);
     @Modifying
