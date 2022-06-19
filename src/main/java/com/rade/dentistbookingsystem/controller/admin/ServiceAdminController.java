@@ -1,6 +1,7 @@
 package com.rade.dentistbookingsystem.controller.admin;
 
 import com.rade.dentistbookingsystem.domain.Service;
+import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.ServiceDTO;
 import com.rade.dentistbookingsystem.services.GoogleDriveFileService;
 import com.rade.dentistbookingsystem.services.ServiceSv;
@@ -32,9 +33,12 @@ public class ServiceAdminController {
 
 
     // những hàm cho service
-    @GetMapping()
-    public Optional<Service> findByID(@RequestParam int id) {
-        return serviceSv.findById(id);
+    @GetMapping("/{id}")
+    public Optional<Service> findByID(@PathVariable int id) {
+        Optional<Service> service = serviceSv.findById(id);
+        if (service.isPresent()) {
+            return service;
+        } else throw new NotFoundException("Service is not found");
     }
 
 

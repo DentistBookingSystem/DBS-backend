@@ -6,6 +6,7 @@ import com.rade.dentistbookingsystem.services.DistrictService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DistrictServiceImpl implements DistrictService {
@@ -26,5 +27,10 @@ public class DistrictServiceImpl implements DistrictService {
     @Override
     public List<District> findByProvinceId(Integer id) {
         return districtRepo.findByProvinceId(id);
+    }
+
+    @Override
+    public Optional<District> findById(Integer integer) {
+        return districtRepo.findById(integer);
     }
 }

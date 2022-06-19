@@ -11,6 +11,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 public class AccountDTO implements Serializable {
+    private int id;
     @NotNull(message = "Full name is required")
     private String full_name;
     @NotNull(message = "Password is required")

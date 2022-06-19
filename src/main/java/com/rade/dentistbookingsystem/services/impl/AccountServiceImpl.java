@@ -3,7 +3,10 @@ package com.rade.dentistbookingsystem.services.impl;
 import com.rade.dentistbookingsystem.componentform.AccountAndViolationTimes;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.model.AccountDTO;
-import com.rade.dentistbookingsystem.repository.*;
+import com.rade.dentistbookingsystem.repository.AccountRepo;
+import com.rade.dentistbookingsystem.repository.AppointmentRepo;
+import com.rade.dentistbookingsystem.repository.DistrictRepo;
+import com.rade.dentistbookingsystem.repository.RoleRepo;
 import com.rade.dentistbookingsystem.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -106,6 +110,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public Account findByPhone(String phone) {
-        return accountRepo.findByPhone(phone);
+        Account account = accountRepo.findByPhone(phone);
+        account.setPassword("***");
+        return account;
+    }
+
+
+    @Override
+    public Optional<Account> findById(Integer integer) {
+        return accountRepo.findById(integer);
     }
 }

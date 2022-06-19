@@ -1,6 +1,7 @@
 package com.rade.dentistbookingsystem.services.impl;
 
 import com.rade.dentistbookingsystem.domain.Branch;
+import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.BranchDTO;
 import com.rade.dentistbookingsystem.repository.BranchRepo;
 import com.rade.dentistbookingsystem.services.BranchService;
@@ -35,7 +36,6 @@ public class BranchServiceImpl implements BranchService {
         return branchRepo.findAll(pageable);
     }
 
-
     @Override
     public <S extends Branch> S save(S entity) {
         return branchRepo.save(entity);
@@ -44,46 +44,59 @@ public class BranchServiceImpl implements BranchService {
     @Override
     public Branch saveBranch(BranchDTO branchDTO) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        Date openTime = null;
+        Date closeTime = null;
         try {
-            Branch branch = new Branch(
-                    branchDTO.getName(),
-                    districtService.getById(branchDTO.getDistrict_id()),
-                    sdf.parse(branchDTO.getOpen_time()),
-                    sdf.parse(branchDTO.getClose_time()),
-                    branchDTO.getStatus(),
-                    branchDTO.getUrl());
-            return branchRepo.save(branch);
+            openTime = sdf.parse(branchDTO.getOpen_time());
+            closeTime = sdf.parse(branchDTO.getClose_time());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        if (openTime.after(closeTime)) throw new ValidationException("Open time and close time are invalid");
+        if (branchRepo.findByName(branchDTO.getName()) != null)
+            throw new ValidationException("Branch name is already use");
+
+        else {
+            Branch branch = new Branch();
+            branch.setName(branchDTO.getName());
+            branch.setStatus(branchDTO.getStatus());
+            branch.setUrl(branchDTO.getUrl());
+            branch.setDistrict(districtService.findById(branchDTO.getDistrict_id()).orElseThrow(() -> new NotFoundException("District is not found")));
+            branch.setClose_time(closeTime);
+            branch.setOpen_time(openTime);
+            return save(branch);
+        }
+
     }
 
     @Override
     public Branch updateBranch(BranchDTO branchDTO, int id) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        try {
-            if (existsById(id) == false) {
-                throw new Exception("Branch not found");
-            } else {
-                Branch branch = branchRepo.getById(id);
-                Date openTime = sdf.parse(branchDTO.getOpen_time());
-                Date closeTime = sdf.parse(branchDTO.getClose_time());
-                if (openTime.after(closeTime)) throw new ValidationException("Open time and close time are invalid");
-                branch.setName(branchDTO.getName());
-                branch.setStatus(branchDTO.getStatus());
-                branch.setUrl(branchDTO.getUrl());
-                branch.setDistrict(districtService.getById(branchDTO.getDistrict_id()));
-                branch.setClose_time(closeTime);
-                branch.setOpen_time(openTime);
-                return save(branch);
-
+        Date openTime = null;
+        Date closeTime = null;
+        if (existsById(id) == false) {
+            throw new NotFoundException("Branch not found");
+        } else {
+            Branch branch = branchRepo.getById(id);
+            try {
+                openTime = sdf.parse(branchDTO.getOpen_time());
+                closeTime = sdf.parse(branchDTO.getClose_time());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            if (openTime.after(closeTime)) throw new ValidationException("Open time and close time are invalid");
+            if (branchRepo.findByName(branchDTO.getName()) != null && branchRepo.findId(id).getId() != branchRepo.findByName(branchDTO.getName()).getId())
+                throw new ValidationException("Branch name is already use");
+            branch.setName(branchDTO.getName());
+            branch.setStatus(branchDTO.getStatus());
+            branch.setUrl(branchDTO.getUrl());
+            branch.setDistrict(districtService.findById(branchDTO.getDistrict_id()).orElseThrow(() -> new NotFoundException("District is not found")));
+            branch.setClose_time(closeTime);
+            branch.setOpen_time(openTime);
+            return save(branch);
+
         }
 
-        return null;
     }
 
 

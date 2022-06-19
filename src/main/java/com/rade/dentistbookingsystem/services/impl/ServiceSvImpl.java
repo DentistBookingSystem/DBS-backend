@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -79,6 +80,8 @@ public class ServiceSvImpl implements ServiceSv {
         Optional<Service> serviceData = findById(serviceDTO.getId());
         if (serviceData.isPresent()) {
             Service service = serviceData.get();
+            if (serviceRepo.findByName(serviceDTO.getName()) != null && serviceRepo.findByName(serviceDTO.getName()).getId() != serviceDTO.getId())
+                throw new ValidationException("Service name has been use");
             service.setName(serviceDTO.getName());
             service.setDescription(serviceDTO.getDescription());
             service.setStatus(serviceDTO.getStatus());

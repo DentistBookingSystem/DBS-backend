@@ -1,6 +1,5 @@
 package com.rade.dentistbookingsystem.repository;
 
-import com.rade.dentistbookingsystem.componentform.AccountAndViolationTimes;
 import com.rade.dentistbookingsystem.domain.Account;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,15 +14,18 @@ public interface AccountRepo extends JpaRepository<Account, Integer> {
     @Query(value = "SELECT Account.* FROM Account  WHERE id = ?1", nativeQuery = true)
     Account findId(int id);
 
+    @Override
+    Account getById(Integer integer);
+
     @Query(value =
             "SELECT Account.*" +
-            "FROM Account " +
-            "LEFT JOIN " +
-            "(" +
-                "select a.id, count(apm.account_id) as count_apm " +
-                "from Account as a " +
-                "left join Appointment apm on a.id = apm.account_id and datediff(MONTH, apm.appointment_date, getdate()) <= 3 and apm.status = 2 " +
-                "group by a.id, apm.account_id" +
+                    "FROM Account " +
+                    "LEFT JOIN " +
+                    "(" +
+                    "select a.id, count(apm.account_id) as count_apm " +
+                    "from Account as a " +
+                    "left join Appointment apm on a.id = apm.account_id and datediff(MONTH, apm.appointment_date, getdate()) <= 3 and apm.status = 2 " +
+                    "group by a.id, apm.account_id" +
             ") AS apm ON Account.id = apm.id " +
             "LEFT JOIN " +
             "(" +

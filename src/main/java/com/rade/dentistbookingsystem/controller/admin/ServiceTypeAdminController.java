@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -19,17 +20,24 @@ public class ServiceTypeAdminController {
     @Autowired
     ServiceTypeSv serviceTypeSv;
 
+
+    @GetMapping("{id}")
+    public Optional<ServiceType> getByID(@PathVariable int id) {
+        return serviceTypeSv.findById(id);
+    }
+
     @GetMapping("list")
     public List<ServiceType> findAll() {
         return serviceTypeSv.findAll();
     }
 
+    @GetMapping("")
     // add service type cho admin
     @RolesAllowed({"ROLE_ADMIN"})
     @PostMapping("add")
     public ResponseEntity<?> addServiceType(@Valid @RequestBody ServiceTypeDTO serviceTypeDTO) {
 
-            return ResponseEntity.ok(serviceTypeSv.insert(serviceTypeDTO));
+        return ResponseEntity.ok(serviceTypeSv.insert(serviceTypeDTO));
     }
 
     @RolesAllowed({"ROLE_ADMIN"})
@@ -38,6 +46,8 @@ public class ServiceTypeAdminController {
             return ResponseEntity.ok(serviceTypeSv.edit(serviceTypeDTO, id));
 
     }
+
+
     // ko xoa đc vi là bảng gốc, tham chiếu cho service
 //    @GetMapping("delete/{id}")
 //        public ResponseEntity<?> deleteServiceType(@PathVariable int id){

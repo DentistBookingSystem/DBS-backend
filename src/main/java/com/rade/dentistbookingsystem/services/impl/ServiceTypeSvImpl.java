@@ -55,7 +55,6 @@ public class ServiceTypeSvImpl implements ServiceTypeSv {
         serviceTypeRepo.deleteById(id);
     }
 
-
     @Override
     public ServiceType insert(ServiceTypeDTO serviceTypeDTO) {
 

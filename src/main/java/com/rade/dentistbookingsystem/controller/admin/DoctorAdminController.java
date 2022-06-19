@@ -2,6 +2,7 @@ package com.rade.dentistbookingsystem.controller.admin;
 
 
 import com.rade.dentistbookingsystem.domain.Doctor;
+import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.DoctorDTO;
 import com.rade.dentistbookingsystem.services.BranchService;
 import com.rade.dentistbookingsystem.services.DoctorService;
@@ -31,7 +32,10 @@ public class DoctorAdminController {
 
     @GetMapping()
     public Optional<Doctor> findById(@RequestParam int id) {
-        return doctorService.findById(id);
+        Optional<Doctor> doctor = doctorService.findById(id);
+        if (doctor.isPresent()) {
+            return doctor;
+        } else throw new NotFoundException("Doctor not found");
     }
 
     @GetMapping("list")

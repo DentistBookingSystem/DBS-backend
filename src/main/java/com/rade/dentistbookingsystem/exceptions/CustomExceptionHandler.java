@@ -17,14 +17,14 @@ public class CustomExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handlerNotFoundException(ChangeSetPersister.NotFoundException ex, WebRequest req) {
         // Log err
-
+        ex.printStackTrace();
         return new ErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler(DuplicateRecordException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerDuplicateRecordException(DuplicateRecordException ex, WebRequest req) {
-
+        ex.printStackTrace();
 
         return new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
@@ -32,14 +32,16 @@ public class CustomExceptionHandler {
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     public ErrorResponse handlerValidationException(Exception ex, WebRequest req) {
+        ex.printStackTrace();
         return new ErrorResponse(HttpStatus.NOT_ACCEPTABLE, ex.getMessage());
     }
 
+
     // Xử lý tất cả các exception chưa được khai báo
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     public ErrorResponse handlerException(Exception ex, WebRequest req) {
-        // Log err
+        ex.printStackTrace();
 
         return new ErrorResponse(HttpStatus.NOT_ACCEPTABLE, ex.getMessage());
     }
