@@ -14,10 +14,6 @@ import java.util.Optional;
 public class AccountDetailServiceImpl implements UserDetailsService {
     @Autowired
     AccountRepo accountRepo;
-
-
-
-
     @Override
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
         Account account = accountRepo.findByPhone(phone);

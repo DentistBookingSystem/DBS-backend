@@ -17,10 +17,10 @@ public class DentistBookingSystemApplication{
         SpringApplication.run(DentistBookingSystemApplication.class, args);
     }
 
-    @Scheduled(fixedDelayString = "PT1M")
-    void checkAllAppointmentToMarkAbsent() throws InterruptedException{
-        appointmentService.checkAllAppointmentToMarkAbsent();
-    }
+//    @Scheduled(fixedDelayString = "PT1M")
+//    void checkAllAppointmentToMarkAbsent() throws InterruptedException{
+//        appointmentService.checkAllAppointmentToMarkAbsent();
+//    }
 }
 @Configuration
 @EnableScheduling

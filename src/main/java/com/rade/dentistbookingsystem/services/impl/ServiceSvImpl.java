@@ -1,11 +1,13 @@
 package com.rade.dentistbookingsystem.services.impl;
 
+import com.rade.dentistbookingsystem.componentform.ServiceDiscountComponent;
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.domain.ServiceType;
 import com.rade.dentistbookingsystem.exceptions.DuplicateRecordException;
 import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.ServiceDTO;
 import com.rade.dentistbookingsystem.repository.ServiceRepo;
+import com.rade.dentistbookingsystem.services.DiscountService;
 import com.rade.dentistbookingsystem.services.ServiceSv;
 import com.rade.dentistbookingsystem.services.ServiceTypeSv;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class ServiceSvImpl implements ServiceSv {
     ServiceRepo serviceRepo;
     @Autowired
     ServiceTypeSv serviceTypeSv;
+
+    @Autowired
+    DiscountService discountService;
 
     public ServiceSvImpl(ServiceRepo serviceRepo) {
         this.serviceRepo = serviceRepo;
@@ -126,6 +131,19 @@ public class ServiceSvImpl implements ServiceSv {
         return serviceRepo.findByServiceTypeIdAndStatus(id, status);
     }
 
+    @Override
+    public List<ServiceDiscountComponent> findByServiceTypeIdAndStatusIncludeDiscount(int id, short status) {
+        List<Service> serviceList =  findByServiceTypeIdAndStatus(id, status);
+        List<ServiceDiscountComponent> serviceDiscountComponentList = new ArrayList<>();
+        for (Service service : serviceList) {
+            ServiceDiscountComponent serviceDiscountComponent = new ServiceDiscountComponent(
+                    service,
+                    discountService.findAvailableByServiceId(service.getId())
+            );
+            serviceDiscountComponentList.add(serviceDiscountComponent);
+        }
+        return serviceDiscountComponentList;
+    }
 
     @Override
     public Page<Service> findAllWithPagination() {
@@ -139,5 +157,10 @@ public class ServiceSvImpl implements ServiceSv {
     public Page<Service> findAllWithPaginationAndSorting(String field) {
         Page<Service> servicePage = serviceRepo.findAll(PageRequest.of(1, 5).withSort(Sort.by(field)));
         return servicePage;
+    }
+
+    @Override
+    public List<Service> findByAppointmentId(Integer appointment_id) {
+        return serviceRepo.findByAppointmentId(appointment_id);
     }
 }

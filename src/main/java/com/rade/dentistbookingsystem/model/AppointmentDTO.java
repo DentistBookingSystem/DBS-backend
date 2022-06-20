@@ -10,7 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 public class AppointmentDTO  implements Serializable {
-    private int id;
+    private Integer id;
     private Integer account_id;
     private int branch_id;
     private int doctor_id;

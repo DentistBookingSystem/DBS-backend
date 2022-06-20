@@ -35,15 +35,25 @@ public class AppointmentServiceImpl implements AppointmentService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Account account = accountService.findId(appointmentDTO.getAccount_id());
         try{
-            Appointment appointment = new Appointment(
-                    account,
-                    branchService.findId(appointmentDTO.getBranch_id()),
-                    doctorService.findId(appointmentDTO.getDoctor_id()),
-                    dateFormat.parse(appointmentDTO.getDate()),
-                    appointmentDTO.getTime(),
-                    0,
-                    new Date()
-            );
+            Appointment appointment;
+            if(appointmentDTO.getId() == null){
+                appointment = new Appointment(
+                        account,
+                        branchService.findId(appointmentDTO.getBranch_id()),
+                        doctorService.findId(appointmentDTO.getDoctor_id()),
+                        dateFormat.parse(appointmentDTO.getDate()),
+                        appointmentDTO.getTime(),
+                        0,
+                        new Date()
+                );
+            }
+            else{
+                appointment = findId(appointmentDTO.getId());
+                appointment.setDoctor(doctorService.findId(appointmentDTO.getDoctor_id()));
+                appointment.setAppointment_date(dateFormat.parse(appointmentDTO.getDate()));
+                appointment.setAppointment_time(appointmentDTO.getTime());
+                appointment.setStatus(4);
+            }
             return appointmentRepo.save(appointment);
         }
         catch (Exception e){
@@ -82,87 +92,94 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<String> checkTimeOptionOfDoctorByDate(DoctorAndDate doctorAndDate) throws Exception{
-        List<String> timeOptionByDateList = new ArrayList<>();
-        List<String> timeOptionBooked = new ArrayList<>();
+    public List<String> checkTimeOptionOfDoctorByDate(DoctorAndDate doctorAndDate){
         List<String> validTimeOption = new ArrayList<>();
-        List<Appointment> appointmentList;
-        if(doctorAndDate.getService_id().length == 0) return null;
-        float totalTime = 0;
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        Date startTimeAtMorning = branchService.findId(doctorAndDate.getBranch_id()).getOpen_time();
-        Date endTimeAtMorning = sdf.parse("12:00");
-        Date startTimeAtNoon = sdf.parse("13:00");
-        Date endTimeAtNoon = branchService.findId(doctorAndDate.getBranch_id()).getClose_time();
-        boolean endOfMorning = false;
-        boolean endOfNoon = false;
-        if(doctorAndDate.getDoctor_id() != 0){
-            for (int service_id: doctorAndDate.getService_id()) {
-                totalTime = totalTime + serviceSv.findId(service_id).getEstimated_time();
-            }
-            while(!endOfMorning){
-                String start = sdf.format(startTimeAtMorning);
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(sdf.parse(start));
-                cal.add(Calendar.MINUTE, Math.round(totalTime*60));
+        try{
+            List<String> timeOptionByDateList = new ArrayList<>();
+            List<String> timeOptionBooked = new ArrayList<>();
 
-                Calendar calForEndOfMorning = Calendar.getInstance();
-                calForEndOfMorning.setTime(endTimeAtMorning);
-
-                if(!cal.after(calForEndOfMorning)){
-                    String end = sdf.format(cal.getTime());
-                    timeOptionByDateList.add(start+"-"+end);
+            List<Appointment> appointmentList;
+            if(doctorAndDate.getService_id().length == 0) return null;
+            float totalTime = 0;
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            Date startTimeAtMorning = branchService.findId(doctorAndDate.getBranch_id()).getOpen_time();
+            Date endTimeAtMorning = sdf.parse("12:00");
+            Date startTimeAtNoon = sdf.parse("13:00");
+            Date endTimeAtNoon = branchService.findId(doctorAndDate.getBranch_id()).getClose_time();
+            boolean endOfMorning = false;
+            boolean endOfNoon = false;
+            if(doctorAndDate.getDoctor_id() != 0){
+                for (int service_id: doctorAndDate.getService_id()) {
+                    totalTime = totalTime + serviceSv.findId(service_id).getEstimated_time();
+                }
+                while(!endOfMorning){
+                    String start = sdf.format(startTimeAtMorning);
+                    Calendar cal = Calendar.getInstance();
                     cal.setTime(sdf.parse(start));
-                    cal.add(Calendar.MINUTE, 30);
-                    startTimeAtMorning = cal.getTime();
-                }
-                else{
-                    endOfMorning = true;
-                }
-            }
+                    cal.add(Calendar.MINUTE, Math.round(totalTime*60));
 
-            while(!endOfNoon){
-                String start = sdf.format(startTimeAtNoon);
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(sdf.parse(start));
-                cal.add(Calendar.MINUTE, Math.round(totalTime*60));
+                    Calendar calForEndOfMorning = Calendar.getInstance();
+                    calForEndOfMorning.setTime(endTimeAtMorning);
 
-                Calendar calForEndOfNoon = Calendar.getInstance();
-                calForEndOfNoon.setTime(endTimeAtNoon);
-
-                if(!cal.after(calForEndOfNoon)){
-                    String end = sdf.format(cal.getTime());
-                    timeOptionByDateList.add(start+"-"+end);
-                    cal.setTime(sdf.parse(start));
-                    cal.add(Calendar.MINUTE, 30);
-                    startTimeAtNoon = cal.getTime();
-                }
-                else{
-                    endOfNoon = true;
-                }
-            }
-            appointmentList = appointmentRepo.findByDoctorIdAndTime(doctorAndDate.getDoctor_id(), doctorAndDate.getDate());
-            Appointment tmp = null;
-            Integer appointment_id = doctorAndDate.getAppointment_id();
-            if(appointment_id != null) tmp = findId(appointment_id);
-            for (Appointment appointment : appointmentList) {
-                if (tmp != null && appointment.getId() == tmp.getId()) continue;
-                timeOptionBooked.add(appointment.getAppointment_time());
-            }
-            for (String option : timeOptionByDateList) {
-                boolean valid = true;
-                Date startTime = sdf.parse(option.split("-")[0]);
-                Date endTime = sdf.parse(option.split("-")[1]);
-                for (String optionBooked : timeOptionBooked) {
-                    Date startTimeBooked = sdf.parse(optionBooked.split("-")[0]);
-                    Date endTimeBooked = sdf.parse(optionBooked.split("-")[1]);
-                    if(((startTimeBooked.before(endTime)) && (endTimeBooked.after(startTime)))){
-                        valid = false;
+                    if(!cal.after(calForEndOfMorning)){
+                        String end = sdf.format(cal.getTime());
+                        timeOptionByDateList.add(start+"-"+end);
+                        cal.setTime(sdf.parse(start));
+                        cal.add(Calendar.MINUTE, 30);
+                        startTimeAtMorning = cal.getTime();
+                    }
+                    else{
+                        endOfMorning = true;
                     }
                 }
-                if (valid) validTimeOption.add(option);
+
+                while(!endOfNoon){
+                    String start = sdf.format(startTimeAtNoon);
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(sdf.parse(start));
+                    cal.add(Calendar.MINUTE, Math.round(totalTime*60));
+
+                    Calendar calForEndOfNoon = Calendar.getInstance();
+                    calForEndOfNoon.setTime(endTimeAtNoon);
+
+                    if(!cal.after(calForEndOfNoon)){
+                        String end = sdf.format(cal.getTime());
+                        timeOptionByDateList.add(start+"-"+end);
+                        cal.setTime(sdf.parse(start));
+                        cal.add(Calendar.MINUTE, 30);
+                        startTimeAtNoon = cal.getTime();
+                    }
+                    else{
+                        endOfNoon = true;
+                    }
+                }
+                appointmentList = appointmentRepo.findByDoctorIdAndTime(doctorAndDate.getDoctor_id(), doctorAndDate.getDate());
+                Appointment tmp = null;
+                Integer appointment_id = doctorAndDate.getAppointment_id();
+                if(appointment_id != null) tmp = findId(appointment_id);
+                for (Appointment appointment : appointmentList) {
+                    if (tmp != null && appointment.getId() == tmp.getId()) continue;
+                    timeOptionBooked.add(appointment.getAppointment_time());
+                }
+                for (String option : timeOptionByDateList) {
+                    boolean valid = true;
+                    Date startTime = sdf.parse(option.split("-")[0]);
+                    Date endTime = sdf.parse(option.split("-")[1]);
+                    for (String optionBooked : timeOptionBooked) {
+                        Date startTimeBooked = sdf.parse(optionBooked.split("-")[0]);
+                        Date endTimeBooked = sdf.parse(optionBooked.split("-")[1]);
+                        if(((startTimeBooked.before(endTime)) && (endTimeBooked.after(startTime)))){
+                            valid = false;
+                        }
+                    }
+                    if (valid) validTimeOption.add(option);
+                }
             }
         }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
         return validTimeOption;
     }
     @Override
@@ -205,6 +222,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 }
             }
             else{
+
                 List<Doctor> doctorList = doctorService.findByBranchId(branch_id);
                 List<Doctor> availableDoctorList = new ArrayList<>();
                 for (Doctor doctor : doctorList) {
@@ -225,6 +243,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                         Date start = sdf.parse(appointment.getAppointment_time().split("-")[0]);
                         Date end = sdf.parse(appointment.getAppointment_time().split("-")[1]);
                         totalTime.set(i, totalTime.get(i) + (float)((end.getTime() - start.getTime()) / (1000 * 60 * 60)));
+                        i++;
                     }
                 }
                 int indexOfDoctor = totalTime.indexOf(Collections.min(totalTime));

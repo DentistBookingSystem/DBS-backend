@@ -84,4 +84,6 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
             "GETDATE()) > 15",
             nativeQuery = true)
     void checkAllAppointmentToMarkAbsent();
+
+//    boolean checkViolateByAccountIdAndStatus(@Param("account_id") int account_id, @Param("status") int status);
 }

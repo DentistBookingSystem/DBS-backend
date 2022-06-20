@@ -29,5 +29,18 @@ public interface FeedbackRepo extends JpaRepository<Feedback, Integer> {
                                   @Param("time") String time,
                                   Pageable pageable);
 
-//    int countByAccountIdAndStatus(int account_id, int status);
+@Query(value =
+        "SELECT " +
+        "CASE WHEN ( " +
+        "SELECT COUNT(Feedback.id) " +
+        "FROM Feedback LEFT JOIN Appointment a ON Feedback.appointment_id = a.id " +
+        "WHERE a.account_id = :account_id AND Feedback.status = :status " +
+        ") >= 3 " +
+        "THEN 'TRUE' " +
+        "ELSE 'FALSE' " +
+        "END",
+        nativeQuery = true)
+    boolean checkViolateByAccountIdAndStatus(@Param("account_id") int account_id, @Param("status") int status);
+
+
 }

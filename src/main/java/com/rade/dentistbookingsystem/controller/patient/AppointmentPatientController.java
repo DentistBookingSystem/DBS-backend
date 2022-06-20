@@ -16,11 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -87,11 +84,32 @@ public class AppointmentPatientController {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-
+    @PostMapping("load-update")
+    public AppointmentComponentForUpdate loadToUpdate(@RequestBody JsonPhoneAndAppointmentId jsonPhoneAndAppointmentId) {
+        try{
+            Account account = accountService.findByPhone(jsonPhoneAndAppointmentId.getPhone());
+            if(account == null)
+                return null;
+            if(account.getStatus() == 2)
+                return null;
+            Appointment appointment = appointmentService.findId(jsonPhoneAndAppointmentId.getAppointment_id());
+            if (!(appointment != null && appointment.getAccount().getId() == account.getId()))
+                return null;
+            if(appointment.getStatus() != 0)
+                return null;
+            List<Doctor> doctorList = doctorService.findByBranchId(appointment.getBranch().getId());
+            List<Service> serviceList = serviceSv.findByAppointmentId(appointment.getId());
+            return new AppointmentComponentForUpdate(appointment, doctorList, serviceList);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @PostMapping("update")
     @Transactional(rollbackFor = {Exception.class, Throwable.class})
-    public ResponseEntity<?> updateAppointment(@RequestBody @Valid JsonAppointment jsonAppointment){
+    public ResponseEntity<?> updateAppointment(@RequestBody JsonAppointment jsonAppointment){
         try {
             Account account = accountService.findByPhone(jsonAppointment.getPhone());
             if(account == null)
