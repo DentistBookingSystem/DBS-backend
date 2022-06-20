@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 @AllArgsConstructor
@@ -16,8 +17,9 @@ public class DiscountDTO  implements Serializable {
     @NotNull
     private String name;
     @NotNull
+    @Min(value = 1, message = "percentage must >= 0")
     private float percentage;
-    @NotNull
+
     private String description;
     @NotNull
     private int status;

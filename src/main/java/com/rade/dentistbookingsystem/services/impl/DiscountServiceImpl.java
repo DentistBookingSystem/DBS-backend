@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,27 +31,27 @@ public class DiscountServiceImpl implements DiscountService {
         this.discountRepo = discountRepo;
     }
 
+
     public Discount findAvailableByServiceId(Integer id) {
         return discountRepo.findAvailableByServiceId(id);
     }
 
     @Override
     public List<Discount> findAll() {
-        return discountRepo.findAll();
+        return discountRepo.findByStatus(1);
     }
 
 
     @Override
     public Page<Discount> findAll(Pageable pageable) {
-        return discountRepo.findAll(pageable);
+        return discountRepo.findAllByStatus(1, pageable);
     }
 
 
     @Override
     public Page<Discount> findAllWithPagination() {
-        return discountRepo.findAll(PageRequest.of(0, 5));
+        return discountRepo.findAllByStatus(1, PageRequest.of(0, 5));
     }
-
 
     @Override
     public Optional<Discount> findById(Integer integer) {
@@ -59,7 +60,7 @@ public class DiscountServiceImpl implements DiscountService {
 
 
     @Override
-    public Discount addDiscount(DiscountDTO discountDTO) throws ParseException {
+    public Discount addDiscount(@Valid DiscountDTO discountDTO) throws ParseException {
         Discount discount = new Discount();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -77,9 +78,11 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Discount editDiscount(DiscountDTO discountDTO) throws ParseException {
+
         Optional<Discount> discount = discountRepo.findById(discountDTO.getId());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        if (discountRepo.findById(discountDTO.getId()).isPresent()) {
+        if (discount.isPresent()) {
+
             if (discountRepo.findByName(discountDTO.getName()) != null)
                 throw new ValidationException("This Discount name has already exits");
             Discount tmpDiscount = discount.get();
@@ -93,4 +96,15 @@ public class DiscountServiceImpl implements DiscountService {
             return discountRepo.save(tmpDiscount);
         } else throw new NotFoundException("Discount not found");
     }
+
+    @Override
+    public Discount deleteDiscount(int discountId) {
+        Optional<Discount> discount = discountRepo.findById(discountId);
+        if (discount.isPresent()) {
+            discount.get().setStatus(0);
+            return discount.get();
+        } else throw new NotFoundException("Discount is not found");
+    }
+
+
 }

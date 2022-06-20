@@ -8,5 +8,7 @@ public interface DiscountSvService {
 
     DiscountService addServiceDiscount(DiscountServiceDTO discountServiceDTO);
 
+    void deleteAllByDiscount_Id(int id);
+
     DiscountService editServiceDiscount(DiscountServiceDTO discountServiceDTO);
 }

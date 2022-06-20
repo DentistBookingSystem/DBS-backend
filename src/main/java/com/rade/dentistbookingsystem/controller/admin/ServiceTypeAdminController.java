@@ -6,6 +6,7 @@ import com.rade.dentistbookingsystem.model.ServiceTypeDTO;
 import com.rade.dentistbookingsystem.services.ServiceTypeSv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -31,11 +32,10 @@ public class ServiceTypeAdminController {
         return serviceTypeSv.findAll();
     }
 
-    @GetMapping("")
     // add service type cho admin
     @RolesAllowed({"ROLE_ADMIN"})
     @PostMapping("add")
-    public ResponseEntity<?> addServiceType(@Valid @RequestBody ServiceTypeDTO serviceTypeDTO) {
+    public ResponseEntity<?> addServiceType(@Validated @RequestBody ServiceTypeDTO serviceTypeDTO) {
 
         return ResponseEntity.ok(serviceTypeSv.insert(serviceTypeDTO));
     }

@@ -20,6 +20,9 @@ public interface ServiceSv {
     List<Service> findAll();
 
     Service findId(Integer id);
+
+    List<Service> findByStatus(short status);
+
     Optional<Service> findById(Integer integer);
 
     Service edit(ServiceDTO serviceDTO);

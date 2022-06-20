@@ -18,9 +18,13 @@ public interface DiscountService {
 
     Page<Discount> findAllWithPagination();
 
+
     Optional<Discount> findById(Integer integer);
 
     Discount addDiscount(DiscountDTO discountDTO) throws ParseException;
 
     Discount editDiscount(DiscountDTO discountDTO) throws ParseException;
+
+
+    Discount deleteDiscount(int discountId);
 }

@@ -47,7 +47,8 @@ public class DiscountAdminController {
 
     @PostMapping("/add")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> addDiscount(@RequestBody @Validated DiscountServiceComponentAdmin discountServiceComponent) {
+
+    public ResponseEntity<?> addDiscount(@Validated @RequestBody DiscountServiceComponentAdmin discountServiceComponent) {
         try {
             Discount tmpDiscount = discount.addDiscount(discountServiceComponent.getDiscountDTO());
             int discountID = tmpDiscount.getId();
@@ -70,12 +71,15 @@ public class DiscountAdminController {
 
     }
 
-    @PostMapping("/update")
+    @PostMapping("/edit")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> updateDiscount(@RequestBody DiscountServiceComponentAdmin discountServiceComponent) {
+    public ResponseEntity<?> updateDiscount(@RequestBody @Validated DiscountServiceComponentAdmin discountServiceComponent) {
+
         try {
+
             Discount tmpDiscount = discount.editDiscount(discountServiceComponent.getDiscountDTO());
             int discountID = tmpDiscount.getId();
+            discountSv.deleteAllByDiscount_Id(discountID);
             int[] serviceList = discountServiceComponent.getServiceIDList();
             if (serviceList != null) {
 
@@ -95,5 +99,16 @@ public class DiscountAdminController {
 
     }
 
+    @GetMapping("delete/{id}")
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<?> deleteDiscount(@PathVariable int id) {
+        Discount tmpDiscount = discount.deleteDiscount(id);
+        if (tmpDiscount != null) {
+            discountSv.deleteAllByDiscount_Id(tmpDiscount.getId());
+        }
+
+        return ResponseEntity.ok(tmpDiscount);
+
+    }
 
 }

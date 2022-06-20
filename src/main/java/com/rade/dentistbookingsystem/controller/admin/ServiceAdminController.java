@@ -84,7 +84,7 @@ public class ServiceAdminController {
 
     @GetMapping("list")
     public List<Service> loadServiceComponent() {
-        return serviceSv.findAll();
+        return serviceSv.findByStatus((short) 1);
     }
 
     // Pagination

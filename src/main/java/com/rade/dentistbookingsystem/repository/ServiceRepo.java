@@ -2,11 +2,15 @@ package com.rade.dentistbookingsystem.repository;
 
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.domain.ServiceType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface ServiceRepo extends JpaRepository<Service, Integer> {
     public List<Service> findByServiceType(ServiceType serviceType);
 
@@ -18,4 +22,8 @@ public interface ServiceRepo extends JpaRepository<Service, Integer> {
     Service findId(Integer id);
 
     public List<Service> findByServiceTypeIdAndStatus(int id, short status);
+
+    public List<Service> findByStatus(short status);
+
+    public Page<Service> findAllByStatus(short status, Pageable pageable);
 }

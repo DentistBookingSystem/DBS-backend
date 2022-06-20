@@ -71,6 +71,11 @@ public class ServiceSvImpl implements ServiceSv {
     }
 
     @Override
+    public List<Service> findByStatus(short status) {
+        return serviceRepo.findByStatus(status);
+    }
+
+    @Override
     public Optional<Service> findById(Integer integer) {
         return serviceRepo.findById(integer);
     }
@@ -132,15 +137,13 @@ public class ServiceSvImpl implements ServiceSv {
 
     @Override
     public Page<Service> findAllWithPagination() {
-        Page<Service> servicePage = serviceRepo.findAll(PageRequest.of(1, 5));
-        return servicePage;
+        return serviceRepo.findAllByStatus((short) 1, PageRequest.of(1, 5));
     }
 
     // Pagation and sort by fields
 
     @Override
     public Page<Service> findAllWithPaginationAndSorting(String field) {
-        Page<Service> servicePage = serviceRepo.findAll(PageRequest.of(1, 5).withSort(Sort.by(field)));
-        return servicePage;
+        return serviceRepo.findAllByStatus((short) 1, PageRequest.of(1, 5).withSort(Sort.by(field)));
     }
 }
