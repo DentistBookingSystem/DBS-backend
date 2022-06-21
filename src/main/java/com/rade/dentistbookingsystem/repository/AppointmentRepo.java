@@ -2,8 +2,6 @@ package com.rade.dentistbookingsystem.repository;
 
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
-import com.rade.dentistbookingsystem.domain.Feedback;
-import com.rade.dentistbookingsystem.domain.ServiceType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Date;
 import java.util.List;
@@ -117,7 +114,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     List<Appointment> findByTimeMaking(Date timeMaking);
 
     @Query(value = "SELECT  id,account_id,branch_id,doctor_id,appointment_date,appointment_time,status,time_making"
-            + " FROM Appointment  " + "WHERE status=?1 OR " + "CAST(?2 AS Date ) " + " = CAST( time_making AS Date )", nativeQuery = true)
+            + " FROM Appointment  " + "WHERE status=?1 AND " + "CAST(?2 AS Date ) " + " = CAST( time_making AS Date )", nativeQuery = true)
     List<Appointment> findByStatusAndDate(int status, Date today);
 
 //    boolean checkViolateByAccountIdAndStatus(@Param("account_id") int account_id, @Param("status") int status);
