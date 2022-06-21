@@ -32,8 +32,8 @@ public class ServiceAdminController {
 
 
     // những hàm cho service
-    @GetMapping()
-    public Optional<Service> findByID(@RequestParam int id) {
+    @GetMapping("/{id}")
+    public Optional<Service> findByID(@PathVariable int id) {
         return serviceSv.findById(id);
     }
 
@@ -55,7 +55,7 @@ public class ServiceAdminController {
         return ResponseEntity.ok(serviceSv.insert(serviceDTO));
 
 
-        // return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+
 
 
     }

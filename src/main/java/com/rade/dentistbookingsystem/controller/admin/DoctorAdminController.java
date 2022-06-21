@@ -2,10 +2,12 @@ package com.rade.dentistbookingsystem.controller.admin;
 
 
 import com.rade.dentistbookingsystem.domain.Doctor;
+import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.DoctorDTO;
 import com.rade.dentistbookingsystem.services.BranchService;
 import com.rade.dentistbookingsystem.services.DoctorService;
 import com.rade.dentistbookingsystem.services.GoogleDriveFileService;
+import com.rade.dentistbookingsystem.utils.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +31,15 @@ public class DoctorAdminController {
     @Autowired
     GoogleDriveFileService googleDriveFileService;
 
+    @Autowired
+    ImageService imageService;
+
     @GetMapping()
     public Optional<Doctor> findById(@RequestParam int id) {
-        return doctorService.findById(id);
+        Optional<Doctor> doctor = doctorService.findById(id);
+        if (doctor.isPresent()) {
+            return doctor;
+        } else throw new NotFoundException("Doctor not found");
     }
 
     @GetMapping("list")
@@ -44,11 +52,19 @@ public class DoctorAdminController {
         return null;
     }
 
+    @PostMapping(value = "add-image")
+    public ResponseEntity<?> addDoctorImg(@RequestParam MultipartFile url) throws Exception {
+        String id = imageService.validateAndDownload(url);
+        if (id != null)
+            return ResponseEntity.ok(id); // lấy id gán vào cột url của serviceDTO sẽ gửi lên requeest
+        else
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    }
+
     @PostMapping("add")
-    public ResponseEntity<?> insertDoctor(@RequestPart @Validated DoctorDTO doctorDTO, @RequestPart MultipartFile url) {
+    public ResponseEntity<?> insertDoctor(@RequestPart @Validated DoctorDTO doctorDTO) {
         try {
-            String imgUrl = googleDriveFileService.uploadFile(url, "image", true);
-            doctorDTO.setUrl(imgUrl);
+
             Doctor doctor = doctorService.addDoctor(doctorDTO);
             if (doctor == null) throw new Exception();
             return ResponseEntity.ok(doctor);
@@ -60,10 +76,9 @@ public class DoctorAdminController {
     }
 
     @GetMapping("edit/{id}")
-    public ResponseEntity<?> insertDoctor(@RequestPart @Validated DoctorDTO doctorDTO, @RequestPart MultipartFile url, @PathVariable int id) {
+    public ResponseEntity<?> updateDoctor(@RequestPart @Validated DoctorDTO doctorDTO, @PathVariable int id) {
         try {
-            String imgUrl = googleDriveFileService.uploadFile(url, "image", true);
-            doctorDTO.setUrl(imgUrl);
+
             Doctor doctor = doctorService.editDoctor(doctorDTO, id);
             if (doctor == null) throw new Exception();
             return ResponseEntity.ok(doctor);
@@ -84,6 +99,7 @@ public class DoctorAdminController {
         }
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
+
 
 
 }
