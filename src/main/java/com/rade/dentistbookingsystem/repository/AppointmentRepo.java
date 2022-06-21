@@ -86,6 +86,16 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     List<Appointment> findAllAppointmentToMarkAbsent();
 
     @Query(value =
+            "SELECT TOP 1 Appointment.* " +
+                    "FROM Appointment " +
+                    "WHERE (status = 0 OR status = 4) AND DATEDIFF(HOUR," +
+                    "(CAST(appointment_date AS varchar) + ' ' + SUBSTRING(appointment_time, 0, 6) + ':00')," +
+                    "GETDATE()) <= 24 AND " +
+                    "account_id = :account_id",
+            nativeQuery = true)
+    Appointment findAppointmentByAccountIdInNext24h(@Param("account_id") Integer accountId);
+
+    @Query(value =
             "DECLARE @count_absent INT = 0 " +
                     "DECLARE @i INT = 0 " +
                     "DECLARE @count INT =  " +
@@ -113,5 +123,5 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "END", nativeQuery = true)
     boolean checkAccountToBanByAppointment(@Param("account_id") int accountId);
 
-//    boolean checkViolateByAccountIdAndStatus(@Param("account_id") int account_id, @Param("status") int status);
+//    Appointment findByAccountIdAndAppointmentDateAndStatusIn(Integer accountId, Date date, int[] status);
 }

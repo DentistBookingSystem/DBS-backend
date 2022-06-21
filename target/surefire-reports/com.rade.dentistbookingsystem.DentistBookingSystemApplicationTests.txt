@@ -1,9 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.rade.dentistbookingsystem.DentistBookingSystemApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 3.999 s <<< FAILURE! - in com.rade.dentistbookingsystem.DentistBookingSystemApplicationTests
-contextLoads  Time elapsed: 0.001 s  <<< ERROR!
-java.lang.IllegalStateException: Failed to load ApplicationContext
-Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoconfigure/orm/jpa/HibernateJpaConfiguration.class]: Invocation of init method failed; nested exception is org.hibernate.AnnotationException: mappedBy reference an unknown target entity property: com.rade.dentistbookingsystem.domain.Discount.account in com.rade.dentistbookingsystem.domain.Account.discountSet
-Caused by: org.hibernate.AnnotationException: mappedBy reference an unknown target entity property: com.rade.dentistbookingsystem.domain.Discount.account in com.rade.dentistbookingsystem.domain.Account.discountSet
-
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.447 s - in com.rade.dentistbookingsystem.DentistBookingSystemApplicationTests

@@ -267,8 +267,14 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<Appointment> findAllAppointmentToMarkAbsent() {
         return appointmentRepo.findAllAppointmentToMarkAbsent();
     }
+
     @Override
     public boolean checkAccountToBanByAppointment(int accountId) {
         return appointmentRepo.checkAccountToBanByAppointment(accountId);
+    }
+
+    @Override
+    public Appointment findAppointmentByAccountIdInNext24h(Integer accountId) {
+        return appointmentRepo.findAppointmentByAccountIdInNext24h(accountId);
     }
 }

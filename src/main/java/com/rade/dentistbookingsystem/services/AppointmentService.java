@@ -41,5 +41,7 @@ public interface AppointmentService {
     List<Appointment> findAllAppointmentToMarkAbsent();
 
     boolean checkAccountToBanByAppointment(int accountId);
+
+    Appointment findAppointmentByAccountIdInNext24h(Integer accountId);
 }
 

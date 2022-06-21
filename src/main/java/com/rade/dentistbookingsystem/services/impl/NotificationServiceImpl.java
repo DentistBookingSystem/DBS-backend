@@ -1,20 +1,39 @@
 package com.rade.dentistbookingsystem.services.impl;
 
-import com.rade.dentistbookingsystem.domain.Appointment;
-import com.rade.dentistbookingsystem.domain.Discount;
-import com.rade.dentistbookingsystem.domain.DiscountService;
-import com.rade.dentistbookingsystem.domain.Notification;
+import com.rade.dentistbookingsystem.componentform.PhoneAndPage;
+import com.rade.dentistbookingsystem.domain.*;
 import com.rade.dentistbookingsystem.repository.NotificationRepo;
+import com.rade.dentistbookingsystem.services.AccountService;
+import com.rade.dentistbookingsystem.services.AppointmentService;
 import com.rade.dentistbookingsystem.services.NotificationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
     NotificationRepo notificationRepo;
+
+    public NotificationServiceImpl(NotificationRepo notificationRepo) {
+        this.notificationRepo = notificationRepo;
+    }
+
+    @Autowired
+    AccountService accountService;
+
+    @Autowired
+    AppointmentService appointmentService;
+    @Override
+    public <S extends Notification> S save(S entity) {
+        return notificationRepo.save(entity);
+    }
+
     @Override
     public Notification newDiscount(Discount discount){
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -32,12 +51,59 @@ public class NotificationServiceImpl implements NotificationService {
                 description,
                 new Date()
         );
-        return notificationRepo.save(notification);
+        return save(notification);
     }
 
-//    public Notification remindingAppointment(String phone){
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//        int status = 2;
-//        String description = "Nhắc bạn: bạn có lịch hẹn vao";
-//    }
+    @Override
+    public List<Notification> findByAccountId(Integer accountId, Pageable pageable) {
+        return findByAccountId(accountId, pageable);
+    }
+
+    @Override
+    public List<Notification> findByAccountId(PhoneAndPage phoneAndPage) {
+        try{
+            int accountId = accountService.findByPhone(phoneAndPage.getPhone()).getId();
+            int page = phoneAndPage.getPage() - 1;
+            Pageable pageable = PageRequest.of(page, 3, Sort.by("id").descending());
+            return notificationRepo.findByAccountId(accountId, pageable);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Notification findDuplicateDescriptionByAccountId(Integer accountId, String description) {
+        return notificationRepo.findDuplicateDescriptionByAccountId(accountId, description);
+    }
+
+    @Override
+    public Notification findDuplicateDescription(Notification notification) {
+        Integer accountId = notification.getAccount().getId();
+        String description = notification.getDescription();
+        return findDuplicateDescriptionByAccountId(accountId, description);
+    }
+
+    @Override
+    public void createRemindNotificationIfNeeded(String phone){
+        Account account = accountService.findByPhone(phone);
+        if (account == null) return;
+        Appointment appointment = appointmentService.findAppointmentByAccountIdInNext24h(account.getId());
+        if(appointment != null){
+            SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
+            String date = sdfDate.format(appointment.getAppointmentDate());
+            String time = appointment.getAppointmentTime().split("-")[0];
+            String description = "Nhắc yêu: Bạn có lịch hẹn khám răng vào lúc " + time + " ngày " + date +
+                    " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + ". Nhớ đến đúng giờ nhé <3";
+            Notification notification = new Notification(
+                    account,
+                    description,
+                    new Date()
+            );
+            if(findDuplicateDescription(notification) == null) save(notification);
+        }
+    }
+
+
 }

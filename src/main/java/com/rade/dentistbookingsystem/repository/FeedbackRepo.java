@@ -11,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface FeedbackRepo extends JpaRepository<Feedback, Integer> {
-//    List<Feedback> findByServiceIdAndStatus(int id, int status, Pageable pageable);
 
     @Query(value =
             "SELECT Feedback.* \n" +
@@ -34,13 +33,13 @@ public interface FeedbackRepo extends JpaRepository<Feedback, Integer> {
         "CASE WHEN ( " +
         "SELECT COUNT(Feedback.id) " +
         "FROM Feedback LEFT JOIN Appointment a ON Feedback.appointment_id = a.id " +
-        "WHERE a.account_id = :account_id AND Feedback.status = :status " +
+        "WHERE a.account_id = :account_id AND Feedback.status = 2 " +
         ") >= 3 " +
         "THEN 'TRUE' " +
         "ELSE 'FALSE' " +
         "END",
         nativeQuery = true)
-    boolean checkViolateByAccountIdAndStatus(@Param("account_id") int accountId, @Param("status") int status);
+    boolean checkAccountToBanByFeedback(@Param("account_id") int accountId);
 
 
 }
