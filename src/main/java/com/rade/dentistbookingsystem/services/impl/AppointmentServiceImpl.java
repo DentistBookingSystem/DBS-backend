@@ -10,6 +10,7 @@ import com.rade.dentistbookingsystem.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -270,5 +271,23 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public boolean checkAccountToBanByAppointment(int accountId) {
         return appointmentRepo.checkAccountToBanByAppointment(accountId);
+    }
+
+
+    @Override
+    public List<Appointment> findByStatus(int status) {
+        return appointmentRepo.findByStatus(status);
+    }
+
+    @Override
+    public List<Appointment> findByTimeMaking(Date timeMaking) {
+        return appointmentRepo.findByTimeMaking(timeMaking);
+    }
+
+    @Override
+
+    public List<Appointment> findByStatusAndDate(int status, Date today) {
+
+        return appointmentRepo.findByStatusAndDate(status, today);
     }
 }

@@ -41,5 +41,11 @@ public interface AppointmentService {
     List<Appointment> findAllAppointmentToMarkAbsent();
 
     boolean checkAccountToBanByAppointment(int accountId);
+
+    List<Appointment> findByStatus(int status);
+
+    List<Appointment> findByTimeMaking(Date timeMaking);
+
+    List<Appointment> findByStatusAndDate(int status, Date today);
 }
 

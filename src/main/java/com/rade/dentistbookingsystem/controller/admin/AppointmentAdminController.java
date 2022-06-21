@@ -9,6 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequestMapping("rade/admin/appointment")
@@ -27,4 +32,36 @@ public class AppointmentAdminController {
         appointmentService.check(statusForAppointment.getStatus(), statusForAppointment.getId());
         return true;
     }
+    @GetMapping("/filter/status")
+    public List<Appointment> findAppointmentByStatus(@RequestParam int status){
+        return appointmentService.findByStatus(status);
+    }
+
+    @GetMapping("/filter/makingTime")
+    public List<Appointment> findAppointmentByMakingDate(@RequestParam String date){
+        try{
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date searchDate = simpleDateFormat.parse(date);
+            return appointmentService.findByTimeMaking(searchDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    @GetMapping("filter/today")
+    public List<Appointment> findAppointmentByMakingDateAndStatus(@RequestParam String date, @RequestParam int status){
+        try{
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date searchDate = simpleDateFormat.parse(date);
+            return appointmentService.findByStatusAndDate(status,searchDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+
 }

@@ -113,5 +113,12 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "END", nativeQuery = true)
     boolean checkAccountToBanByAppointment(@Param("account_id") int accountId);
 
+    List<Appointment> findByStatus(int status);
+    List<Appointment> findByTimeMaking(Date timeMaking);
+
+    @Query(value = "SELECT  id,account_id,branch_id,doctor_id,appointment_date,appointment_time,status,time_making"
+            + " FROM Appointment  " + "WHERE status=?1 OR " + "CAST(?2 AS Date ) " + " = CAST( time_making AS Date )", nativeQuery = true)
+    List<Appointment> findByStatusAndDate(int status, Date today);
+
 //    boolean checkViolateByAccountIdAndStatus(@Param("account_id") int account_id, @Param("status") int status);
 }

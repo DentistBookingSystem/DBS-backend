@@ -6,6 +6,7 @@ import com.rade.dentistbookingsystem.domain.Discount;
 import com.rade.dentistbookingsystem.model.DiscountServiceDTO;
 import com.rade.dentistbookingsystem.services.DiscountService;
 import com.rade.dentistbookingsystem.services.DiscountSvService;
+import com.rade.dentistbookingsystem.services.NotificationService;
 import com.rade.dentistbookingsystem.services.ServiceSv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,9 @@ public class DiscountAdminController {
     DiscountSvService discountSv;
     @Autowired
     ServiceSv service;
+
+    @Autowired
+    NotificationService notificationService;
 
     @GetMapping("page")
     public Page<Discount> discountListPage() {
@@ -61,6 +65,8 @@ public class DiscountAdminController {
                     discountServiceDTO.setServiceId(serviceList[i]);
                     discountSv.addServiceDiscount(discountServiceDTO);
                 }
+
+                notificationService.newDiscount(tmpDiscount);
                 return ResponseEntity.ok(tmpDiscount);
 
             }
