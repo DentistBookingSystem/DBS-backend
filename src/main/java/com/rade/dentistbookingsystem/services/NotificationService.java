@@ -1,6 +1,7 @@
 package com.rade.dentistbookingsystem.services;
 
 import com.rade.dentistbookingsystem.componentform.PhoneAndPage;
+import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.domain.Discount;
 import com.rade.dentistbookingsystem.domain.Notification;
 import org.springframework.data.domain.Pageable;
@@ -23,4 +24,10 @@ public interface NotificationService {
     Notification findDuplicateDescription(Notification notification);
 
     void createRemindNotificationIfNeeded(String phone);
+
+    void createNotificationForAbsent(Appointment appointment);
+
+    void createNotificationForBannedByAbsent(Integer accountId);
+
+    void createNotificationForBannedByFeedback(Integer accountId);
 }

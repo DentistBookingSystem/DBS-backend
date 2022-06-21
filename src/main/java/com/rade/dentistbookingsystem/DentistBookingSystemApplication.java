@@ -4,6 +4,7 @@ import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.services.AccountService;
 import com.rade.dentistbookingsystem.services.AppointmentService;
 import com.rade.dentistbookingsystem.services.FeedbackService;
+import com.rade.dentistbookingsystem.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,24 +21,31 @@ public class DentistBookingSystemApplication{
     AppointmentService appointmentService;
     @Autowired
     AccountService accountService;
-
+    @Autowired
+    NotificationService notificationService;
     @Autowired
     FeedbackService feedbackService;
     public static void main(String[] args) {
         SpringApplication.run(DentistBookingSystemApplication.class, args);
     }
 
-//    @Scheduled(fixedDelayString = "PT1M")
-//    void checkAllAppointmentToMarkAbsent() throws InterruptedException{
-//        List<Appointment> appointmentList = appointmentService.findAllAppointmentToMarkAbsent();
-//        for (Appointment appointment : appointmentList) {
-//            Integer accountId = appointment.getAccount().getId();
-//            appointmentService.check(2, appointment.getId());
-//            if (appointmentService.checkAccountToBanByAppointment(accountId) || feedbackService.checkAccountToBanByFeedback(accountId)) {
-//                accountService.checkAccount(2, accountId);
-//            }
-//        }
-//    }
+    @Scheduled(fixedDelayString = "PT1M")
+    void checkAllAppointmentToMarkAbsent() throws InterruptedException{
+        List<Appointment> appointmentList = appointmentService.findAllAppointmentToMarkAbsent();
+        for (Appointment appointment : appointmentList) {
+            Integer accountId = appointment.getAccount().getId();
+            appointmentService.check(2, appointment.getId());
+            notificationService.createNotificationForAbsent(appointment);
+            if (appointmentService.checkAccountToBanByAppointment(accountId)) {
+                accountService.checkAccount(2, accountId);
+                notificationService.createNotificationForBannedByAbsent(accountId);
+            }
+            if (feedbackService.checkAccountToBanByFeedback(accountId)) {
+                accountService.checkAccount(2, accountId);
+                notificationService.createNotificationForBannedByFeedback(accountId);
+            }
+        }
+    }
 }
 @Configuration
 @EnableScheduling

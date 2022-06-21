@@ -105,5 +105,50 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
+    @Override
+    public void createNotificationForAbsent(Appointment appointment){
+        Account account = appointment.getAccount();
+        if (account == null) return;
+        if(appointment != null){
+            SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
+            String date = sdfDate.format(appointment.getAppointmentDate());
+            String time = appointment.getAppointmentTime().split("-")[0];
+            String description = "Lịch hẹn khám răng vào lúc " + time + " ngày " + date +
+                    " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + " đã bị hủy do bạn không có mặt quá 15 phút.";
+            Notification notification = new Notification(
+                    account,
+                    description,
+                    new Date()
+            );
+            save(notification);
+        }
+    }
 
+    @Override
+    public void createNotificationForBannedByAbsent(Integer accountId){
+        Account account = accountService.findId(accountId);
+        if(account != null){
+            String description = "Bạn đã bị liệt vào danh sách đen của trung tâm vì đã vắng liên tục quá 3 lịch hẹn. Hiện tại bạn sẽ chỉ còn có thể tham khảo các thông tin mà trung tâm cung cấp.";
+            Notification notification = new Notification(
+                    account,
+                    description,
+                    new Date()
+            );
+            save(notification);
+        }
+    }
+
+    @Override
+    public void createNotificationForBannedByFeedback(Integer accountId){
+        Account account = accountService.findId(accountId);
+        if(account != null){
+            String description = "Bạn đã bị liệt vào danh sách đen của trung tâm vì đã phản hồi vi phạm, quấy rối quá 2 lần. Hiện tại bạn sẽ chỉ còn có thể tham khảo các thông tin mà trung tâm cung cấp.";
+            Notification notification = new Notification(
+                    account,
+                    description,
+                    new Date()
+            );
+            save(notification);
+        }
+    }
 }
