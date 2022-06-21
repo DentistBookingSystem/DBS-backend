@@ -39,12 +39,11 @@ public class AppointmentAdminController {
     }
 
     @GetMapping("/filter/makingTime")
-    public List<Appointment> findAppointmentByMakingDate(@RequestParam String date){
-        try{
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date searchDate = simpleDateFormat.parse(date);
-            return appointmentService.findByTimeMaking(searchDate);
-        } catch (ParseException e) {
+    public List<Appointment> findAppointmentByMakingDate(@RequestParam Date date) {
+        try {
+
+            return appointmentService.findByTimeMaking(date);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
