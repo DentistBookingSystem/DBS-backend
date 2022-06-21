@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,7 +73,6 @@ public class ServiceTypeSvImpl implements ServiceTypeSv {
         return serviceTypeRepo.existsById(integer);
     }
 
-
     @Override
     public Optional<ServiceType> findById(Integer integer) {
         return serviceTypeRepo.findById(integer);
@@ -82,7 +82,10 @@ public class ServiceTypeSvImpl implements ServiceTypeSv {
     public ServiceType edit(ServiceTypeDTO serviceTypeDTO, int id) {
         Optional<ServiceType> serviceTypeData = findById(id);
         if (serviceTypeData.isPresent()) {
+
             ServiceType serviceType = serviceTypeData.get();
+            if(findByName(serviceTypeDTO.getName()) != null && findByName(serviceTypeDTO.getName()).getId() != id )
+                throw new ValidationException("This service type has been use");
             serviceType.setName(serviceTypeDTO.getName());
             serviceType.setDescription(serviceTypeDTO.getDescription());
 

@@ -16,6 +16,6 @@ public class DiscountDTO  implements Serializable {
     private float percentage;
     private String description;
     private int status;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
 }
