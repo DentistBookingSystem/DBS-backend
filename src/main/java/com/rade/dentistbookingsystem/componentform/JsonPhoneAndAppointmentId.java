@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class JsonPhoneAndAppointmentId {
     private String phone;
-    private int appointment_id;
+    private int appointmentId;
 }

@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 public class BranchError {
     private String nameError;
 
-    private String district_idError;
+    private String districtIdError;
 
     private String urlError;
 
-    private String open_timeError;
+    private String openTimeError;
 
-    private String close_timeError;
+    private String closeTimeError;
 
     private String statusError;
 }

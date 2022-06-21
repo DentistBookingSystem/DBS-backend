@@ -22,15 +22,15 @@ public class BranchDTO  implements Serializable {
     private String name;
 
     @NotNull(message = "District is required")
-    private int district_id;
+    private int districtId;
 
     private String url;
 
     @NotNull(message = "Branch's open time is required")
-    private String open_time;
+    private String openTime;
 
     @NotNull(message = "Branch's close time is required")
-    private String close_time;
+    private String closeTime;
 
     @NotNull(message = "Branch's status is required")
     private Integer status;

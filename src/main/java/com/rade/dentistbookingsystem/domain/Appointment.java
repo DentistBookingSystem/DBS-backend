@@ -34,17 +34,17 @@ public class Appointment implements Serializable, Comparable<Appointment>{
 
     @Column(name = "appointment_date", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date appointment_date;
+    private Date appointmentDate;
 
     @Column(name = "appointment_time", nullable = false)
-    private String appointment_time;
+    private String appointmentTime;
 
     @Column(name = "status", nullable = false)
     private int status;
 
     @Column(name = "time_making", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date time_making;
+    private Date timeMaking;
 
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
     @JsonIgnore
@@ -54,19 +54,19 @@ public class Appointment implements Serializable, Comparable<Appointment>{
     @OneToOne(mappedBy = "appointment")
     private Feedback feedback;
 
-    public Appointment(Account account, Branch branch, Doctor doctor, Date date, String time, int status, Date time_making){
+    public Appointment(Account account, Branch branch, Doctor doctor, Date date, String time, int status, Date timeMaking){
         this.account = account;
         this.branch = branch;
         this.doctor = doctor;
-        this.appointment_date = date;
-        this.appointment_time = time;
+        this.appointmentDate = date;
+        this.appointmentTime = time;
         this.status = status;
-        this.time_making = time_making;
+        this.timeMaking = timeMaking;
     }
 
     @Override
     public int compareTo(Appointment appointment) {
-        return this.time_making.compareTo(appointment.getTime_making());
+        return this.timeMaking.compareTo(appointment.getTimeMaking());
     }
 
 }

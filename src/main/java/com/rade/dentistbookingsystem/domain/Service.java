@@ -36,13 +36,13 @@ public class Service implements Serializable {
     private short status;
 
     @Column(name = "min_price", nullable = false)
-    private float min_price;
+    private float minPrice;
 
     @Column(name = "max_price", nullable = false)
-    private float max_price;
+    private float maxPrice;
 
     @Column(name = "estimated_time", nullable = false)
-    private float estimated_time;
+    private float estimatedTime;
 
     // Discount service
     @OneToMany(mappedBy = "service")
@@ -50,13 +50,13 @@ public class Service implements Serializable {
     private Set<DiscountService> discountServiceSet;
 
 
-    public Service(ServiceType byId, String name, String url, String description, short status, float min_price, float max_price) {
+    public Service(ServiceType byId, String name, String url, String description, short status, float minPrice, float maxPrice) {
         this.serviceType = byId;
         this.name = name;
         this.url = url;
         this.description = description;
         this.status = status;
-        this.min_price = min_price;
-        this.max_price = max_price;
+        this.minPrice = minPrice;
+        this.maxPrice = maxPrice;
     }
 }

@@ -14,8 +14,8 @@ import java.io.Serializable;
 @Embeddable
 public class DiscountServiceKey implements Serializable {
     @Column(name = "service_id")
-    private int service_id;
+    private int serviceId;
 
     @Column(name = "discount_id")
-    private int discount_id;
+    private int discountId;
 }

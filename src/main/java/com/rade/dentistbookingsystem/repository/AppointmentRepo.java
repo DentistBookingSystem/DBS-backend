@@ -37,12 +37,12 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "appointment_date = :time",
             nativeQuery = true)
     List<Appointment> findByDoctorIdAndTime(
-                                        @Param("doctor_id") int doctor_id,
+                                        @Param("doctor_id") int doctorId,
                                         @Param("time") String time);
 
     Appointment findByAccountAndStatusIn(Account account, int[] status);
 
-    int countByAccountIdAndStatus(int account_id, int status);
+    int countByAccountIdAndStatus(int accountId, int status);
 
     @Query(value =
             "SELECT " +
@@ -55,7 +55,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "                    ELSE 'FALSE'  " +
                     "            END",
             nativeQuery = true)
-    boolean checkAppointmentToCancel(@Param("id") int id, @Param("account_id") int account_id);
+    boolean checkAppointmentToCancel(@Param("id") int id, @Param("account_id") int accountId);
 
     @Query(value =
             "SELECT  " +
@@ -74,16 +74,44 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "                    ELSE 'FALSE'  " +
                     "                    END",
             nativeQuery = true)
-    boolean checkCountAppointmentToCancel(@Param("account_id") int account_id);
-    @Modifying
-    @Transactional
+    boolean checkCountAppointmentToCancel(@Param("account_id") int accountId);
+
     @Query(value =
-            "UPDATE Appointment SET status = 2 " +
+            "SELECT Appointment.* " +
+            "FROM Appointment " +
             "WHERE (status = 0 OR status = 4) AND DATEDIFF(MINUTE," +
             "(CAST(appointment_date AS varchar) + ' ' + SUBSTRING(appointment_time, 0, 6) + ':00')," +
-            "GETDATE()) > 15",
+            "GETDATE()) > 15 ",
             nativeQuery = true)
-    void checkAllAppointmentToMarkAbsent();
+    List<Appointment> findAllAppointmentToMarkAbsent();
+
+    @Query(value =
+            "DECLARE @count_absent INT = 0 " +
+                    "DECLARE @i INT = 0 " +
+                    "DECLARE @count INT =  " +
+                    "(SELECT COUNT(account_id) " +
+                    "FROM Appointment " +
+                    "WHERE account_id = :account_id) " +
+                    "WHILE @i < @count " +
+                    "BEGIN " +
+                    "SET @count_absent = CASE (SELECT status " +
+                    "FROM Appointment " +
+                    "WHERE account_id = :account_id " +
+                    "    ORDER BY id DESC " +
+                    "OFFSET @i ROWS  " +
+                    "FETCH NEXT 1 ROWS ONLY) " +
+                    "                     WHEN 2 THEN @count_absent + 1 " +
+                    "ELSE 0 " +
+                    "                   END  " +
+                    "IF @count_absent >= 3 BEGIN BREAK END " +
+                    "    SET @i = @i + 1 " +
+                    "END " +
+                    "SELECT " +
+                    "CASE WHEN @count_absent >= 3 " +
+                    "THEN 'TRUE' " +
+                    "ELSE 'FALSE' " +
+                    "END", nativeQuery = true)
+    boolean checkAccountToBanByAppointment(@Param("account_id") int accountId);
 
 //    boolean checkViolateByAccountIdAndStatus(@Param("account_id") int account_id, @Param("status") int status);
 }

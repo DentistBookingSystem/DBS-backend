@@ -22,8 +22,8 @@ public class DoctorServiceImpl implements DoctorService {
         this.doctorRepo = doctorRepo;
     }
 
-    public List<Doctor> findByBranchId(int branch_id) {
-        return doctorRepo.findByBranchId(branch_id);
+    public List<Doctor> findByBranchId(int branchId) {
+        return doctorRepo.findByBranchId(branchId);
     }
 
     public Doctor findId(Integer id) {
@@ -31,8 +31,8 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public int countByBranchId(int branch_id) {
-        return doctorRepo.countByBranchId(branch_id);
+    public int countByBranchId(int branchId) {
+        return doctorRepo.countByBranchId(branchId);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setName(doctorDTO.getName());
         doctor.setDescription(doctorDTO.getDescription());
         doctor.setUrl(doctorDTO.getUrl());
-        Branch branch = branchService.findById(doctorDTO.getBranch_id()).orElseThrow(() -> new RuntimeException("Can not find branch"));
+        Branch branch = branchService.findById(doctorDTO.getBranchId()).orElseThrow(() -> new RuntimeException("Can not find branch"));
         doctor.setBranch(branch);
         doctor.setStatus(1);
         return save(doctor);
@@ -75,7 +75,7 @@ public class DoctorServiceImpl implements DoctorService {
             doctor.setName(doctorDTO.getName());
             doctor.setDescription(doctorDTO.getDescription());
             doctor.setUrl(doctorDTO.getUrl());
-            Branch branch = branchService.findById(doctorDTO.getBranch_id()).orElseThrow(() -> new RuntimeException("Can not find branch"));
+            Branch branch = branchService.findById(doctorDTO.getBranchId()).orElseThrow(() -> new RuntimeException("Can not find branch"));
             doctor.setBranch(branch);
             doctor.setStatus(doctorDTO.getStatus());
             return save(doctor);

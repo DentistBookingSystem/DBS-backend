@@ -34,11 +34,9 @@ public class AuthApi {
                     new UsernamePasswordAuthenticationToken(
                             request.getPhone(), request.getPassword())
             );
-
             AccountDetail account = (AccountDetail) authentication.getPrincipal();
             String accessToken = jwtUtil.generateAccessToken(account);
-            AuthResponse response = new AuthResponse(account.getUsername(), accessToken);
-
+            AuthResponse response = new AuthResponse(account.getUsername(), accessToken, account.getRoleName());
             return ResponseEntity.ok().body(response);
 
         } catch (BadCredentialsException ex) {

@@ -11,14 +11,14 @@ import java.util.Date;
 @Data
 public class AppointmentDTO  implements Serializable {
     private Integer id;
-    private Integer account_id;
-    private int branch_id;
-    private int doctor_id;
+    private Integer accountId;
+    private int branchId;
+    private int doctorId;
     private String date;
     private String time;
     private int status;
 
-    public AppointmentDTO(int branch_id){
-        this.branch_id = branch_id;
+    public AppointmentDTO(int branchId){
+        this.branchId = branchId;
     }
 }

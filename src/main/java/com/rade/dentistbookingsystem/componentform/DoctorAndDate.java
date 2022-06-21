@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class DoctorAndDate {
-    private Integer appointment_id;
-    private int branch_id;
-    private int doctor_id;
+    private Integer appointmentId;
+    private int branchId;
+    private int doctorId;
     private String date;
-    private int [] service_id;
+    private int [] serviceId;
 }

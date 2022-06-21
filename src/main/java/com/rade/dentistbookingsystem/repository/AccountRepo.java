@@ -4,7 +4,10 @@ import com.rade.dentistbookingsystem.componentform.AccountAndViolationTimes;
 import com.rade.dentistbookingsystem.domain.Account;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -34,4 +37,12 @@ public interface AccountRepo extends JpaRepository<Account, Integer> {
             ") AS f ON Account.id = f.id " +
             "WHERE apm.count_apm + f.count_f > 4", nativeQuery = true)
     List<Account> findAccountViolated(Pageable pageable);
+
+    @Modifying
+    @Transactional
+    @Query(value =
+            "UPDATE Account SET status = :status " +
+                    "WHERE id = :id",
+            nativeQuery = true)
+    void checkAccount(@Param("status") Integer status, @Param("id") Integer id);
 }

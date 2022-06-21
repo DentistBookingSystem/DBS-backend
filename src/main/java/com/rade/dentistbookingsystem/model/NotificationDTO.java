@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 public class NotificationDTO  implements Serializable {
     private int id;
-    private int account_id;
+    private int accountId;
     private String description;
     private String status;
 }

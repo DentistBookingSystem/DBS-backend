@@ -25,7 +25,7 @@ public interface FeedbackRepo extends JpaRepository<Feedback, Integer> {
             nativeQuery = true)
     List<Feedback> filterFeedback(@Param("phone") String phone,
                                   @Param("status") int status,
-                                  @Param("service_id") int service_id,
+                                  @Param("service_id") int serviceId,
                                   @Param("time") String time,
                                   Pageable pageable);
 
@@ -40,7 +40,7 @@ public interface FeedbackRepo extends JpaRepository<Feedback, Integer> {
         "ELSE 'FALSE' " +
         "END",
         nativeQuery = true)
-    boolean checkViolateByAccountIdAndStatus(@Param("account_id") int account_id, @Param("status") int status);
+    boolean checkViolateByAccountIdAndStatus(@Param("account_id") int accountId, @Param("status") int status);
 
 
 }

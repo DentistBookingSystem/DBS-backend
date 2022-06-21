@@ -11,5 +11,5 @@ public interface AppointmentDetailService {
 
     List<AppointmentDetail> save(Appointment appointment, JsonAppointment jsonAppointment);
 
-    List<AppointmentDetail> findByAppointmentId(int appointment_id);
+    List<AppointmentDetail> findByAppointmentId(int appointmentId);
 }

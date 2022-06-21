@@ -27,9 +27,9 @@ public interface BranchService {
 
     Branch updateBranch(BranchDTO branchDTO, int id);
 
-    List<Branch> findByDistrictIdAndStatus(int district_id, int status);
+    List<Branch> findByDistrictIdAndStatus(int districtId, int status);
 
-    List<Branch> findByProvinceIdAndStatus(int province_id, int status);
+    List<Branch> findByProvinceIdAndStatus(int provinceId, int status);
 
     Optional<Branch> findById(Integer id);
 

@@ -10,6 +10,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 public class DiscountServiceDTO  implements Serializable {
-    private int service_id;
-    private int discount_id;
+    private int serviceId;
+    private int discountId;
 }

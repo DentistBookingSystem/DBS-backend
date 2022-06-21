@@ -12,25 +12,25 @@ import java.io.Serializable;
 @Data
 public class AccountDTO implements Serializable {
     @NotNull(message = "Full name is required")
-    private String full_name;
+    private String fullName;
     @NotNull(message = "Password is required")
     private String password;
     @NotNull(message = "Date of birth is required")
-    private String date_of_birth;
+    private String dateOfBirth;
     @NotNull(message = "Gender is required")
     private int gender;
     @NotNull(message = "District is required")
-    private int district_id;
+    private int districtId;
     @NotNull(message = "Phone is required")
     private String phone;
     private String email;
     private int status;
 
-    public AccountDTO(String full_name, String password, String date_of_birth, int gender, int district_id, String phone, String email) {
-        this.full_name = full_name;
-        this.date_of_birth = date_of_birth;
+    public AccountDTO(String fullName, String password, String dateOfBirth, int gender, int districtId, String phone, String email) {
+        this.fullName = fullName;
+        this.dateOfBirth = dateOfBirth;
         this.gender = gender;
-        this.district_id = district_id;
+        this.districtId = districtId;
         this.phone = phone;
         this.email = email;
         this.password = password;

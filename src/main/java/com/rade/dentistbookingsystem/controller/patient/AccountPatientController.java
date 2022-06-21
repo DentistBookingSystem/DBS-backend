@@ -17,6 +17,7 @@ public class AccountPatientController {
     AccountService accountService;
     @Autowired
     AppointmentService appointmentService;
+
     @GetMapping("profile")
     public Account viewProfile(@RequestParam String phone) {
 

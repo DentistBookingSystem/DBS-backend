@@ -38,7 +38,7 @@ public class FeedbackPatientController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             if(account.getStatus() == 2)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            Appointment appointment = appointmentService.findId(feedbackAndPhone.getFeedbackDTO().getAppointment_id());
+            Appointment appointment = appointmentService.findId(feedbackAndPhone.getFeedbackDTO().getAppointmentId());
             if(appointment == null)
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             if(appointment.getAccount().getId() != account.getId())

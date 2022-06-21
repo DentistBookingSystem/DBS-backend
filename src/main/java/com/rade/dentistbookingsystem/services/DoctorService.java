@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DoctorService {
-    List<Doctor> findByBranchId(int branch_id);
+    List<Doctor> findByBranchId(int branchId);
 
     Doctor findId(Integer id);
 
-    int countByBranchId(int branch_id);
+    int countByBranchId(int branchId);
 
     Optional<Doctor> findById(Integer integer);
 

@@ -43,7 +43,7 @@ public class AppointmentDetailServiceImpl implements AppointmentDetailService {
         return appointmentDetailList;
     }
     @Override
-    public List<AppointmentDetail> findByAppointmentId(int appointment_id) {
-        return appointmentDetailRepo.findByAppointmentId(appointment_id);
+    public List<AppointmentDetail> findByAppointmentId(int appointmentId) {
+        return appointmentDetailRepo.findByAppointmentId(appointmentId);
     }
 }

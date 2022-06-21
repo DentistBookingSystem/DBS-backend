@@ -35,11 +35,11 @@ public class Branch implements Serializable {
 
     @Column(name = "open_time", nullable = false)
     @Temporal(TemporalType.TIME)
-    private Date open_time;
+    private Date openTime;
 
     @Column(name = "close_time", nullable = false)
     @Temporal(TemporalType.TIME)
-    private Date close_time;
+    private Date closeTime;
 
     @Column(nullable = false)
     private int status;
@@ -51,12 +51,12 @@ public class Branch implements Serializable {
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     private Set<Doctor> doctorSet;
 
-    public Branch(String name, District byId, Date open_time, Date close_time, int status, String url) {
+    public Branch(String name, District byId, Date openTime, Date closeTime, int status, String url) {
         this.name = name;
         this.district = byId;
         this.url = url;
-        this.open_time = open_time;
-        this.close_time = close_time;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
         this.status = status;
     }
 }

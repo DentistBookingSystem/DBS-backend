@@ -52,9 +52,9 @@ public class BranchServiceImpl implements BranchService {
         try {
             Branch branch = new Branch(
                     branchDTO.getName(),
-                    districtService.getById(branchDTO.getDistrict_id()),
-                    sdf.parse(branchDTO.getOpen_time()),
-                    sdf.parse(branchDTO.getClose_time()),
+                    districtService.getById(branchDTO.getDistrictId()),
+                    sdf.parse(branchDTO.getOpenTime()),
+                    sdf.parse(branchDTO.getCloseTime()),
                     branchDTO.getStatus(),
                     branchDTO.getUrl());
             return branchRepo.save(branch);
@@ -72,15 +72,15 @@ public class BranchServiceImpl implements BranchService {
                 throw new Exception("Branch not found");
             } else {
                 Branch branch = branchRepo.getById(id);
-                Date openTime = sdf.parse(branchDTO.getOpen_time());
-                Date closeTime = sdf.parse(branchDTO.getClose_time());
+                Date openTime = sdf.parse(branchDTO.getOpenTime());
+                Date closeTime = sdf.parse(branchDTO.getCloseTime());
                 if (openTime.after(closeTime)) throw new ValidationException("Open time and close time are invalid");
                 branch.setName(branchDTO.getName());
                 branch.setStatus(branchDTO.getStatus());
                 branch.setUrl(branchDTO.getUrl());
-                branch.setDistrict(districtService.getById(branchDTO.getDistrict_id()));
-                branch.setClose_time(closeTime);
-                branch.setOpen_time(openTime);
+                branch.setDistrict(districtService.getById(branchDTO.getDistrictId()));
+                branch.setCloseTime(closeTime);
+                branch.setOpenTime(openTime);
                 return save(branch);
 
             }
@@ -92,13 +92,13 @@ public class BranchServiceImpl implements BranchService {
     }
 
     @Override
-    public List<Branch> findByDistrictIdAndStatus(int district_id, int status) {
-        return branchRepo.findByDistrictIdAndStatus(district_id, status);
+    public List<Branch> findByDistrictIdAndStatus(int districtId, int status) {
+        return branchRepo.findByDistrictIdAndStatus(districtId, status);
     }
 
     @Override
-    public List<Branch> findByProvinceIdAndStatus(int province_id, int status) {
-        return branchRepo.findByProvinceIdAndStatus(province_id, status);
+    public List<Branch> findByProvinceIdAndStatus(int provinceId, int status) {
+        return branchRepo.findByProvinceIdAndStatus(provinceId, status);
     }
 
     public Optional<Branch> findById(Integer id) {

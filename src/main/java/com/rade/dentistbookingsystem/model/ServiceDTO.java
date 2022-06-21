@@ -14,7 +14,7 @@ public class ServiceDTO  implements Serializable {
 
     private int id;
     @NotNull(message = "Service type id is required")
-    private int service_type_id;
+    private int serviceTypeId;
 
     @NotNull(message = "Service type name is required")
     @NotBlank(message = "Service type name is required")
@@ -36,12 +36,12 @@ public class ServiceDTO  implements Serializable {
 
     @NotNull(message = "Service min price is required")
     @Min(value = 1, message = " Min price must be  greater than 0")
-    private float min_price;
+    private float minPrice;
 
     @NotNull(message = "Service estimated time is required")
-    private float estimated_time;
+    private float estimatedTime;
     @NotNull(message = "Service max price is required")
     @Min(value = 1, message = " Max price must be  greater than 0")
-    private float max_price;
+    private float maxPrice;
 
 }

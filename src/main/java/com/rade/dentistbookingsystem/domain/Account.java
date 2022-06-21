@@ -24,11 +24,11 @@ public class Account implements Serializable {
     private String password;
 
     @Column(name = "full_name", nullable = false, columnDefinition = "nvarchar(30)")
-    private String full_name;
+    private String fullName;
 
     @Column(name = "date_of_birth", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date date_of_birth;
+    private Date dateOfBirth;
 
     @Column(name = "gender", nullable = false)
     private int gender;

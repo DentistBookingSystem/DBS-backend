@@ -4,6 +4,6 @@ import java.io.Serializable;
 
 public class DistrictDTO  implements Serializable {
     private int id;
-    private int province_id;
+    private int provinceId;
     private String name;
 }

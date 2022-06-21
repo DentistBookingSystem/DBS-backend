@@ -25,7 +25,7 @@ public class DoctorDTO implements Serializable {
     private String url;
 
     @NotNull(message = "Branch is require")
-    private int branch_id;
+    private int branchId;
 
     private int status;
 

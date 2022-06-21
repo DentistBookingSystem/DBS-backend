@@ -37,11 +37,13 @@ public class Discount  implements Serializable {
     @Column(nullable = false)
     private int status;
 
+    @Column(name = "start_date")
     @Temporal(TemporalType.DATE)
-    private Date start_date;
+    private Date startDate;
 
+    @Column(name = "end_date")
     @Temporal(TemporalType.DATE)
-    private Date end_date;
+    private Date endDate;
 
     @JsonIgnore
     @OneToMany(mappedBy = "discount")

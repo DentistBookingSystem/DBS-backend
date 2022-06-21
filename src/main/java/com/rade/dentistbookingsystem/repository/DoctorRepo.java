@@ -11,10 +11,10 @@ import java.util.List;
 
 @Repository
 public interface DoctorRepo extends JpaRepository<Doctor, Integer> {
-    public List<Doctor> findByBranchId(int branch_id);
+    public List<Doctor> findByBranchId(int branchId);
 
     @Query(value = "SELECT * FROM Doctor WHERE id = ?1", nativeQuery = true)
     Doctor findId(Integer id);
 
-    public int countByBranchId(int branch_id);
+    public int countByBranchId(int branchId);
 }

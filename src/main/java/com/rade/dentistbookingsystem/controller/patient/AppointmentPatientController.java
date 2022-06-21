@@ -40,8 +40,8 @@ public class AppointmentPatientController {
     AppointmentDetailService appointmentDetailService;
     @Autowired
     AccountService accountService;
-    @GetMapping("{branch_id}")
-    public AppointmentComponent chooseBranch(@PathVariable int branch_id){
+    @GetMapping("{branchId}")
+    public AppointmentComponent chooseBranch(@PathVariable int branchId){
         ArrayList<ServiceDiscountComponent> serviceDiscountComponentList = new ArrayList<>();
         for (Service service : serviceSv.findAll()) {
             serviceDiscountComponentList.add(new ServiceDiscountComponent(
@@ -50,12 +50,12 @@ public class AppointmentPatientController {
             ));
         }
         return new AppointmentComponent(
-        new AppointmentDTO(branch_id),
+        new AppointmentDTO(branchId),
         new AppointmentError(),
         serviceDiscountComponentList,
         serviceTypeSv.findAll(),
-        branchService.findId(branch_id),
-        doctorService.findByBranchId(branch_id)
+        branchService.findId(branchId),
+        doctorService.findByBranchId(branchId)
         );
     }
 
@@ -92,7 +92,7 @@ public class AppointmentPatientController {
                 return null;
             if(account.getStatus() == 2)
                 return null;
-            Appointment appointment = appointmentService.findId(jsonPhoneAndAppointmentId.getAppointment_id());
+            Appointment appointment = appointmentService.findId(jsonPhoneAndAppointmentId.getAppointmentId());
             if (!(appointment != null && appointment.getAccount().getId() == account.getId()))
                 return null;
             if(appointment.getStatus() != 0)
@@ -135,10 +135,10 @@ public class AppointmentPatientController {
     @PostMapping("history")
     public List<Appointment> getHistoryList(@RequestBody PhoneAndPage phoneAndPage){
         String phone = phoneAndPage.getPhone();
-        int account_id = accountService.findByPhone(phone).getId();
+        int accountId = accountService.findByPhone(phone).getId();
         int page = phoneAndPage.getPage();
         Pageable pageable = PageRequest.of(page - 1, 3, Sort.by("id").descending());
-        return appointmentService.findByAccountId(account_id, pageable);
+        return appointmentService.findByAccountId(accountId, pageable);
     }
 
     @GetMapping("history/{id}")
@@ -151,14 +151,14 @@ public class AppointmentPatientController {
     public ResponseEntity<?> cancelAppointment(@RequestBody JsonPhoneAndAppointmentId jsonPhoneAndAppointmentId){
         try{
             String phone = jsonPhoneAndAppointmentId.getPhone();;
-            int appointment_id = jsonPhoneAndAppointmentId.getAppointment_id();
+            int appointmentId = jsonPhoneAndAppointmentId.getAppointmentId();
             Account account = accountService.findByPhone(phone);
             if(!(account != null && account.getStatus() == 1))
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // tài khoản phải tồn tại và ko bị ban
-            Appointment appointment = appointmentService.findId(appointment_id);
+            Appointment appointment = appointmentService.findId(appointmentId);
             if(!(appointment != null && appointment.getAccount().getId() == account.getId()))
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); //lịch cancel phải là của tài khoản đó
-            if(appointmentService.checkAppointmentToCancel(appointment_id, account.getId())){
+            if(appointmentService.checkAppointmentToCancel(appointmentId, account.getId())){
                 if(appointmentService.checkCountAppointmentToCancel(account.getId())){
                     appointmentService.check(3, appointment.getId());
                     return ResponseEntity.status(HttpStatus.OK).build();

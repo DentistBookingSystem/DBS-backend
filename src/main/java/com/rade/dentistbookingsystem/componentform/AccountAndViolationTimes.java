@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class AccountAndViolationTimes {
     private Account account;
-    private int violation_times;
+    private int violationTimes;
 }

@@ -14,9 +14,9 @@ import java.io.Serializable;
 @Embeddable
 public class AppointmentDetailKey implements Serializable {
     @Column(name = "service_id")
-    private int service_id;
+    private int serviceId;
 
     @Column(name = "appointment_id")
-    private int appointment_id;
+    private int appointmentId;
 
 }

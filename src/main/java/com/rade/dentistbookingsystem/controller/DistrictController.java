@@ -16,8 +16,8 @@ public class DistrictController {
     @Autowired
     DistrictService districtService;
 
-    @GetMapping("{province_id}")
-    public List<District> getDistrictListByProvinceID(@PathVariable int province_id){
-        return districtService.findByProvinceId(province_id);
+    @GetMapping("{provinceId}")
+    public List<District> getDistrictListByProvinceID(@PathVariable int provinceId){
+        return districtService.findByProvinceId(provinceId);
     }
 }

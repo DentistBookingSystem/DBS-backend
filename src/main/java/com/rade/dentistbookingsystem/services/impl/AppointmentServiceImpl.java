@@ -33,14 +33,14 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Appointment save(AppointmentDTO appointmentDTO){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Account account = accountService.findId(appointmentDTO.getAccount_id());
+        Account account = accountService.findId(appointmentDTO.getAccountId());
         try{
             Appointment appointment;
             if(appointmentDTO.getId() == null){
                 appointment = new Appointment(
                         account,
-                        branchService.findId(appointmentDTO.getBranch_id()),
-                        doctorService.findId(appointmentDTO.getDoctor_id()),
+                        branchService.findId(appointmentDTO.getBranchId()),
+                        doctorService.findId(appointmentDTO.getDoctorId()),
                         dateFormat.parse(appointmentDTO.getDate()),
                         appointmentDTO.getTime(),
                         0,
@@ -49,9 +49,9 @@ public class AppointmentServiceImpl implements AppointmentService {
             }
             else{
                 appointment = findId(appointmentDTO.getId());
-                appointment.setDoctor(doctorService.findId(appointmentDTO.getDoctor_id()));
-                appointment.setAppointment_date(dateFormat.parse(appointmentDTO.getDate()));
-                appointment.setAppointment_time(appointmentDTO.getTime());
+                appointment.setDoctor(doctorService.findId(appointmentDTO.getDoctorId()));
+                appointment.setAppointmentDate(dateFormat.parse(appointmentDTO.getDate()));
+                appointment.setAppointmentTime(appointmentDTO.getTime());
                 appointment.setStatus(4);
             }
             return appointmentRepo.save(appointment);
@@ -77,8 +77,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointmentRepo.check(status, id);
     }
     @Override
-    public List<Appointment> findByAccountId(int account_id, Pageable pageable) {
-        return appointmentRepo.findByAccountId(account_id, pageable);
+    public List<Appointment> findByAccountId(int accountId, Pageable pageable) {
+        return appointmentRepo.findByAccountId(accountId, pageable);
     }
 
     @Override
@@ -87,8 +87,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public boolean checkAppointmentToCancel(int id, int account_id) {
-        return appointmentRepo.checkAppointmentToCancel(id, account_id);
+    public boolean checkAppointmentToCancel(int id, int accountId) {
+        return appointmentRepo.checkAppointmentToCancel(id, accountId);
     }
 
     @Override
@@ -99,18 +99,18 @@ public class AppointmentServiceImpl implements AppointmentService {
             List<String> timeOptionBooked = new ArrayList<>();
 
             List<Appointment> appointmentList;
-            if(doctorAndDate.getService_id().length == 0) return null;
+            if(doctorAndDate.getServiceId().length == 0) return null;
             float totalTime = 0;
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            Date startTimeAtMorning = branchService.findId(doctorAndDate.getBranch_id()).getOpen_time();
+            Date startTimeAtMorning = branchService.findId(doctorAndDate.getBranchId()).getOpenTime();
             Date endTimeAtMorning = sdf.parse("12:00");
             Date startTimeAtNoon = sdf.parse("13:00");
-            Date endTimeAtNoon = branchService.findId(doctorAndDate.getBranch_id()).getClose_time();
+            Date endTimeAtNoon = branchService.findId(doctorAndDate.getBranchId()).getCloseTime();
             boolean endOfMorning = false;
             boolean endOfNoon = false;
-            if(doctorAndDate.getDoctor_id() != 0){
-                for (int service_id: doctorAndDate.getService_id()) {
-                    totalTime = totalTime + serviceSv.findId(service_id).getEstimated_time();
+            if(doctorAndDate.getDoctorId() != 0){
+                for (int serviceId: doctorAndDate.getServiceId()) {
+                    totalTime = totalTime + serviceSv.findId(serviceId).getEstimatedTime();
                 }
                 while(!endOfMorning){
                     String start = sdf.format(startTimeAtMorning);
@@ -153,13 +153,13 @@ public class AppointmentServiceImpl implements AppointmentService {
                         endOfNoon = true;
                     }
                 }
-                appointmentList = appointmentRepo.findByDoctorIdAndTime(doctorAndDate.getDoctor_id(), doctorAndDate.getDate());
+                appointmentList = appointmentRepo.findByDoctorIdAndTime(doctorAndDate.getDoctorId(), doctorAndDate.getDate());
                 Appointment tmp = null;
-                Integer appointment_id = doctorAndDate.getAppointment_id();
-                if(appointment_id != null) tmp = findId(appointment_id);
+                Integer appointmentId = doctorAndDate.getAppointmentId();
+                if(appointmentId != null) tmp = findId(appointmentId);
                 for (Appointment appointment : appointmentList) {
                     if (tmp != null && appointment.getId() == tmp.getId()) continue;
-                    timeOptionBooked.add(appointment.getAppointment_time());
+                    timeOptionBooked.add(appointment.getAppointmentTime());
                 }
                 for (String option : timeOptionByDateList) {
                     boolean valid = true;
@@ -184,14 +184,14 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
     @Override
     public List<String> checkTimeOptionByDate(DoctorAndDate doctorAndDate) throws Exception{
-        if(doctorAndDate.getDoctor_id() != 0){
+        if(doctorAndDate.getDoctorId() != 0){
             return checkTimeOptionOfDoctorByDate(doctorAndDate);
         }
         else{
-            List<Doctor> doctorList = doctorService.findByBranchId(doctorAndDate.getBranch_id());
+            List<Doctor> doctorList = doctorService.findByBranchId(doctorAndDate.getBranchId());
             List<String> generalOptionList = new ArrayList<>();
             for (Doctor doctor : doctorList) {
-                doctorAndDate.setDoctor_id(doctor.getId());
+                doctorAndDate.setDoctorId(doctor.getId());
                 List<String> option = checkTimeOptionOfDoctorByDate(doctorAndDate);
                 option.removeAll(generalOptionList);
                 generalOptionList.addAll(option);
@@ -204,16 +204,16 @@ public class AppointmentServiceImpl implements AppointmentService {
         try{
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             Account account = accountService.findByPhone(jsonAppointment.getPhone());
-            jsonAppointment.getAppointmentDTO().setAccount_id(account.getId());
-            int doctor_id = jsonAppointment.getAppointmentDTO().getDoctor_id();
+            jsonAppointment.getAppointmentDTO().setAccountId(account.getId());
+            int doctorId = jsonAppointment.getAppointmentDTO().getDoctorId();
             String date = jsonAppointment.getAppointmentDTO().getDate();
             String time = jsonAppointment.getAppointmentDTO().getTime();
-            int branch_id = jsonAppointment.getAppointmentDTO().getBranch_id();
-            int [] service_id = jsonAppointment.getServiceIdList();
-            Integer appointment_id = jsonAppointment.getAppointmentDTO().getId();
+            int branchId = jsonAppointment.getAppointmentDTO().getBranchId();
+            int [] serviceId = jsonAppointment.getServiceIdList();
+            Integer appointmentId = jsonAppointment.getAppointmentDTO().getId();
             boolean valid = false;
-            if(jsonAppointment.getAppointmentDTO().getDoctor_id() != 0){
-                DoctorAndDate doctorAndDate = new DoctorAndDate(appointment_id, branch_id, doctor_id, date, service_id);
+            if(jsonAppointment.getAppointmentDTO().getDoctorId() != 0){
+                DoctorAndDate doctorAndDate = new DoctorAndDate(appointmentId, branchId, doctorId, date, serviceId);
                 for (String stringOption : checkTimeOptionByDate(doctorAndDate)) {
                     if (time.equals(stringOption)){
                         valid = true;
@@ -223,10 +223,10 @@ public class AppointmentServiceImpl implements AppointmentService {
             }
             else{
 
-                List<Doctor> doctorList = doctorService.findByBranchId(branch_id);
+                List<Doctor> doctorList = doctorService.findByBranchId(branchId);
                 List<Doctor> availableDoctorList = new ArrayList<>();
                 for (Doctor doctor : doctorList) {
-                    DoctorAndDate doctorAndDate = new DoctorAndDate(appointment_id, branch_id, doctor.getId(), date, service_id);
+                    DoctorAndDate doctorAndDate = new DoctorAndDate(appointmentId, branchId, doctor.getId(), date, serviceId);
                     for (String stringOption : checkTimeOptionByDate(doctorAndDate)) {
                         if (time.equals(stringOption)){
                             availableDoctorList.add(doctor);
@@ -240,14 +240,14 @@ public class AppointmentServiceImpl implements AppointmentService {
                     totalTime.add((float) 0);
                     List<Appointment> appointmentList = appointmentRepo.findByDoctorIdAndTime(doctor.getId(), date);
                     for (Appointment appointment : appointmentList) {
-                        Date start = sdf.parse(appointment.getAppointment_time().split("-")[0]);
-                        Date end = sdf.parse(appointment.getAppointment_time().split("-")[1]);
+                        Date start = sdf.parse(appointment.getAppointmentTime().split("-")[0]);
+                        Date end = sdf.parse(appointment.getAppointmentTime().split("-")[1]);
                         totalTime.set(i, totalTime.get(i) + (float)((end.getTime() - start.getTime()) / (1000 * 60 * 60)));
                         i++;
                     }
                 }
                 int indexOfDoctor = totalTime.indexOf(Collections.min(totalTime));
-                jsonAppointment.getAppointmentDTO().setDoctor_id(availableDoctorList.get(indexOfDoctor).getId());
+                jsonAppointment.getAppointmentDTO().setDoctorId(availableDoctorList.get(indexOfDoctor).getId());
                 valid = true;
             }
             if(valid) return save(jsonAppointment.getAppointmentDTO());
@@ -259,12 +259,16 @@ public class AppointmentServiceImpl implements AppointmentService {
         return null;
     }
     @Override
-    public boolean checkCountAppointmentToCancel(int account_id) {
-        return appointmentRepo.checkCountAppointmentToCancel(account_id);
+    public boolean checkCountAppointmentToCancel(int accountId) {
+        return appointmentRepo.checkCountAppointmentToCancel(accountId);
     }
 
     @Override
-    public void checkAllAppointmentToMarkAbsent() {
-        appointmentRepo.checkAllAppointmentToMarkAbsent();
+    public List<Appointment> findAllAppointmentToMarkAbsent() {
+        return appointmentRepo.findAllAppointmentToMarkAbsent();
+    }
+    @Override
+    public boolean checkAccountToBanByAppointment(int accountId) {
+        return appointmentRepo.checkAccountToBanByAppointment(accountId);
     }
 }

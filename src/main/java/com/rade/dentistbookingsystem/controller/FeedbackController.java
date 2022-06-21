@@ -21,8 +21,8 @@ public class FeedbackController {
     public List<Feedback> getFeedbackPage(@RequestBody PageForFeedback pageForFeedback){
         short available = 1;
         int page = pageForFeedback.getPage() - 1;
-        int service_id = pageForFeedback.getService_id();
-        Pageable pageable = PageRequest.of(pageForFeedback.getPage() - 1, 3, Sort.by("id").descending());
-        return feedbackService.filterFeedback(null, available, pageForFeedback.getService_id(), null, pageable);
+        int serviceId = pageForFeedback.getServiceId();
+        Pageable pageable = PageRequest.of(page, 3, Sort.by("id").descending());
+        return feedbackService.filterFeedback(null, available, serviceId, null, pageable);
     }
 }

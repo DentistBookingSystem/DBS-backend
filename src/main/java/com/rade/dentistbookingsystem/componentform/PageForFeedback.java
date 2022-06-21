@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class PageForFeedback {
-    private int service_id;
+    private int serviceId;
     private int page;
 }

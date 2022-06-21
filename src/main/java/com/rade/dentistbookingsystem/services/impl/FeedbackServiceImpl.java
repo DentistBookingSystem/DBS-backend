@@ -36,7 +36,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public Feedback save(FeedbackDTO feedbackDTO) {
         Feedback feedback = new Feedback(
-            appointmentService.findId(feedbackDTO.getAppointment_id()),
+            appointmentService.findId(feedbackDTO.getAppointmentId()),
             new Date(),
             feedbackDTO.getContent(),
             0);
@@ -69,8 +69,8 @@ public class FeedbackServiceImpl implements FeedbackService {
 //    }
 
     @Override
-    public List<Feedback> filterFeedback(String phone, int status, int service_id, String time, Pageable pageable) {
-        return feedBackRepo.filterFeedback(phone, status, service_id, time, pageable);
+    public List<Feedback> filterFeedback(String phone, int status, int serviceId, String time, Pageable pageable) {
+        return feedBackRepo.filterFeedback(phone, status, serviceId, time, pageable);
     }
 
 //    @Override

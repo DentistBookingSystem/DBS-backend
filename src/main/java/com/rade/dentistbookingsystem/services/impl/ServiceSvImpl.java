@@ -51,11 +51,11 @@ public class ServiceSvImpl implements ServiceSv {
         service.setName(serviceDTO.getName());
         service.setStatus(serviceDTO.getStatus());
         service.setDescription(serviceDTO.getDescription());
-        service.setMin_price(serviceDTO.getMin_price());
-        service.setMax_price(serviceDTO.getMax_price());
+        service.setMinPrice(serviceDTO.getMinPrice());
+        service.setMaxPrice(serviceDTO.getMaxPrice());
         service.setUrl(serviceDTO.getUrl());
-        service.setEstimated_time(serviceDTO.getEstimated_time());
-        service.setServiceType(serviceTypeSv.findById(serviceDTO.getService_type_id()).orElseThrow(() -> new NotFoundException("Service type id not found")));
+        service.setEstimatedTime(serviceDTO.getEstimatedTime());
+        service.setServiceType(serviceTypeSv.findById(serviceDTO.getServiceTypeId()).orElseThrow(() -> new NotFoundException("Service type id not found")));
         return save(service);
 
 
@@ -87,10 +87,10 @@ public class ServiceSvImpl implements ServiceSv {
             service.setName(serviceDTO.getName());
             service.setDescription(serviceDTO.getDescription());
             service.setStatus(serviceDTO.getStatus());
-            service.setMin_price(serviceDTO.getMin_price());
-            service.setMax_price(serviceDTO.getMax_price());
-            service.setServiceType(serviceTypeSv.findById(serviceDTO.getService_type_id()).orElseThrow(() -> new NotFoundException("Service type id not found")));
-            service.setEstimated_time(serviceDTO.getEstimated_time());
+            service.setMinPrice(serviceDTO.getMinPrice());
+            service.setMaxPrice(serviceDTO.getMaxPrice());
+            service.setServiceType(serviceTypeSv.findById(serviceDTO.getServiceTypeId()).orElseThrow(() -> new NotFoundException("Service type id not found")));
+            service.setEstimatedTime(serviceDTO.getEstimatedTime());
             return save(service);
         } else throw new NotFoundException("Service is not found");
 
@@ -160,7 +160,7 @@ public class ServiceSvImpl implements ServiceSv {
     }
 
     @Override
-    public List<Service> findByAppointmentId(Integer appointment_id) {
-        return serviceRepo.findByAppointmentId(appointment_id);
+    public List<Service> findByAppointmentId(Integer appointmentId) {
+        return serviceRepo.findByAppointmentId(appointmentId);
     }
 }

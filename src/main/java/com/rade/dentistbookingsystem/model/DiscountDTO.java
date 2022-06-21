@@ -11,11 +11,11 @@ import java.util.Date;
 @Data
 public class DiscountDTO  implements Serializable {
     private int id;
-    private int account_id;
+    private int accountId;
     private String name;
     private float percentage;
     private String description;
     private int status;
-    private Date start_date;
-    private Date end_date;
+    private Date startDate;
+    private Date endDate;
 }

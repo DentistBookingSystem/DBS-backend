@@ -23,5 +23,5 @@ public interface ServiceRepo extends JpaRepository<Service, Integer> {
     @Query(value = "SELECT Service.* " +
             "FROM Service, Appointment_Detail ad, Appointment a " +
             "WHERE Service.id = ad.service_id AND ad.appointment_id = a.id AND a.id = :appointment_id", nativeQuery = true)
-    List<Service> findByAppointmentId(@Param("appointment_id") Integer appointment_id);
+    List<Service> findByAppointmentId(@Param("appointment_id") Integer appointmentId);
 }

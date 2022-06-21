@@ -40,5 +40,5 @@ public interface ServiceSv {
 
     Page<Service> findAllWithPaginationAndSorting(String field);
 
-    List<Service> findByAppointmentId(Integer appointment_id);
+    List<Service> findByAppointmentId(Integer appointmentId);
 }

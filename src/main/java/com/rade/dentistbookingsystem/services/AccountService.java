@@ -24,4 +24,6 @@ public interface AccountService {
     List<AccountAndViolationTimes> findViolatedAccountsAndViolationTimes(Pageable pageable);
 
     Account findByPhone(String phone);
+
+    void checkAccount(Integer status, Integer id);
 }
