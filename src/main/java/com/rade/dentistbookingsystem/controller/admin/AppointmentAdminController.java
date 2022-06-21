@@ -1,8 +1,8 @@
 package com.rade.dentistbookingsystem.controller.admin;
 
 import com.rade.dentistbookingsystem.componentform.StatusForAppointment;
-import com.rade.dentistbookingsystem.domain.*;
-import com.rade.dentistbookingsystem.services.*;
+import com.rade.dentistbookingsystem.domain.Appointment;
+import com.rade.dentistbookingsystem.services.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -50,7 +50,7 @@ public class AppointmentAdminController {
 
     }
 
-    @GetMapping("filter/today")
+    @GetMapping("filter")
     public List<Appointment> findAppointmentByMakingDateAndStatus(@RequestParam String date, @RequestParam int status){
         try{
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");

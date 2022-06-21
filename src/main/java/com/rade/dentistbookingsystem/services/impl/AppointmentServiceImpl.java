@@ -1,4 +1,5 @@
 package com.rade.dentistbookingsystem.services.impl;
+
 import com.rade.dentistbookingsystem.componentform.DoctorAndDate;
 import com.rade.dentistbookingsystem.componentform.JsonAppointment;
 import com.rade.dentistbookingsystem.domain.Account;
@@ -10,7 +11,6 @@ import com.rade.dentistbookingsystem.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -276,18 +276,38 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<Appointment> findByStatus(int status) {
-        return appointmentRepo.findByStatus(status);
+        List<Appointment> list = appointmentRepo.findByStatus(status);
+        if(list != null){
+            for (int i = 0; i <list.size() ; i++) {
+                list.get(i).getAccount().setPassword("*****");
+
+            }
+        }
+        return list;
     }
 
     @Override
     public List<Appointment> findByTimeMaking(Date timeMaking) {
-        return appointmentRepo.findByTimeMaking(timeMaking);
+        List<Appointment> list = appointmentRepo.findByTimeMaking(timeMaking );
+        if(list != null){
+            for (int i = 0; i <list.size() ; i++) {
+                list.get(i).getAccount().setPassword("*****");
+
+            }
+        }
+        return list;
     }
 
     @Override
 
     public List<Appointment> findByStatusAndDate(int status, Date today) {
+       List<Appointment> list = appointmentRepo.findByStatusAndDate(status, today);
+       if(list != null){
+           for (int i = 0; i <list.size() ; i++) {
+               list.get(i).getAccount().setPassword("*****");
 
-        return appointmentRepo.findByStatusAndDate(status, today);
+           }
+       }
+        return list;
     }
 }

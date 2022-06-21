@@ -38,7 +38,7 @@ public class CustomExceptionHandler {
 
     // Xử lý tất cả các exception chưa được khai báo
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handlerException(Exception ex, WebRequest req) {
         // Log err
         ex.printStackTrace();
