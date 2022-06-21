@@ -66,7 +66,7 @@ public class DiscountAdminController {
                     discountSv.addServiceDiscount(discountServiceDTO);
                 }
 
-                notificationService.newDiscount(tmpDiscount);
+
                 return ResponseEntity.ok(tmpDiscount);
 
             }
