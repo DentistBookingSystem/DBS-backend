@@ -8,7 +8,9 @@ import com.rade.dentistbookingsystem.repository.NotificationRepo;
 import com.rade.dentistbookingsystem.services.NotificationService;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -26,8 +28,9 @@ public class NotificationServiceImpl implements NotificationService {
         description.substring(0, description.length() - 2);
         description += ". Chi tiết khuyến mãi: " + discount.getDescription();
         Notification notification = new Notification(
+                null,
                 description,
-                status
+                new Date()
         );
         return notificationRepo.save(notification);
     }

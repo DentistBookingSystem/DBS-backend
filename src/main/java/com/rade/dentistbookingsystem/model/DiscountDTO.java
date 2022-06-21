@@ -11,7 +11,6 @@ import java.util.Date;
 @Data
 public class DiscountDTO  implements Serializable {
     private int id;
-    private int accountId;
     private String name;
     private float percentage;
     private String description;
