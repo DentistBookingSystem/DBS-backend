@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -52,14 +53,22 @@ public class AppointmentAdminController {
 
     @GetMapping("filter")
     public List<Appointment> findAppointmentByMakingDateAndStatus(@RequestParam String date, @RequestParam int status){
-        try{
+        try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date searchDate = simpleDateFormat.parse(date);
-            return appointmentService.findByStatusAndDate(status,searchDate);
+            return appointmentService.findByStatusAndDate(status, searchDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return null;
+
+    }
+
+    @GetMapping("cancel")
+    public ResponseEntity<?> cancelAppointment(@RequestParam int id) {
+
+        return ResponseEntity.ok(appointmentService.cancelAppointmentForAdmin(id));
+
 
     }
 

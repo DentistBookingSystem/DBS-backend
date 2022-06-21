@@ -5,6 +5,7 @@ import com.rade.dentistbookingsystem.componentform.JsonAppointment;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.domain.Doctor;
+import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.AppointmentDTO;
 import com.rade.dentistbookingsystem.repository.AppointmentRepo;
 import com.rade.dentistbookingsystem.services.*;
@@ -301,13 +302,26 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
 
     public List<Appointment> findByStatusAndDate(int status, Date today) {
-       List<Appointment> list = appointmentRepo.findByStatusAndDate(status, today);
-       if(list != null){
-           for (int i = 0; i <list.size() ; i++) {
-               list.get(i).getAccount().setPassword("*****");
+        List<Appointment> list = appointmentRepo.findByStatusAndDate(status, today);
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).getAccount().setPassword("*****");
 
-           }
-       }
+            }
+        }
         return list;
+    }
+
+    @Override
+    public Appointment cancelAppointmentForAdmin(int appointmentId) {
+        Optional<Appointment> appointment = appointmentRepo.findById(appointmentId);
+        if (appointment.isPresent()) {
+            Appointment cancelAppointment = appointment.get();
+            if (cancelAppointment.getStatus() == 0 || cancelAppointment.getStatus() == 4) {
+                cancelAppointment.setStatus(6);
+                appointmentRepo.save(cancelAppointment);
+            } else throw new RuntimeException("Can not cancel appointment");
+        }
+        throw new NotFoundException("Appointment not found");
     }
 }
