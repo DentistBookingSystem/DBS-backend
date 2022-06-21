@@ -13,5 +13,5 @@ public class NotificationDTO  implements Serializable {
     private int id;
     private int accountId;
     private String description;
-    private String status;
+    private String date;
 }

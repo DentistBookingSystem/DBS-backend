@@ -31,12 +31,9 @@ public class Notification implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    @Column(nullable = false)
-    private int status;
-
-
-    public Notification(String description, int status){
+    public Notification(Account account, String description, Date date){
+        this.account = account;
         this.description = description;
-        this.status = status;
+        this.date = date;
     }
 }

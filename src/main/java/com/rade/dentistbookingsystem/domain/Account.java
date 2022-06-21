@@ -54,10 +54,7 @@ public class Account implements Serializable {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Appointment> appointmentSet;
-    
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Discount> discountSet;
+
 
     @OneToMany(mappedBy = "account")
     @JsonIgnore

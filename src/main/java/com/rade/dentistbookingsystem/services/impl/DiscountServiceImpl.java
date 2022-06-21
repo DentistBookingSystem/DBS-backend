@@ -83,7 +83,6 @@ public class DiscountServiceImpl implements DiscountService {
         discount.setStatus(discountDTO.getStatus());
         discount.setPercentage(discountDTO.getPercentage());
         discount.setDescription(discountDTO.getDescription());
-        discount.setAccount(accountRepo.findById((discountDTO.getAccountId())).orElseThrow(() -> new NotFoundException(("Account not found"))));
         discount.setStartDate(dateFormat.parse(discountDTO.getStartDate()));
         discount.setEndDate(dateFormat.parse(discountDTO.getEndDate()));
 
@@ -108,7 +107,6 @@ public class DiscountServiceImpl implements DiscountService {
             tmpDiscount.setStatus(discountDTO.getStatus());
             tmpDiscount.setPercentage(discountDTO.getPercentage());
             tmpDiscount.setDescription(discountDTO.getDescription());
-            tmpDiscount.setAccount(accountRepo.findById((discountDTO.getAccountId())).orElseThrow(() -> new NotFoundException(("Account not found"))));
             tmpDiscount.setStartDate(dateFormat.parse(discountDTO.getStartDate()));
             tmpDiscount.setEndDate(dateFormat.parse(discountDTO.getEndDate()));
             return save(tmpDiscount);

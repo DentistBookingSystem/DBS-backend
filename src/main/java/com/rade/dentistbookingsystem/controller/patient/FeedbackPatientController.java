@@ -39,10 +39,10 @@ public class FeedbackPatientController {
             if(account.getStatus() == 2)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             Appointment appointment = appointmentService.findId(feedbackAndPhone.getFeedbackDTO().getAppointmentId());
-            if(appointment == null)
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            if(appointment.getAccount().getId() != account.getId())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            if(appointment == null){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();}
+            if(appointment.getAccount().getId() != account.getId()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();}
             String content = feedbackAndPhone.getFeedbackDTO().getContent();
             if(!(appointment.getStatus()==1))
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();

@@ -19,11 +19,6 @@ public class Discount  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "account_id", nullable = true)
-    private Account account;
 
     @Column(nullable = false, length = 30, columnDefinition = "nvarchar(30)", unique = true)
     private String name;
