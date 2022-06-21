@@ -2,9 +2,7 @@ package com.rade.dentistbookingsystem.services.impl;
 
 import com.rade.dentistbookingsystem.domain.Feedback;
 import com.rade.dentistbookingsystem.model.FeedbackDTO;
-import com.rade.dentistbookingsystem.repository.AccountRepo;
 import com.rade.dentistbookingsystem.repository.FeedbackRepo;
-import com.rade.dentistbookingsystem.repository.ServiceRepo;
 import com.rade.dentistbookingsystem.services.AccountService;
 import com.rade.dentistbookingsystem.services.AppointmentService;
 import com.rade.dentistbookingsystem.services.FeedbackService;
@@ -63,18 +61,13 @@ public class FeedbackServiceImpl implements FeedbackService {
         return null;
     }
 
-//    @Override
-//    public List<Feedback> findByServiceIdAndStatus(int id, int status, Pageable pageable) {
-//        return feedBackRepo.findByServiceIdAndStatus(id, status, pageable);
-//    }
-
     @Override
     public List<Feedback> filterFeedback(String phone, int status, int serviceId, String time, Pageable pageable) {
         return feedBackRepo.filterFeedback(phone, status, serviceId, time, pageable);
     }
 
-//    @Override
-//    public int countByAccountIdAndStatus(int account_id, int status) {
-//        return feedBackRepo.countByAccountIdAndStatus(account_id, status);
-//    }
+    @Override
+    public boolean checkAccountToBanByFeedback(int accountId) {
+        return feedBackRepo.checkAccountToBanByFeedback(accountId);
+    }
 }

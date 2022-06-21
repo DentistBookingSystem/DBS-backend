@@ -7,6 +7,7 @@ import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.model.AppointmentDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Date;
 import java.util.List;
@@ -41,12 +42,6 @@ public interface AppointmentService {
 
     boolean checkAccountToBanByAppointment(int accountId);
 
-    List<Appointment> findByStatus(int status);
-
-    List<Appointment> findByTimeMaking(Date timeMaking);
-
-    List<Appointment> findByStatusAndDate(int status, Date today);
-
-    Appointment cancelAppointmentForAdmin(int appointmentId);
+    Appointment findAppointmentByAccountIdInNext24h(Integer accountId);
 }
 
