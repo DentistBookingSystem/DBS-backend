@@ -8,7 +8,6 @@ import com.rade.dentistbookingsystem.model.AppointmentDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Date;
 import java.util.List;
 
 public interface AppointmentService {
@@ -43,11 +42,7 @@ public interface AppointmentService {
 
     Appointment findAppointmentByAccountIdInNext24h(Integer accountId);
 
-    List<Appointment> findByStatus(int status);
 
-    List<Appointment> findByTimeMaking(Date timeMaking);
-
-    List<Appointment> findByStatusAndDate(int status, Date today);
 
     Appointment cancelAppointmentForAdmin(int appointmentId);
 }

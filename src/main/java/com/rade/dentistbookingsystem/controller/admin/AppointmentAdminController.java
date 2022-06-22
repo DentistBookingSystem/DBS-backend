@@ -33,29 +33,14 @@ public class AppointmentAdminController {
         appointmentService.check(statusForAppointment.getStatus(), statusForAppointment.getId());
         return true;
     }
-    @GetMapping("/filter/status")
-    public List<Appointment> findAppointmentByStatus(@RequestParam int status){
-        return appointmentService.findByStatus(status);
-    }
 
-    @GetMapping("/filter/makingTime")
-    public List<Appointment> findAppointmentByMakingDate(@RequestParam Date date) {
-        try {
-
-            return appointmentService.findByTimeMaking(date);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-
-    }
 
     @GetMapping("filter")
     public List<Appointment> findAppointmentByMakingDateAndStatus(@RequestParam String date, @RequestParam int status){
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date searchDate = simpleDateFormat.parse(date);
-            return appointmentService.findByStatusAndDate(status, searchDate);
+            return null;
         } catch (ParseException e) {
             e.printStackTrace();
         }

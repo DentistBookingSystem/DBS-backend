@@ -279,42 +279,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentRepo.findAppointmentByAccountIdInNext24h(accountId);
     }
 
-    @Override
-    public List<Appointment> findByStatus(int status) {
-        List<Appointment> list = appointmentRepo.findByStatus(status);
-        if (list != null) {
-            for (int i = 0; i < list.size(); i++) {
-                list.get(i).getAccount().setPassword("*****");
 
-            }
-        }
-        return list;
-    }
 
-    @Override
-    public List<Appointment> findByTimeMaking(Date timeMaking) {
-        List<Appointment> list = appointmentRepo.findByTimeMaking(timeMaking);
-        if (list != null) {
-            for (int i = 0; i < list.size(); i++) {
-                list.get(i).getAccount().setPassword("*****");
-
-            }
-        }
-        return list;
-    }
-
-    @Override
-
-    public List<Appointment> findByStatusAndDate(int status, Date today) {
-        List<Appointment> list = appointmentRepo.findByStatusAndDate(status, today);
-        if (list != null) {
-            for (int i = 0; i < list.size(); i++) {
-                list.get(i).getAccount().setPassword("*****");
-
-            }
-        }
-        return list;
-    }
 
     @Override
     public Appointment cancelAppointmentForAdmin(int appointmentId) {
