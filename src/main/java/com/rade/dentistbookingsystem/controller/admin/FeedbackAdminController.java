@@ -1,21 +1,17 @@
 package com.rade.dentistbookingsystem.controller.admin;
 
-import com.rade.dentistbookingsystem.componentform.StatusForFeedback;
-import com.rade.dentistbookingsystem.domain.Feedback;
 import com.rade.dentistbookingsystem.services.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
 @RequestMapping("rade/admin/feedback")
 public class FeedbackAdminController {
-
+    @Autowired
+    FeedbackService feedbackService;
 //    @GetMapping("{i}")
 //    public Page<Feedback> getFeedbackList(@PathVariable Integer i){
 //        if(i == null) i = 0;
@@ -31,4 +27,5 @@ public class FeedbackAdminController {
 //        }
 //        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
 //    }
+
 }

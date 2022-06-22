@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -279,7 +280,23 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentRepo.findAppointmentByAccountIdInNext24h(accountId);
     }
 
+    @Override
+    public List<Appointment> filterAppointment(AppointmentDTO appointmentDTO) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date appointmentDate = null;
+        if (appointmentDTO.getDate() != null) {
+            appointmentDate = sdf.parse(appointmentDTO.getDate());
+        }
+        return appointmentRepo.filterAppointment(
+                appointmentDTO.getStatus(),
+                appointmentDate,
+                "0123456789",
+                appointmentDTO.getBranchId(),
+                appointmentDTO.getDoctorId()
+        );
 
+
+    }
 
 
     @Override

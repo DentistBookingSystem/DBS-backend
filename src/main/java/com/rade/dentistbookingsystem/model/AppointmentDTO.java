@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -17,6 +16,7 @@ public class AppointmentDTO  implements Serializable {
     private String date;
     private String time;
     private int status;
+    private String phone;
 
     public AppointmentDTO(int branchId){
         this.branchId = branchId;

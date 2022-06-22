@@ -8,6 +8,7 @@ import com.rade.dentistbookingsystem.model.AppointmentDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface AppointmentService {
@@ -43,6 +44,7 @@ public interface AppointmentService {
     Appointment findAppointmentByAccountIdInNext24h(Integer accountId);
 
 
+    List<Appointment> filterAppointment(AppointmentDTO appointmentDTO) throws ParseException;
 
     Appointment cancelAppointmentForAdmin(int appointmentId);
 }

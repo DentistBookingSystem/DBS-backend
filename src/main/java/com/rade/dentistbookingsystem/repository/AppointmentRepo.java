@@ -120,13 +120,15 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "END", nativeQuery = true)
     boolean checkAccountToBanByAppointment(@Param("account_id") int accountId);
 
-    List<Appointment> findByStatus(int status);
 
-    List<Appointment> findByTimeMaking(Date timeMaking);
-
-    @Query(value = "SELECT  id,account_id,branch_id,doctor_id,appointment_date,appointment_time,status,time_making"
-            + " FROM Appointment  " + "WHERE status=?1 AND " + "CAST(?2 AS Date ) " + " = CAST( time_making AS Date )", nativeQuery = true)
-    List<Appointment> findByStatusAndDate(int status, Date today);
+    @Query(value = "SELECT a FROM Appointment a join a.account "
+            +
+            "WHERE (a.status = :status OR :status IS NULL) AND " +
+            "(a.appointmentDate = :appointmentDate OR :appointmentDate IS NULL) AND " +
+            "(a.account.phone LIKE :phone OR :phone IS NULL) AND " +
+            "(a.branch.id = :branchId OR :branchId IS NULL) AND " +
+            "(a.doctor.id = :doctorId OR :doctorId IS NULL)")
+    List<Appointment> filterAppointment(@Param("status") int status, @Param("appointmentDate") Date appointmentDate, @Param("phone") String phone, @Param("branchId") int branchId, @Param("doctorId") int doctorId);
 
 //    Appointment findByAccountIdAndAppointmentDateAndStatusIn(Integer accountId, Date date, int[] status);
 }
