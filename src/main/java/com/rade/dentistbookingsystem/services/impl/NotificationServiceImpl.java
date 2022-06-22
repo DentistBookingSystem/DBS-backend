@@ -205,8 +205,28 @@ public class NotificationServiceImpl implements NotificationService {
             save(notification);
         }
     }
+
     @Override
     public void createNotificationForApprovingFeedbackFromAdmin(Feedback feedback){
+        if(feedback != null && feedback.getAppointment() != null && feedback.getAppointment().getAccount() != null){
+            Appointment appointment = feedback.getAppointment();
+            Account account = feedback.getAppointment().getAccount();
+            SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
+            String date = sdfDate.format(appointment.getAppointmentDate());
+            String time = appointment.getAppointmentTime().split("-")[0];
+            String description = "Phản hồi cho lịch hẹn vào lúc " + time + " ngày " + date +
+                    " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + " đã được phê duyệt, xin cảm ơn quý khách đã để lại phản hồi tới trung tâm nha khoa RaDe";
+            Notification notification = new Notification(
+                    account,
+                    description,
+                    new Date()
+            );
+            save(notification);
+        }
+    }
+
+    @Override
+    public void createNotificationForDisapprovingFeedbackFromAdmin(Feedback feedback){
         if(feedback != null && feedback.getAppointment() != null && feedback.getAppointment().getAccount() != null){
             Appointment appointment = feedback.getAppointment();
             Account account = feedback.getAppointment().getAccount();

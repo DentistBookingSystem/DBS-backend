@@ -40,5 +40,7 @@ public interface NotificationService {
 
     void createNotificationForApprovingFeedbackFromAdmin(Feedback feedback);
 
+    void createNotificationForDisapprovingFeedbackFromAdmin(Feedback feedback);
+
     void createNotificationFromAdmin(String description);
 }
