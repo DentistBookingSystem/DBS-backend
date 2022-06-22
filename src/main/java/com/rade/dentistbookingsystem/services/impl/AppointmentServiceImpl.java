@@ -290,7 +290,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentRepo.filterAppointment(
                 appointmentDTO.getStatus(),
                 appointmentDate,
-                "0123456789",
+                appointmentDTO.getPhone(),
                 appointmentDTO.getBranchId(),
                 appointmentDTO.getDoctorId()
         );
