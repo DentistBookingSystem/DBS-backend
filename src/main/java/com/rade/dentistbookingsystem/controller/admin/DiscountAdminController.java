@@ -51,7 +51,6 @@ public class DiscountAdminController {
 
     @PostMapping("/add")
     @Transactional(rollbackFor = Exception.class)
-
     public ResponseEntity<?> addDiscount(@Validated @RequestBody DiscountServiceComponentAdmin discountServiceComponent) {
         try {
             Discount tmpDiscount = discount.addDiscount(discountServiceComponent.getDiscountDTO());

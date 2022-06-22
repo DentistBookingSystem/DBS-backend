@@ -1,6 +1,7 @@
 package com.rade.dentistbookingsystem.services.impl;
 
 import com.rade.dentistbookingsystem.domain.Feedback;
+import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.FeedbackDTO;
 import com.rade.dentistbookingsystem.repository.FeedbackRepo;
 import com.rade.dentistbookingsystem.services.AccountService;
@@ -69,5 +70,19 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public boolean checkAccountToBanByFeedback(int accountId) {
         return feedBackRepo.checkAccountToBanByFeedback(accountId);
+    }
+
+    @Override
+    public Feedback updateFeedbackStatus(int feedbackId, int feedbackStatus) {
+        Optional<Feedback> feedback = feedBackRepo.findById(feedbackId);
+        if (feedback.isPresent()) {
+            Feedback tmpFeedback = feedback.get();
+            if (tmpFeedback.getStatus() == 0) {
+                tmpFeedback.setStatus(feedbackStatus);
+                return feedBackRepo.save(tmpFeedback);
+
+            } else throw new RuntimeException("Can not update feedback");
+        } else throw new NotFoundException("Feedback not found");
+
     }
 }

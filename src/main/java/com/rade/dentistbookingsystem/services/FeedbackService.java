@@ -11,7 +11,8 @@ public interface FeedbackService {
     abstract Feedback save(FeedbackDTO feedbackDTO);
 
     Page<Feedback> findAll(Pageable pageable);
-//
+
+    //
     Feedback check(Integer status, Integer id);
 //
 //    List<Feedback> findByServiceIdAndStatus(int id, int status, Pageable pageable);
@@ -19,6 +20,8 @@ public interface FeedbackService {
     List<Feedback> filterFeedback(String phone, int status, int serviceId, String time, Pageable pageable);
 
     boolean checkAccountToBanByFeedback(int accountId);
+
+    Feedback updateFeedbackStatus(int feedbackId, int feedbackStatus);
 
 //    int countByAccountIdAndStatus(int account_id, int status);
 }
