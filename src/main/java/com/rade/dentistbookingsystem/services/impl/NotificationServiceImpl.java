@@ -151,4 +151,89 @@ public class NotificationServiceImpl implements NotificationService {
             save(notification);
         }
     }
+
+    @Override
+    public void createNotificationForCancellingAppointment(Appointment appointment){
+        Account account = appointment.getAccount();
+        if (account == null) return;
+        if(appointment != null){
+            SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
+            String date = sdfDate.format(appointment.getAppointmentDate());
+            String time = appointment.getAppointmentTime().split("-")[0];
+            String description = "Bạn đã hủy lịch hẹn khám răng vào lúc " + time + " ngày " + date +
+                    " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + ".";
+            Notification notification = new Notification(
+                    account,
+                    description,
+                    new Date()
+            );
+            save(notification);
+        }
+    }
+
+    @Override
+    public void createNotificationForUpdatingAppointment(Appointment appointment){
+        if(appointment != null && appointment.getAccount() != null){
+            String description = "Lịch hẹn sắp tới của bạn đã được cập nhật";
+            Notification notification = new Notification(
+                    appointment.getAccount(),
+                    description,
+                    new Date()
+            );
+            save(notification);
+        }
+    }
+
+    @Override
+    public void createNotificationForCancellingAppointmentFromAdmin(Appointment appointment, String description){
+        Account account = appointment.getAccount();
+        if (description == null) return;
+        else description = description.trim();
+        if (account == null) return;
+        if(appointment != null){
+            SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
+            String date = sdfDate.format(appointment.getAppointmentDate());
+            String time = appointment.getAppointmentTime().split("-")[0];
+            description = "Lịch hẹn khám răng vào lúc " + time + " ngày " + date +
+                    " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + " đã bị hủy do: " + description +
+                    ". Xin quý khách thông cảm vì sự bất tiện này.";
+            Notification notification = new Notification(
+                    account,
+                    description,
+                    new Date()
+            );
+            save(notification);
+        }
+    }
+    @Override
+    public void createNotificationForApprovingFeedbackFromAdmin(Feedback feedback){
+        if(feedback != null && feedback.getAppointment() != null && feedback.getAppointment().getAccount() != null){
+            Appointment appointment = feedback.getAppointment();
+            Account account = feedback.getAppointment().getAccount();
+            SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
+            String date = sdfDate.format(appointment.getAppointmentDate());
+            String time = appointment.getAppointmentTime().split("-")[0];
+            String description = "Phản hồi cho lịch hẹn vào lúc " + time + " ngày " + date +
+                    " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + " không được phê duyệt vi phạm quy tắc cộng động.";
+            Notification notification = new Notification(
+                    account,
+                    description,
+                    new Date()
+            );
+            save(notification);
+        }
+    }
+
+    @Override
+    public void createNotificationFromAdmin(String description){
+        if(description != null){
+            description = description.trim();
+            Notification notification = new Notification(
+                    null,
+                    description,
+                    new Date()
+            );
+            save(notification);
+        }
+    }
 }

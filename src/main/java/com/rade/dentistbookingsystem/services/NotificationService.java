@@ -3,6 +3,7 @@ package com.rade.dentistbookingsystem.services;
 import com.rade.dentistbookingsystem.componentform.PhoneAndPage;
 import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.domain.Discount;
+import com.rade.dentistbookingsystem.domain.Feedback;
 import com.rade.dentistbookingsystem.domain.Notification;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,4 +31,14 @@ public interface NotificationService {
     void createNotificationForBannedByAbsent(Integer accountId);
 
     void createNotificationForBannedByFeedback(Integer accountId);
+
+    void createNotificationForCancellingAppointment(Appointment appointment);
+
+    void createNotificationForUpdatingAppointment(Appointment appointment);
+
+    void createNotificationForCancellingAppointmentFromAdmin(Appointment appointment, String description);
+
+    void createNotificationForApprovingFeedbackFromAdmin(Feedback feedback);
+
+    void createNotificationFromAdmin(String description);
 }
