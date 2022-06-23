@@ -40,10 +40,6 @@ public class DentistBookingSystemApplication{
                 accountService.checkAccount(2, accountId);
                 notificationService.createNotificationForBannedByAbsent(accountId);
             }
-            if (feedbackService.checkAccountToBanByFeedback(accountId)) {
-                accountService.checkAccount(2, accountId);
-                notificationService.createNotificationForBannedByFeedback(accountId);
-            }
         }
     }
 }
