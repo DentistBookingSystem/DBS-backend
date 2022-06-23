@@ -17,7 +17,7 @@ public interface FeedbackService {
 //
 //    List<Feedback> findByServiceIdAndStatus(int id, int status, Pageable pageable);
 
-    List<Feedback> filterFeedback(String phone, int status, int serviceId, String time, Pageable pageable);
+    List<Feedback> filterFeedback(String phone, Integer status, Integer serviceId, String time, Pageable pageable);
 
     boolean checkAccountToBanByFeedback(int accountId);
 

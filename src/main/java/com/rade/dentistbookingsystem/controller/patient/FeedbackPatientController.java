@@ -9,6 +9,7 @@ import com.rade.dentistbookingsystem.model.FeedbackDTO;
 import com.rade.dentistbookingsystem.services.AccountService;
 import com.rade.dentistbookingsystem.services.AppointmentService;
 import com.rade.dentistbookingsystem.services.FeedbackService;
+import com.rade.dentistbookingsystem.services.NotificationService;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +31,9 @@ public class FeedbackPatientController {
     FeedbackService feedbackService;
     @Autowired
     AppointmentService appointmentService;
+
+    @Autowired
+    NotificationService notificationService;
     @PostMapping("send")
     public ResponseEntity<?> sendFeedback(@RequestBody FeedbackAndPhone feedbackAndPhone){
         try {
@@ -51,6 +55,7 @@ public class FeedbackPatientController {
             Feedback feedback = feedbackService.save(feedbackAndPhone.getFeedbackDTO());
             if (feedback != null){
                 appointmentService.check(5, feedback.getAppointment().getId());
+                notificationService.createNotificationForSendingFeedback(feedback);
                 return ResponseEntity.ok(feedback);
             }
             else{

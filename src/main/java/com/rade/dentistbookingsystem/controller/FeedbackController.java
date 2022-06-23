@@ -17,11 +17,12 @@ import java.util.List;
 public class FeedbackController {
     @Autowired
     FeedbackService feedbackService;
+
     @PostMapping("")
-    public List<Feedback> getFeedbackPage(@RequestBody PageForFeedback pageForFeedback){
-        short available = 1;
+    public List<Feedback> getFeedbackPage(@RequestBody PageForFeedback pageForFeedback) {
+        int available = 1;
         int page = pageForFeedback.getPage() - 1;
-        int serviceId = pageForFeedback.getServiceId();
+        Integer serviceId = pageForFeedback.getServiceId();
         Pageable pageable = PageRequest.of(page, 3, Sort.by("id").descending());
         return feedbackService.filterFeedback(null, available, serviceId, null, pageable);
     }

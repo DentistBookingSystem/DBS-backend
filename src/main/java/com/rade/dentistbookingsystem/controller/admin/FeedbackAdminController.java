@@ -1,12 +1,19 @@
 package com.rade.dentistbookingsystem.controller.admin;
 
+import com.rade.dentistbookingsystem.componentform.PageForFeedback;
 import com.rade.dentistbookingsystem.domain.Feedback;
+import com.rade.dentistbookingsystem.services.AccountService;
 import com.rade.dentistbookingsystem.services.FeedbackService;
 import com.rade.dentistbookingsystem.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -16,11 +23,19 @@ public class FeedbackAdminController {
     FeedbackService feedbackService;
     @Autowired
     NotificationService notificationService;
-//    @GetMapping("{i}")
-//    public Page<Feedback> getFeedbackList(@PathVariable Integer i){
-//        if(i == null) i = 0;
-//        return feedBackService.findAll(PageRequest.of(i, 20, Sort.by("id").descending()));
-//    }
+    @Autowired
+    AccountService accountService;
+    @PostMapping("")
+    public List<Feedback> getFeedbackPage(@RequestBody PageForFeedback pageForFeedback){
+        int page = pageForFeedback.getPage() - 1;
+        Pageable pageable = PageRequest.of(page, 3, Sort.by("id").descending());
+        return feedbackService.filterFeedback(
+                pageForFeedback.getPhone(),
+                pageForFeedback.getStatus(),
+                pageForFeedback.getServiceId(),
+                pageForFeedback.getTime(),
+                pageable);
+    }
 
 //    @PostMapping("check")
 //    public ResponseEntity<?> checkFeedback(@RequestBody StatusForFeedback statusForFeedback){
@@ -47,8 +62,11 @@ public class FeedbackAdminController {
     public ResponseEntity<?> disapproveFeedback(@RequestParam int feedbackId) {
         Feedback feedback = feedbackService.updateFeedbackStatus(feedbackId, 2);
         notificationService.createNotificationForDisapprovingFeedbackFromAdmin(feedback);
+        int accountId = feedback.getAppointment().getAccount().getId();
+        if (feedbackService.checkAccountToBanByFeedback(accountId)) {
+            accountService.checkAccount(2, accountId);
+            notificationService.createNotificationForBannedByFeedback(accountId);
+        }
         return ResponseEntity.ok().build();
-
-
     }
 }

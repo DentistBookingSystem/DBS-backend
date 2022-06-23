@@ -32,6 +32,8 @@ public interface NotificationService {
 
     void createNotificationForBannedByFeedback(Integer accountId);
 
+    void createNotificationForSendingFeedback(Feedback feedback);
+
     void createNotificationForCancellingAppointment(Appointment appointment);
 
     void createNotificationForUpdatingAppointment(Appointment appointment);

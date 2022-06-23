@@ -153,6 +153,19 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public void createNotificationForSendingFeedback(Feedback feedback){
+        if(feedback == null) return;
+        Account account = accountService.findId(feedback.getAppointment().getAccount().getId());
+        String description = "Phản hồi của bạn đã được gửi tới trung tâm, cảm ơn bãn đã để lại đánh giá cho RaDe.";
+        Notification notification = new Notification(
+                account,
+                description,
+                new Date()
+        );
+        save(notification);
+    }
+
+    @Override
     public void createNotificationForCancellingAppointment(Appointment appointment){
         Account account = appointment.getAccount();
         if (account == null) return;

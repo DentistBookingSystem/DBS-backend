@@ -63,7 +63,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public List<Feedback> filterFeedback(String phone, int status, int serviceId, String time, Pageable pageable) {
+    public List<Feedback> filterFeedback(String phone, Integer status, Integer serviceId, String time, Pageable pageable) {
         return feedBackRepo.filterFeedback(phone, status, serviceId, time, pageable);
     }
 
