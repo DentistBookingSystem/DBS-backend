@@ -52,5 +52,13 @@ public class AppointmentAdminController {
 
     }
 
+    @GetMapping("/maskdone")
+    public ResponseEntity<?> checkDoneAppointment(@RequestParam int id) {
+
+        return ResponseEntity.ok(appointmentService.checkDoneAppointmentForAdmin(id));
+
+
+    }
+
 
 }

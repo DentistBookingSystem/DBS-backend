@@ -47,5 +47,7 @@ public interface AppointmentService {
     List<Appointment> filterAppointment(AppointmentDTO appointmentDTO) throws ParseException;
 
     Appointment cancelAppointmentForAdmin(int appointmentId);
+
+    Appointment checkDoneAppointmentForAdmin(int appointmentId);
 }
 

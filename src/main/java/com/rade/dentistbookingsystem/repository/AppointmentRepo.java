@@ -123,12 +123,23 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
 
     @Query(value = "SELECT a FROM Appointment a join a.account "
             +
-            "WHERE (a.status = :status OR :status IS NULL) AND " +
+            "WHERE (a.status = :status OR :status IS NULL) and " +
             "(a.appointmentDate = :appointmentDate OR :appointmentDate IS NULL) AND " +
             "(a.account.phone LIKE :phone OR :phone IS NULL) AND " +
             "(a.branch.id = :branchId OR :branchId IS NULL) AND " +
             "(a.doctor.id = :doctorId OR :doctorId IS NULL)")
     List<Appointment> filterAppointment(@Param("status") int status, @Param("appointmentDate") Date appointmentDate, @Param("phone") String phone, @Param("branchId") int branchId, @Param("doctorId") int doctorId);
 
-//    Appointment findByAccountIdAndAppointmentDateAndStatusIn(Integer accountId, Date date, int[] status);
+    //Appointment findByAccountIdAndAppointmentDateAndStatusIn(Integer accountId, Date date, int[] status);
+
+    @Query(value = "SELECT a FROM Appointment a join a.account"
+            + " WHERE (a.status = :status OR :status IS NULL) AND " +
+            // "(a.appointmentDate = :appointmentDate  OR :appointmentDate IS NULL) AND " +
+            //"(a.account.phone = :phone OR :phone IS NULL)" +
+            "(a.branch.id = :branchId OR :branchId IS NULL) AND " +
+            "(a.doctor.id = :doctorId OR :doctorId IS NULL)")
+    List<Appointment> filter(@Param("status") int status, @Param("branchId") int branchId, @Param("doctorId") int doctorId);
+
+    List<Appointment> findByStatusOrAppointmentDateOrAccount_PhoneOrDoctor_IdOrBranch_Id(int status, Date appointmentDate, String account_phone, int doctor_id, int branch_id);
+    //List<Appointment> findByStatusNullOrStatusAndAppointmentDateNullOrAppointmentDateDAndDoctorIsNull;
 }

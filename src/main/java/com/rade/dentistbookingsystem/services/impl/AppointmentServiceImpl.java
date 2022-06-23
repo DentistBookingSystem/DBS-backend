@@ -285,15 +285,19 @@ public class AppointmentServiceImpl implements AppointmentService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date appointmentDate = null;
         if (appointmentDTO.getDate() != null) {
+
             appointmentDate = sdf.parse(appointmentDTO.getDate());
+
         }
-        return appointmentRepo.filterAppointment(
+
+        return appointmentRepo.findByStatusOrAppointmentDateOrAccount_PhoneOrDoctor_IdOrBranch_Id(
                 appointmentDTO.getStatus(),
                 appointmentDate,
                 appointmentDTO.getPhone(),
                 appointmentDTO.getBranchId(),
                 appointmentDTO.getDoctorId()
         );
+        // return appointmentRepo.filter(appointmentDTO.getStatus(),appointmentDTO.getBranchId(),appointmentDTO.getDoctorId());
 
 
     }
@@ -306,9 +310,22 @@ public class AppointmentServiceImpl implements AppointmentService {
             Appointment cancelAppointment = appointment.get();
             if (cancelAppointment.getStatus() == 0 || cancelAppointment.getStatus() == 4) {
                 cancelAppointment.setStatus(6);
-                appointmentRepo.save(cancelAppointment);
+                return appointmentRepo.save(cancelAppointment);
             } else throw new RuntimeException("Can not cancel appointment");
-        }
-        throw new NotFoundException("Appointment not found");
+        } else throw new NotFoundException("Appointment not found");
+
+    }
+
+    @Override
+    public Appointment checkDoneAppointmentForAdmin(int appointmentId) {
+        Optional<Appointment> appointment = appointmentRepo.findById(appointmentId);
+        if (appointment.isPresent()) {
+            Appointment acceptAppointment = appointment.get();
+            if (acceptAppointment.getStatus() == 0 || acceptAppointment.getStatus() == 4) {
+                acceptAppointment.setStatus(1);
+                return appointmentRepo.save(acceptAppointment);
+            } else throw new RuntimeException("Can not mark done this appointment");
+        } else throw new NotFoundException("Appointment not found");
+
     }
 }
