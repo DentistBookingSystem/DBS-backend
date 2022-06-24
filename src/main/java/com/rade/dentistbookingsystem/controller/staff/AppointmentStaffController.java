@@ -34,10 +34,14 @@ public class AppointmentStaffController {
     @Autowired
     AccountService accountService;
 
-    @GetMapping("{i}")
-    public Page<Appointment> getAppointmentList(@PathVariable Integer i) {
-        if (i == null) i = 1;
-        return appointmentService.findAll(PageRequest.of(i - 1, 20, Sort.by("id").descending()));
+    @GetMapping("filter")
+    public List<Appointment> findAppointmentByMakingDateAndStatus(@RequestBody AppointmentDTO appointmentDTO) {
+        try {
+            return appointmentService.filterAppointment(appointmentDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @GetMapping("find")
