@@ -37,16 +37,6 @@ public class FeedbackAdminController {
                 pageable);
     }
 
-//    @PostMapping("check")
-//    public ResponseEntity<?> checkFeedback(@RequestBody StatusForFeedback statusForFeedback){
-//        try {
-//            return ResponseEntity.ok(feedBackService.check(statusForFeedback.getStatus(), statusForFeedback.getId()));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-//    }
-
     @PostMapping("/approve")
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> approveFeedback(@RequestParam int feedbackId) {
@@ -65,7 +55,6 @@ public class FeedbackAdminController {
         int accountId = feedback.getAppointment().getAccount().getId();
         if (feedbackService.checkAccountToBanByFeedback(accountId)) {
             accountService.checkAccount(2, accountId);
-            notificationService.createNotificationForBannedByFeedback(accountId);
         }
         return ResponseEntity.ok().build();
     }

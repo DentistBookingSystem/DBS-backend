@@ -30,13 +30,6 @@ public class AppointmentAdminController {
         return appointmentService.findAll(PageRequest.of(i - 1, 20, Sort.by("id").descending()));
     }
 
-    @PostMapping("check")
-    public boolean checkAppointment(@RequestBody StatusForAppointment statusForAppointment) {
-        appointmentService.check(statusForAppointment.getStatus(), statusForAppointment.getId());
-        return true;
-    }
-
-
     @GetMapping("filter")
     public List<Appointment> findAppointmentByMakingDateAndStatus(@RequestBody AppointmentDTO appointmentDTO) {
         try {
@@ -45,26 +38,5 @@ public class AppointmentAdminController {
             e.printStackTrace();
         }
         return null;
-
     }
-
-    @GetMapping("cancel")
-    @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> cancelAppointment(@RequestParam int id, @RequestParam String description) {
-        Appointment appointment = appointmentService.cancelAppointmentForAdmin(id);
-        notificationService.createNotificationForCancellingAppointmentFromAdmin(appointment, description);
-        return ResponseEntity.ok(appointment);
-
-
-    }
-
-    @GetMapping("/markdone")
-    public ResponseEntity<?> checkDoneAppointment(@RequestParam int id) {
-
-        return ResponseEntity.ok(appointmentService.checkDoneAppointmentForAdmin(id));
-
-
-    }
-
-
 }
