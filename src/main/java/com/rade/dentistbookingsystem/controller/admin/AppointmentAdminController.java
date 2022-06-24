@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.controller.admin;
 
+import com.rade.dentistbookingsystem.componentform.AppointmentComponentForFilter;
 import com.rade.dentistbookingsystem.componentform.StatusForAppointment;
 import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.model.AppointmentDTO;
@@ -32,10 +33,10 @@ public class AppointmentAdminController {
     }
 
     @GetMapping("filter/{i}")
-    public List<Appointment> findAppointmentByMakingDateAndStatus(@RequestBody AppointmentDTO appointmentDTO, @PathVariable int i) {
+    public List<Appointment> findAppointmentByMakingDateAndStatus(@RequestBody AppointmentComponentForFilter appointmentComponentForFilter, @PathVariable int i) {
         try {
             Pageable pageable = PageRequest.of(i - 1, 3, Sort.by("id").ascending());
-            return appointmentService.filterAppointment(appointmentDTO, pageable);
+            return appointmentService.filterAppointment(appointmentComponentForFilter, pageable);
         } catch (Exception e) {
             e.printStackTrace();
         }

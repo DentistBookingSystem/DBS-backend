@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.services;
 
+import com.rade.dentistbookingsystem.componentform.AppointmentComponentForFilter;
 import com.rade.dentistbookingsystem.componentform.DoctorAndDate;
 import com.rade.dentistbookingsystem.componentform.JsonAppointment;
 import com.rade.dentistbookingsystem.domain.Account;
@@ -44,7 +45,7 @@ public interface AppointmentService {
     Appointment findAppointmentByAccountIdInNext24h(Integer accountId);
 
 
-    List<Appointment> filterAppointment(AppointmentDTO appointmentDTO, Pageable pageable) throws ParseException;
+    List<Appointment> filterAppointment(AppointmentComponentForFilter appointmentComponentForFilter, Pageable pageable) throws ParseException;
 
     Appointment cancelAppointmentForAdmin(int appointmentId);
 

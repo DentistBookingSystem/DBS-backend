@@ -1,4 +1,5 @@
 package com.rade.dentistbookingsystem.services.impl;
+import com.rade.dentistbookingsystem.componentform.AppointmentComponentForFilter;
 import com.rade.dentistbookingsystem.componentform.DoctorAndDate;
 import com.rade.dentistbookingsystem.componentform.JsonAppointment;
 import com.rade.dentistbookingsystem.domain.Account;
@@ -11,6 +12,7 @@ import com.rade.dentistbookingsystem.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -281,23 +283,31 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> filterAppointment(AppointmentDTO appointmentDTO, Pageable pageable) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date appointmentDate = null;
-        if (appointmentDTO.getDate() != null) {
-
-            appointmentDate = sdf.parse(appointmentDTO.getDate());
-
+    public List<Appointment> filterAppointment(AppointmentComponentForFilter appointmentComponentForFilter, Pageable pageable) throws ParseException {
+        List<Integer> status = null;
+        if (appointmentComponentForFilter.getStatus() != null && appointmentComponentForFilter.getStatus().length != 0){
+            status = Arrays.asList(appointmentComponentForFilter.getStatus());
+            return appointmentRepo.filterAppointment(
+                    status,
+                    appointmentComponentForFilter.getDate(),
+                    appointmentComponentForFilter.getPhone(),
+                    appointmentComponentForFilter.getBranchId(),
+                    appointmentComponentForFilter.getDoctorId(),
+                    appointmentComponentForFilter.getServiceId(),
+                    pageable
+            );
+        }
+        else{
+            return appointmentRepo.filterAppointment(
+                    appointmentComponentForFilter.getDate(),
+                    appointmentComponentForFilter.getPhone(),
+                    appointmentComponentForFilter.getBranchId(),
+                    appointmentComponentForFilter.getDoctorId(),
+                    appointmentComponentForFilter.getServiceId(),
+                    pageable
+            );
         }
 
-        return appointmentRepo.findByStatusOrAppointmentDateOrAccount_PhoneOrDoctor_IdOrBranch_Id(
-                appointmentDTO.getStatus(),
-                appointmentDate,
-                appointmentDTO.getPhone(),
-                appointmentDTO.getBranchId(),
-                appointmentDTO.getDoctorId(),
-                pageable
-        );
         // return appointmentRepo.filter(appointmentDTO.getStatus(),appointmentDTO.getBranchId(),appointmentDTO.getDoctorId());
 
 
