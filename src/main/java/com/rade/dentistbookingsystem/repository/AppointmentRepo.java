@@ -34,8 +34,8 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "appointment_date = :time",
             nativeQuery = true)
     List<Appointment> findByDoctorIdAndTime(
-                                        @Param("doctor_id") int doctorId,
-                                        @Param("time") String time);
+            @Param("doctor_id") int doctorId,
+            @Param("time") String time);
 
     Appointment findByAccountAndStatusIn(Account account, int[] status);
 
@@ -75,10 +75,10 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
 
     @Query(value =
             "SELECT Appointment.* " +
-            "FROM Appointment " +
-            "WHERE (status = 0 OR status = 4) AND DATEDIFF(MINUTE," +
-            "(CAST(appointment_date AS varchar) + ' ' + SUBSTRING(appointment_time, 0, 6) + ':00')," +
-            "GETDATE()) > 15 ",
+                    "FROM Appointment " +
+                    "WHERE (status = 0 OR status = 4) AND DATEDIFF(MINUTE," +
+                    "(CAST(appointment_date AS varchar) + ' ' + SUBSTRING(appointment_time, 0, 6) + ':00')," +
+                    "GETDATE()) > 15 ",
             nativeQuery = true)
     List<Appointment> findAllAppointmentToMarkAbsent();
 
@@ -121,25 +121,56 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     boolean checkAccountToBanByAppointment(@Param("account_id") int accountId);
 
 
-    @Query(value = "SELECT a FROM Appointment a join a.account "
-            +
-            "WHERE (a.status = :status OR :status IS NULL) and " +
-            "(a.appointmentDate = :appointmentDate OR :appointmentDate IS NULL) AND " +
-            "(a.account.phone LIKE :phone OR :phone IS NULL) AND " +
-            "(a.branch.id = :branchId OR :branchId IS NULL) AND " +
-            "(a.doctor.id = :doctorId OR :doctorId IS NULL)")
-    List<Appointment> filterAppointment(@Param("status") int status, @Param("appointmentDate") Date appointmentDate, @Param("phone") String phone, @Param("branchId") int branchId, @Param("doctorId") int doctorId);
+    @Query(value =
+            "SELECT DISTINCT Appointment.* " +
+                    "FROM " +
+                    "Appointment, Account a, Appointment_Detail ad " +
+                    "WHERE Appointment.account_id = a.id " +
+                    "AND Appointment.id = ad.appointment_id " +
+                    "AND (Appointment.status IN (:status)) AND " +
+                    "(Appointment.appointment_date = CAST(:date as date) OR :date IS NULL) AND " +
+                    "(a.phone LIKE :phone OR :phone IS NULL) AND " +
+                    "(Appointment.branch_id = :branchId OR :branchId IS NULL) AND " +
+                    "(Appointment.doctor_id = :doctorId OR :doctorId IS NULL) AND " +
+                    "(ad.service_id = :serviceId OR :serviceId IS NULL)",
+            nativeQuery = true)
+    List<Appointment> filterAppointment(@Param("status") List<Integer> status,
+                                        @Param("date") String date,
+                                        @Param("phone") String phone,
+                                        @Param("branchId") Integer branchId,
+                                        @Param("doctorId") Integer doctorId,
+                                        @Param("serviceId") Integer serviceId,
+                                        Pageable pageable);
+
+    @Query(value =
+            "SELECT DISTINCT Appointment.* " +
+                    "FROM " +
+                    "Appointment, Account a, Appointment_Detail ad " +
+                    "WHERE Appointment.account_id = a.id " +
+                    "AND Appointment.id = ad.appointment_id AND " +
+                    "(Appointment.appointment_date = CAST(:date as date) OR :date IS NULL) AND " +
+                    "(a.phone LIKE :phone OR :phone IS NULL) AND " +
+                    "(Appointment.branch_id = :branchId OR :branchId IS NULL) AND " +
+                    "(Appointment.doctor_id = :doctorId OR :doctorId IS NULL) AND " +
+                    "(ad.service_id = :serviceId OR :serviceId IS NULL)",
+            nativeQuery = true)
+    List<Appointment> filterAppointment(@Param("date") String date,
+                                        @Param("phone") String phone,
+                                        @Param("branchId") Integer branchId,
+                                        @Param("doctorId") Integer doctorId,
+                                        @Param("serviceId") Integer serviceId,
+                                        Pageable pageable);
 
     //Appointment findByAccountIdAndAppointmentDateAndStatusIn(Integer accountId, Date date, int[] status);
 
-    @Query(value = "SELECT a FROM Appointment a join a.account"
-            + " WHERE (a.status = :status OR :status IS NULL) AND " +
-            // "(a.appointmentDate = :appointmentDate  OR :appointmentDate IS NULL) AND " +
-            //"(a.account.phone = :phone OR :phone IS NULL)" +
-            "(a.branch.id = :branchId OR :branchId IS NULL) AND " +
-            "(a.doctor.id = :doctorId OR :doctorId IS NULL)")
-    List<Appointment> filter(@Param("status") int status, @Param("branchId") int branchId, @Param("doctorId") int doctorId);
+//    @Query(value = "SELECT a FROM Appointment a join a.account"
+//            + " WHERE (a.status = :status OR :status IS NULL) AND " +
+//            // "(a.appointmentDate = :appointmentDate  OR :appointmentDate IS NULL) AND " +
+//            //"(a.account.phone = :phone OR :phone IS NULL)" +
+//            "(a.branch.id = :branchId OR :branchId IS NULL) AND " +
+//            "(a.doctor.id = :doctorId OR :doctorId IS NULL)")
+//    List<Appointment> filter(@Param("status") int status, @Param("branchId") int branchId, @Param("doctorId") int doctorId);
 
-    List<Appointment> findByStatusOrAppointmentDateOrAccount_PhoneOrDoctor_IdOrBranch_Id(int status, Date appointmentDate, String account_phone, int doctor_id, int branch_id, Pageable pageable);
+//    List<Appointment> findByStatusInOrAppointmentDateOrAccount_PhoneOrDoctor_IdOrBranch_Id(int[] status, Date appointmentDate, String account_phone, int doctor_id, int branch_id, Pageable pageable);
     //List<Appointment> findByStatusNullOrStatusAndAppointmentDateNullOrAppointmentDateDAndDoctorIsNull;
 }
