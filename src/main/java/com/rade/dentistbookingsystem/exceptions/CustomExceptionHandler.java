@@ -25,10 +25,9 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DuplicateRecordException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponse> handlerDuplicateRecordException(DuplicateRecordException ex, WebRequest req) {
+    public ErrorResponse handlerDuplicateRecordException(DuplicateRecordException ex, WebRequest req) {
         ex.printStackTrace();
-        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
-        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+        return new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage());
     }
 
     @ExceptionHandler(ValidationException.class)
