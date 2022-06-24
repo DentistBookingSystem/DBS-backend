@@ -3,6 +3,7 @@ package com.rade.dentistbookingsystem.services.impl;
 import com.rade.dentistbookingsystem.componentform.JsonPhone;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Branch;
+import com.rade.dentistbookingsystem.exceptions.DuplicateRecordException;
 import com.rade.dentistbookingsystem.model.BranchDTO;
 import com.rade.dentistbookingsystem.repository.BranchRepo;
 import com.rade.dentistbookingsystem.services.AccountService;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ValidationException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,6 +52,8 @@ public class BranchServiceImpl implements BranchService {
     public Branch saveBranch(BranchDTO branchDTO) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         try {
+            if (branchRepo.findByName(branchDTO.getName()) != null)
+                throw new DuplicateRecordException("This branch name already use");
             Branch branch = new Branch(
                     branchDTO.getName(),
                     districtService.getById(branchDTO.getDistrictId()),
@@ -58,7 +62,7 @@ public class BranchServiceImpl implements BranchService {
                     branchDTO.getStatus(),
                     branchDTO.getUrl());
             return branchRepo.save(branch);
-        } catch (Exception e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return null;

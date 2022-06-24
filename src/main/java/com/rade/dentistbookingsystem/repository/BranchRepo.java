@@ -30,4 +30,7 @@ public interface BranchRepo extends JpaRepository<Branch,Integer> {
     public List<Branch> findByProvinceIdAndStatus(@Param("province_id") int provinceId, @Param("status") int status);
 
     public List<Branch> findByStatus(int status);
+
+    List<Branch> findByNameIgnoreCase(String name);
+
 }
