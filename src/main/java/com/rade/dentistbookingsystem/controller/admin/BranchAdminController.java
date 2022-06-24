@@ -59,8 +59,13 @@ public class BranchAdminController {
 
     @PostMapping("add")
     public ResponseEntity<?> addBranch(@Valid @RequestBody BranchDTO branchDTO) {
-        return ResponseEntity.ok(branchService.saveBranch(branchDTO));
-
+        try {
+            Branch branch = branchService.saveBranch(branchDTO);
+            return ResponseEntity.ok(branch);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
 
     }
     @PostMapping("edit")
