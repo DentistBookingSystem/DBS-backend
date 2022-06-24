@@ -63,28 +63,27 @@ public class DoctorAdminController {
     }
 
     @PostMapping("add")
-    public ResponseEntity<?> insertDoctor(@RequestPart @Validated DoctorDTO doctorDTO) {
-        try {
+    public ResponseEntity<?> insertDoctor(@RequestPart @Validated DoctorDTO doctorDTO) throws Exception {
+
 
             Doctor doctor = doctorService.addDoctor(doctorDTO);
-            if (doctor == null) throw new Exception();
-            return ResponseEntity.ok(doctor);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-        }
+            if (doctor != null)
+                return ResponseEntity.ok(doctor);
+            else  {
+                imageService.removeImg(doctorDTO.getUrl());
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+            }
+
 
     }
 
-    @GetMapping("edit/{id}")
-    public ResponseEntity<?> updateDoctor(@RequestPart @Validated DoctorDTO doctorDTO, @PathVariable int id) {
-        try {
-
-            Doctor doctor = doctorService.editDoctor(doctorDTO, id);
-            if (doctor == null) throw new Exception();
+    @GetMapping("edit")
+    public ResponseEntity<?> updateDoctor(@RequestPart @Validated DoctorDTO doctorDTO) throws Exception {
+        Doctor doctor = doctorService.editDoctor(doctorDTO);
+        if (doctor != null)
             return ResponseEntity.ok(doctor);
-        } catch (Exception e) {
-            e.printStackTrace();
+        else  {
+            imageService.removeImg(doctorDTO.getUrl());
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
 

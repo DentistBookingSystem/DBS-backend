@@ -68,8 +68,8 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Doctor editDoctor(DoctorDTO doctorDTO, int id) throws Exception {
-        Optional<Doctor> doctorData = findById(id);
+    public Doctor editDoctor(DoctorDTO doctorDTO) throws Exception {
+        Optional<Doctor> doctorData = findById(doctorDTO.getId());
         if (doctorData.isPresent()) {
             Doctor doctor = doctorData.get();
             doctor.setName(doctorDTO.getName());

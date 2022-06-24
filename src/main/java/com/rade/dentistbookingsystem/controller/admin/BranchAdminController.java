@@ -85,10 +85,16 @@ public class BranchAdminController {
 
     }
     @PostMapping("edit")
-    public ResponseEntity<?> updateBranch(@Valid @RequestBody BranchDTO branchDTO) {
+    public ResponseEntity<?> updateBranch(@Valid @RequestBody BranchDTO branchDTO) throws Exception {
+        System.out.println(branchDTO.getUrl());
+        Branch branch = branchService.updateBranch(branchDTO, branchDTO.getId());
+        if (branch != null)
+            return ResponseEntity.status(HttpStatus.OK).build();
+        else{
+            imageService.removeImg(branchDTO.getUrl());
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        }
 
-
-        return ResponseEntity.ok(branchService.updateBranch(branchDTO, branchDTO.getId()));
 
 
     }
