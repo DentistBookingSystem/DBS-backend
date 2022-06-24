@@ -44,7 +44,7 @@ public interface AppointmentService {
     Appointment findAppointmentByAccountIdInNext24h(Integer accountId);
 
 
-    List<Appointment> filterAppointment(AppointmentDTO appointmentDTO) throws ParseException;
+    List<Appointment> filterAppointment(AppointmentDTO appointmentDTO, Pageable pageable) throws ParseException;
 
     Appointment cancelAppointmentForAdmin(int appointmentId);
 

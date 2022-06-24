@@ -8,6 +8,7 @@ import com.rade.dentistbookingsystem.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,10 +31,11 @@ public class AppointmentAdminController {
         return appointmentService.findAll(PageRequest.of(i - 1, 20, Sort.by("id").descending()));
     }
 
-    @GetMapping("filter")
-    public List<Appointment> findAppointmentByMakingDateAndStatus(@RequestBody AppointmentDTO appointmentDTO) {
+    @GetMapping("filter/{i}")
+    public List<Appointment> findAppointmentByMakingDateAndStatus(@RequestBody AppointmentDTO appointmentDTO, @PathVariable int i) {
         try {
-            return appointmentService.filterAppointment(appointmentDTO);
+            Pageable pageable = PageRequest.of(i - 1, 3, Sort.by("id").ascending());
+            return appointmentService.filterAppointment(appointmentDTO, pageable);
         } catch (Exception e) {
             e.printStackTrace();
         }

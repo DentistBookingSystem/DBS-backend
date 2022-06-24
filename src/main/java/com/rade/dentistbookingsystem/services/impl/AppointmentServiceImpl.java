@@ -281,7 +281,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> filterAppointment(AppointmentDTO appointmentDTO) throws ParseException {
+    public List<Appointment> filterAppointment(AppointmentDTO appointmentDTO, Pageable pageable) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date appointmentDate = null;
         if (appointmentDTO.getDate() != null) {
@@ -295,7 +295,8 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointmentDate,
                 appointmentDTO.getPhone(),
                 appointmentDTO.getBranchId(),
-                appointmentDTO.getDoctorId()
+                appointmentDTO.getDoctorId(),
+                pageable
         );
         // return appointmentRepo.filter(appointmentDTO.getStatus(),appointmentDTO.getBranchId(),appointmentDTO.getDoctorId());
 

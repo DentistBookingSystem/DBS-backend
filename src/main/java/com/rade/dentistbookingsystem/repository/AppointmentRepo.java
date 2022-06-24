@@ -140,6 +140,6 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
             "(a.doctor.id = :doctorId OR :doctorId IS NULL)")
     List<Appointment> filter(@Param("status") int status, @Param("branchId") int branchId, @Param("doctorId") int doctorId);
 
-    List<Appointment> findByStatusOrAppointmentDateOrAccount_PhoneOrDoctor_IdOrBranch_Id(int status, Date appointmentDate, String account_phone, int doctor_id, int branch_id);
+    List<Appointment> findByStatusOrAppointmentDateOrAccount_PhoneOrDoctor_IdOrBranch_Id(int status, Date appointmentDate, String account_phone, int doctor_id, int branch_id, Pageable pageable);
     //List<Appointment> findByStatusNullOrStatusAndAppointmentDateNullOrAppointmentDateDAndDoctorIsNull;
 }
