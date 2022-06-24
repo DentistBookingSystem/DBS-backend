@@ -50,9 +50,14 @@ public class ServiceAdminController {
 
     @PostMapping(value = "add-service")
     public ResponseEntity<?> addService(@Valid @RequestBody ServiceDTO serviceDTO) throws Exception {
+        Service service = serviceSv.insert(serviceDTO);
+        if (service != null)
+            return ResponseEntity.ok(service);
+        else {
+            imageService.removeImg(serviceDTO.getUrl());
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        }
 
-
-        return ResponseEntity.ok(serviceSv.insert(serviceDTO));
 
 
 
@@ -61,11 +66,14 @@ public class ServiceAdminController {
     }
 
     @PostMapping("edit")
-    public ResponseEntity<?> editService(@Valid @RequestBody ServiceDTO serviceDTO) {
-
-
-        return ResponseEntity.ok(serviceSv.edit(serviceDTO));
-
+    public ResponseEntity<?> editService(@Valid @RequestBody ServiceDTO serviceDTO) throws Exception {
+        Service service = serviceSv.edit(serviceDTO);
+        if (service != null)
+            return ResponseEntity.ok(service);
+        else {
+            imageService.removeImg(serviceDTO.getUrl());
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        }
 
     }
 

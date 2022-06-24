@@ -20,7 +20,7 @@ public interface DoctorService {
 
     Doctor addDoctor(DoctorDTO doctorDTO);
 
-    Doctor editDoctor(DoctorDTO doctorDTO, int id) throws Exception;
+    Doctor editDoctor(DoctorDTO doctorDTO) throws Exception;
 
     Doctor deleteDoctor(int id);
 }

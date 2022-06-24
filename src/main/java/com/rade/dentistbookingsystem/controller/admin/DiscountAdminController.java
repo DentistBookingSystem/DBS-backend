@@ -51,8 +51,8 @@ public class DiscountAdminController {
 
     @PostMapping("/add")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> addDiscount(@Validated @RequestBody DiscountServiceComponentAdmin discountServiceComponent) {
-        try {
+    public ResponseEntity<?> addDiscount(@Validated @RequestBody DiscountServiceComponentAdmin discountServiceComponent) throws ParseException {
+
             Discount tmpDiscount = discount.addDiscount(discountServiceComponent.getDiscountDTO());
             int discountID = tmpDiscount.getId();
             int[] serviceList = discountServiceComponent.getServiceIDList();
@@ -69,9 +69,7 @@ public class DiscountAdminController {
                 return ResponseEntity.ok(tmpDiscount);
 
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
 
     }

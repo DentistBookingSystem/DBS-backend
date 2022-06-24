@@ -38,7 +38,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public List<Discount> findAll() {
-        return discountRepo.findByStatus(1);
+        return discountRepo.findAll();
     }
 
 
