@@ -30,4 +30,9 @@ public class ImageServiceImpl implements ImageService {
 
         } else throw new Exception("File type error");
     }
+
+    @Override
+    public void removeImg(String id) throws Exception {
+        googleDriveFileService.deleteFile(id);
+    }
 }
