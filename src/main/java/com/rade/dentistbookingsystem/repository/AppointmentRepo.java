@@ -129,10 +129,10 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "AND Appointment.id = ad.appointment_id " +
                     "AND (Appointment.status IN (:status)) AND " +
                     "(Appointment.appointment_date = CAST(:date as date) OR :date IS NULL) AND " +
-                    "(a.phone LIKE :phone OR :phone IS NULL) AND " +
-                    "(Appointment.branch_id = :branchId OR :branchId IS NULL) AND " +
-                    "(Appointment.doctor_id = :doctorId OR :doctorId IS NULL) AND " +
-                    "(ad.service_id = :serviceId OR :serviceId IS NULL)",
+                    "(a.phone LIKE :phone OR :phone IS NULL OR :phone = '') AND " +
+                    "(Appointment.branch_id = :branchId OR :branchId = 0) AND " +
+                    "(Appointment.doctor_id = :doctorId OR :doctorId = 0) AND " +
+                    "(ad.service_id = :serviceId OR :serviceId = 0)",
             nativeQuery = true)
     List<Appointment> filterAppointment(@Param("status") List<Integer> status,
                                         @Param("date") String date,
@@ -149,10 +149,10 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "WHERE Appointment.account_id = a.id " +
                     "AND Appointment.id = ad.appointment_id AND " +
                     "(Appointment.appointment_date = CAST(:date as date) OR :date IS NULL) AND " +
-                    "(a.phone LIKE :phone OR :phone IS NULL) AND " +
-                    "(Appointment.branch_id = :branchId OR :branchId IS NULL) AND " +
-                    "(Appointment.doctor_id = :doctorId OR :doctorId IS NULL) AND " +
-                    "(ad.service_id = :serviceId OR :serviceId IS NULL)",
+                    "(a.phone LIKE :phone OR :phone IS NULL OR :phone = '') AND " +
+                    "(Appointment.branch_id = :branchId OR :branchId = 0) AND " +
+                    "(Appointment.doctor_id = :doctorId OR :doctorId = 0) AND " +
+                    "(ad.service_id = :serviceId OR :serviceId = 0)",
             nativeQuery = true)
     List<Appointment> filterAppointment(@Param("date") String date,
                                         @Param("phone") String phone,
