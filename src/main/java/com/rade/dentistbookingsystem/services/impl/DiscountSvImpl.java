@@ -12,6 +12,7 @@ import com.rade.dentistbookingsystem.services.DiscountSvService;
 import com.rade.dentistbookingsystem.services.ServiceSv;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
 
 @org.springframework.stereotype.Service
@@ -21,6 +22,7 @@ public class DiscountSvImpl implements DiscountSvService {
     ServiceRepo serviceRepo;
     @Autowired
     DiscountRepo discountRepo;
+
 
 
     public DiscountSvImpl (DiscountServiceRepo discountServiceRepo) {
@@ -34,6 +36,10 @@ public class DiscountSvImpl implements DiscountSvService {
     }
 
 
+    @Override
+    public List<DiscountService> findByDiscountId(int id){
+        return discountServiceRepo.findAllByDiscount_Id(id);
+    }
 
     @Override
     public DiscountService addServiceDiscount(DiscountServiceDTO discountServiceDTO) {
@@ -66,6 +72,7 @@ public class DiscountSvImpl implements DiscountSvService {
         return addServiceDiscount(discountServiceDTO);
 
     }
+
 
 
 }

@@ -20,6 +20,7 @@ public class Account implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false, columnDefinition = "nvarchar(MAX)")
     private String password;
 
@@ -35,6 +36,7 @@ public class Account implements Serializable {
 
     @Column(name = "phone", length = 10)
     private String phone;
+
 
     @Column(name = "email", length = 50)
     private String email;

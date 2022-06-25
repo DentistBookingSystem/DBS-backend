@@ -2,7 +2,9 @@ package com.rade.dentistbookingsystem.controller.admin;
 
 
 import com.rade.dentistbookingsystem.componentform.DiscountServiceComponentAdmin;
+import com.rade.dentistbookingsystem.componentform.ServiceDiscountComponent;
 import com.rade.dentistbookingsystem.domain.Discount;
+import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.DiscountServiceDTO;
 import com.rade.dentistbookingsystem.services.DiscountService;
 import com.rade.dentistbookingsystem.services.DiscountSvService;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ValidationException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +46,16 @@ public class DiscountAdminController {
         return discount.findAll();
     }
 
+//    @GetMapping("list")
+//    public List<ServiceDiscountComponent> discountList(){
+//        List<Discount> discountList = discount.findAll();
+//        if(discountList != null){
+//            for (Discount tmp: discountList) {
+//                discountSv.findByDiscountId(tmp.getId())
+//            }
+//        }
+//    }
+
     @GetMapping("{id}")
     public Optional<Discount> getDiscount(@PathVariable int id) {
 
@@ -68,9 +81,7 @@ public class DiscountAdminController {
 
                 return ResponseEntity.ok(tmpDiscount);
 
-            }
-
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+            } else throw new  NotFoundException(" Service list not found");
 
     }
 
