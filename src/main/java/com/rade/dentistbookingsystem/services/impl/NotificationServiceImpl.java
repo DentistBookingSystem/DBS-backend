@@ -75,7 +75,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public Notification findDuplicateDescriptionByAccountId(Integer accountId, String description) {
-        return notificationRepo.findDuplicateDescriptionByAccountId(accountId, description);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(new Date());
+        return notificationRepo.findDuplicateDescriptionByAccountId(accountId, description, date);
     }
 
     @Override
