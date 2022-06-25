@@ -22,8 +22,9 @@ public class DoctorServiceImpl implements DoctorService {
         this.doctorRepo = doctorRepo;
     }
 
-    public List<Doctor> findByBranchId(int branchId) {
-        return doctorRepo.findByBranchId(branchId);
+    @Override
+    public List<Doctor> findByBranchIdAndStatus(int branchId, int status) {
+        return doctorRepo.findByBranchIdAndStatus(branchId, status);
     }
 
     public Doctor findId(Integer id) {

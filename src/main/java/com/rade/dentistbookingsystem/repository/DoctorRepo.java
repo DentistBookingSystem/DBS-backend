@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface DoctorRepo extends JpaRepository<Doctor, Integer> {
-    public List<Doctor> findByBranchId(int branchId);
+    public List<Doctor> findByBranchIdAndStatus(int branchId, int status);
 
     @Query(value = "SELECT * FROM Doctor WHERE id = ?1", nativeQuery = true)
     Doctor findId(Integer id);

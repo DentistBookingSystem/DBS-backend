@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DoctorService {
-    List<Doctor> findByBranchId(int branchId);
+    List<Doctor> findByBranchIdAndStatus(int branchId, int status);
 
     Doctor findId(Integer id);
 

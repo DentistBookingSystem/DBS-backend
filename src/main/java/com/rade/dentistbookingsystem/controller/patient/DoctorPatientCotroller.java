@@ -16,6 +16,6 @@ public class DoctorPatientCotroller {
     DoctorService doctorService;
     @GetMapping("{branchId}")
     public List<Doctor> getByBrandId(@PathVariable int branchId){
-        return doctorService.findByBranchId(branchId);
+        return doctorService.findByBranchIdAndStatus(branchId, 1);
     }
 }

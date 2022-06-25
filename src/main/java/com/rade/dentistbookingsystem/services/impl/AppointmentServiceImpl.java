@@ -191,7 +191,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             return checkTimeOptionOfDoctorByDate(doctorAndDate);
         }
         else{
-            List<Doctor> doctorList = doctorService.findByBranchId(doctorAndDate.getBranchId());
+            List<Doctor> doctorList = doctorService.findByBranchIdAndStatus(doctorAndDate.getBranchId(), 1);
             List<String> generalOptionList = new ArrayList<>();
             for (Doctor doctor : doctorList) {
                 doctorAndDate.setDoctorId(doctor.getId());
@@ -226,7 +226,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             }
             else{
 
-                List<Doctor> doctorList = doctorService.findByBranchId(branchId);
+                List<Doctor> doctorList = doctorService.findByBranchIdAndStatus(branchId,1);
                 List<Doctor> availableDoctorList = new ArrayList<>();
                 for (Doctor doctor : doctorList) {
                     DoctorAndDate doctorAndDate = new DoctorAndDate(appointmentId, branchId, doctor.getId(), date, serviceId);

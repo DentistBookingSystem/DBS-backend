@@ -55,7 +55,7 @@ public class AppointmentPatientController {
         serviceDiscountComponentList,
         serviceTypeSv.findAll(),
         branchService.findId(branchId),
-        doctorService.findByBranchId(branchId)
+        doctorService.findByBranchIdAndStatus(branchId, 1)
         );
     }
 
@@ -97,7 +97,7 @@ public class AppointmentPatientController {
                 return null;
             if(appointment.getStatus() != 0)
                 return null;
-            List<Doctor> doctorList = doctorService.findByBranchId(appointment.getBranch().getId());
+            List<Doctor> doctorList = doctorService.findByBranchIdAndStatus(appointment.getBranch().getId(), 1);
             List<Service> serviceList = serviceSv.findByAppointmentId(appointment.getId());
             return new AppointmentComponentForUpdate(appointment, doctorList, serviceList);
         }
