@@ -42,7 +42,7 @@ public class AccountPatientController {
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build(); //406
             if(account.getStatus() == 2)
                 return ResponseEntity.status(HttpStatus.LOCKED).build(); //423
-            if(appointmentService.findByAccountAndStatusIn(account, new int[]{0, 4}) != null)
+            if(appointmentService.findByAccountAndStatusIn(account, new int[]{0}) != null)
                 return ResponseEntity.status(HttpStatus.GONE).build(); //410
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {

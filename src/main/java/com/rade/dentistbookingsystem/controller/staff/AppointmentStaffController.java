@@ -50,7 +50,7 @@ public class AppointmentStaffController {
     @GetMapping("find")
     public AppointmentWithDetails findAppointmentByPhone(@RequestBody JsonPhone jsonPhone) {
         try {
-            Appointment appointment = appointmentService.findByAccountAndStatusIn(accountService.findByPhone(jsonPhone.getPhone()), new int[]{0, 4});
+            Appointment appointment = appointmentService.findByAccountAndStatusIn(accountService.findByPhone(jsonPhone.getPhone()), new int[]{0});
             List<AppointmentDetail> appointmentDetailList = appointmentDetailService.findByAppointmentId(appointment.getId());
             return new AppointmentWithDetails(appointment, appointmentDetailList);
         } catch (Exception e) {

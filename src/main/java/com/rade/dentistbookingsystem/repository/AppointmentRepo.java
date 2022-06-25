@@ -30,7 +30,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "FROM Appointment " +
                     "WHERE " +
                     "(doctor_id = :doctor_id OR :doctor_id = 0) AND " +
-                    "(status = 0 OR status = 4) AND " +
+                    "(status = 0) AND " +
                     "appointment_date = :time",
             nativeQuery = true)
     List<Appointment> findByDoctorIdAndTime(
@@ -46,7 +46,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "            CASE WHEN EXISTS ( " +
                     "                    SELECT a.*, DATEDIFF(DAY, a.appointment_date, GETDATE())  " +
                     "                    FROM Appointment a  " +
-                    "                    WHERE a.id = :id AND (a.status = 0 OR a.status = 4) AND " +
+                    "                    WHERE a.id = :id AND (a.status = 0) AND " +
                     "                    DATEDIFF(DAY, a.appointment_date, GETDATE()) <= 1 AND a.account_id = :account_id)  " +
                     "                    THEN 'TRUE'  " +
                     "                    ELSE 'FALSE'  " +
@@ -76,7 +76,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     @Query(value =
             "SELECT Appointment.* " +
                     "FROM Appointment " +
-                    "WHERE (status = 0 OR status = 4) AND DATEDIFF(MINUTE," +
+                    "WHERE (status = 0) AND DATEDIFF(MINUTE," +
                     "(CAST(appointment_date AS varchar) + ' ' + SUBSTRING(appointment_time, 0, 6) + ':00')," +
                     "GETDATE()) > 15 ",
             nativeQuery = true)
@@ -85,7 +85,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     @Query(value =
             "SELECT TOP 1 Appointment.* " +
                     "FROM Appointment " +
-                    "WHERE (status = 0 OR status = 4) AND DATEDIFF(HOUR," +
+                    "WHERE (status = 0) AND DATEDIFF(HOUR," +
                     "(CAST(appointment_date AS varchar) + ' ' + SUBSTRING(appointment_time, 0, 6) + ':00')," +
                     "GETDATE()) <= 24 AND " +
                     "account_id = :account_id",

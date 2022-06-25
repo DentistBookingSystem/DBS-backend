@@ -56,7 +56,6 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointment.setDoctor(doctorService.findId(appointmentDTO.getDoctorId()));
                 appointment.setAppointmentDate(dateFormat.parse(appointmentDTO.getDate()));
                 appointment.setAppointmentTime(appointmentDTO.getTime());
-                appointment.setStatus(4);
             }
             return appointmentRepo.save(appointment);
         }
@@ -319,7 +318,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         Optional<Appointment> appointment = appointmentRepo.findById(appointmentId);
         if (appointment.isPresent()) {
             Appointment cancelAppointment = appointment.get();
-            if (cancelAppointment.getStatus() == 0 || cancelAppointment.getStatus() == 4) {
+            if (cancelAppointment.getStatus() == 0) {
                 cancelAppointment.setStatus(6);
                 return appointmentRepo.save(cancelAppointment);
             } else throw new RuntimeException("Can not cancel appointment");
@@ -332,7 +331,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         Optional<Appointment> appointment = appointmentRepo.findById(appointmentId);
         if (appointment.isPresent()) {
             Appointment acceptAppointment = appointment.get();
-            if (acceptAppointment.getStatus() == 0 || acceptAppointment.getStatus() == 4) {
+            if (acceptAppointment.getStatus() == 0) {
                 acceptAppointment.setStatus(1);
                 return appointmentRepo.save(acceptAppointment);
             } else throw new RuntimeException("Can not mark done this appointment");

@@ -68,7 +68,7 @@ public class AppointmentPatientController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             if(account.getStatus() == 2)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            if(appointmentService.findByAccountAndStatusIn(account, new int[]{0, 4}) != null)
+            if(appointmentService.findByAccountAndStatusIn(account, new int[]{0}) != null)
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
             if (jsonAppointment.getServiceIdList().length == 0)
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
