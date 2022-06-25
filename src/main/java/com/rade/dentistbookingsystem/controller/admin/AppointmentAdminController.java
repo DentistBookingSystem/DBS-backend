@@ -32,7 +32,7 @@ public class AppointmentAdminController {
         return appointmentService.findAll(PageRequest.of(i - 1, 20, Sort.by("id").descending()));
     }
 
-    @GetMapping("filter/{i}")
+    @PostMapping("filter/{i}")
     public List<Appointment> findAppointmentByMakingDateAndStatus(@RequestBody AppointmentComponentForFilter appointmentComponentForFilter, @PathVariable int i) {
         try {
             Pageable pageable = PageRequest.of(i - 1, 3, Sort.by("id").ascending());

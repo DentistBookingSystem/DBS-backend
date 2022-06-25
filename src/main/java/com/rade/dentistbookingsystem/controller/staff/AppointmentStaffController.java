@@ -36,7 +36,7 @@ public class AppointmentStaffController {
     @Autowired
     AccountService accountService;
 
-    @GetMapping("filter/{i}")
+    @PostMapping("filter/{i}")
     public List<Appointment> findAppointmentByMakingDateAndStatus(@RequestBody AppointmentComponentForFilter appointmentComponentForFilter, @PathVariable int i) {
         try {
             Pageable pageable = PageRequest.of(i - 1, 3, Sort.by("id").ascending());
@@ -47,7 +47,7 @@ public class AppointmentStaffController {
         return null;
     }
 
-    @GetMapping("find")
+    @PostMapping("find")
     public AppointmentWithDetails findAppointmentByPhone(@RequestBody JsonPhone jsonPhone) {
         try {
             Appointment appointment = appointmentService.findByAccountAndStatusIn(accountService.findByPhone(jsonPhone.getPhone()), new int[]{0});
