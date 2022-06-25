@@ -21,6 +21,7 @@ public class Notification implements Serializable {
     private int id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "account_id", nullable = true)
     private Account account;
 

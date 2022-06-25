@@ -129,7 +129,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "AND Appointment.id = ad.appointment_id " +
                     "AND (Appointment.status IN (:status)) AND " +
                     "(Appointment.appointment_date = CAST(:date as date) OR :date IS NULL) AND " +
-                    "(a.phone LIKE :phone OR :phone IS NULL OR :phone = '') AND " +
+                    "(a.phone LIKE CONCAT('%',:phone,'%') OR :phone IS NULL OR :phone = '') AND " +
                     "(Appointment.branch_id = :branchId OR :branchId = 0) AND " +
                     "(Appointment.doctor_id = :doctorId OR :doctorId = 0) AND " +
                     "(ad.service_id = :serviceId OR :serviceId = 0)",
@@ -149,7 +149,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "WHERE Appointment.account_id = a.id " +
                     "AND Appointment.id = ad.appointment_id AND " +
                     "(Appointment.appointment_date = CAST(:date as date) OR :date IS NULL) AND " +
-                    "(a.phone LIKE :phone OR :phone IS NULL OR :phone = '') AND " +
+                    "(a.phone LIKE CONCAT('%',:phone,'%') OR :phone IS NULL OR :phone = '') AND " +
                     "(Appointment.branch_id = :branchId OR :branchId = 0) AND " +
                     "(Appointment.doctor_id = :doctorId OR :doctorId = 0) AND " +
                     "(ad.service_id = :serviceId OR :serviceId = 0)",

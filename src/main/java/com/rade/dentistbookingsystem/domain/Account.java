@@ -45,11 +45,12 @@ public class Account implements Serializable {
     @JoinColumn(name = "district_id", nullable = false)
     private District district;
 
-
+    @JsonIgnore
     @Column(name = "status", nullable = false)
     private short status;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
