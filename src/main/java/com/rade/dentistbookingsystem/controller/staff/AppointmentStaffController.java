@@ -67,8 +67,8 @@ public class AppointmentStaffController {
         return ResponseEntity.ok(appointment);
     }
 
-    @GetMapping("markdone")
-    public ResponseEntity<?> checkDoneAppointment(@RequestParam int id) {
+    @PostMapping("markdone/{id}")
+    public ResponseEntity<?> checkDoneAppointment(@PathVariable int id) {
         return ResponseEntity.ok(appointmentService.checkDoneAppointmentForAdmin(id));
     }
 }
