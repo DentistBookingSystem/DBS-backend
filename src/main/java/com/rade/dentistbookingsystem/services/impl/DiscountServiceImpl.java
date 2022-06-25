@@ -71,14 +71,13 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Discount addDiscount(@Valid DiscountDTO discountDTO) throws ParseException {
-        Discount discount = new Discount();
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-        System.out.println(findByName(discountDTO.getName()));
-
-        if (findByName(discountDTO.getName()) != null)
+        Discount tmpDiscount = findByName(discountDTO.getName());
+        if (tmpDiscount != null)
             throw new ValidationException("This Discount name has been use");
-
+        Discount discount = new Discount();
         discount.setName(discountDTO.getName());
         discount.setStatus(discountDTO.getStatus());
         discount.setPercentage(discountDTO.getPercentage());
