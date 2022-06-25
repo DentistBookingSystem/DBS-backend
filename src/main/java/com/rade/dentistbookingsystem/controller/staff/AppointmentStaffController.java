@@ -47,10 +47,10 @@ public class AppointmentStaffController {
         return null;
     }
 
-    @PostMapping("find")
-    public AppointmentWithDetails findAppointmentByPhone(@RequestBody JsonPhone jsonPhone) {
+    @PostMapping("find/{id}")
+    public AppointmentWithDetails findAppointmentByPhone(@PathVariable Integer id) {
         try {
-            Appointment appointment = appointmentService.findByAccountAndStatusIn(accountService.findByPhone(jsonPhone.getPhone()), new int[]{0});
+            Appointment appointment = appointmentService.findId(id);
             List<AppointmentDetail> appointmentDetailList = appointmentDetailService.findByAppointmentId(appointment.getId());
             return new AppointmentWithDetails(appointment, appointmentDetailList);
         } catch (Exception e) {
