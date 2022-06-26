@@ -1,4 +1,4 @@
-package com.rade.dentistbookingsystem.controller.admin;
+package com.rade.dentistbookingsystem.controller.staff;
 
 import com.rade.dentistbookingsystem.componentform.PageForFeedback;
 import com.rade.dentistbookingsystem.domain.Feedback;
@@ -18,8 +18,8 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("rade/admin/feedback")
-public class FeedbackAdminController {
+@RequestMapping("rade/staff/feedback")
+public class FeedbackStaffController {
     @Autowired
     FeedbackService feedbackService;
     @Autowired
@@ -37,5 +37,28 @@ public class FeedbackAdminController {
                 pageForFeedback.getStatus(),
                 pageForFeedback.getServiceId(),
                 pageForFeedback.getTime());
+    }
+
+
+    @PostMapping("approve/{id}")
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<?> approveFeedback(@PathVariable int id) {
+        Feedback feedback = feedbackService.updateFeedbackStatus(id, 1);
+        notificationService.createNotificationForApprovingFeedbackFromAdmin(feedback);
+        return ResponseEntity.ok().build();
+
+
+    }
+
+    @PostMapping("disapprove/{id}")
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<?> disapproveFeedback(@PathVariable int id) {
+        Feedback feedback = feedbackService.updateFeedbackStatus(id, 2);
+        notificationService.createNotificationForDisapprovingFeedbackFromAdmin(feedback);
+        int accountId = feedback.getAppointment().getAccount().getId();
+        if (feedbackService.checkAccountToBanByFeedback(accountId)) {
+            accountService.checkAccount(2, accountId);
+        }
+        return ResponseEntity.ok().build();
     }
 }
