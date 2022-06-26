@@ -3,6 +3,7 @@ package com.rade.dentistbookingsystem.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -15,6 +16,7 @@ public class AccountDTO implements Serializable {
     @NotNull(message = "Full name is required")
     private String fullName;
     @NotNull(message = "Password is required")
+    @Length(min = 8, max = 32)
     private String password;
     @NotNull(message = "Date of birth is required")
     private String dateOfBirth;
@@ -22,6 +24,8 @@ public class AccountDTO implements Serializable {
     private int gender;
     @NotNull(message = "District is required")
     private int districtId;
+    @Pattern(regexp = "[0-9]+")
+    @Length(min = 10, max = 11)
     @NotNull(message = "Phone is required")
     private String phone;
     @Pattern( regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"

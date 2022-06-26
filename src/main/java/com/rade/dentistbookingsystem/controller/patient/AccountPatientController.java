@@ -7,6 +7,7 @@ import com.rade.dentistbookingsystem.services.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,7 +26,7 @@ public class AccountPatientController {
     }
 
     @PostMapping("profile/edit")
-    public ResponseEntity<?> edit(@RequestBody AccountDTO accountDTO) {
+    public ResponseEntity<?> edit(@Validated @RequestBody AccountDTO accountDTO) {
         try {
             return ResponseEntity.ok(accountService.edit(accountDTO));
         } catch (Exception e) {

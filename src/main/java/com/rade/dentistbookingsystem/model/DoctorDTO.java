@@ -22,6 +22,7 @@ public class DoctorDTO implements Serializable {
     @NotEmpty(message = "Description of doctor is require")
     private String description;
 
+    @NotNull
     private String url;
 
     @NotNull(message = "Branch is require")

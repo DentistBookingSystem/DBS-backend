@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class AccountAdminController {
 
 
     @PostMapping("register")
-    public ResponseEntity<?> register(@RequestBody AccountDTO accountDTO) throws Exception {
+    public ResponseEntity<?> register( @Validated @RequestBody AccountDTO accountDTO) throws Exception {
 
             final int ROLE_STAFF = 3;
             Account account = accountService.registerNewUserAccount(accountDTO, ROLE_STAFF);
@@ -50,7 +51,7 @@ public class AccountAdminController {
     }
 
     @PostMapping("profile/edit")
-    public ResponseEntity<?> editStaff(@RequestBody AccountDTO accountDTO) throws Exception {
+    public ResponseEntity<?> editStaff(@Validated  @RequestBody AccountDTO accountDTO) throws Exception {
         Account account = accountService.edit(accountDTO);
         if(account != null)
             return ResponseEntity.ok("Edit successfully");

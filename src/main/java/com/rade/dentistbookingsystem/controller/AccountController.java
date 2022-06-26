@@ -6,6 +6,7 @@ import com.rade.dentistbookingsystem.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -18,7 +19,7 @@ public class AccountController {
 
 
     @PostMapping("registration")
-    public ResponseEntity<?> register(@RequestBody AccountDTO accountDTO) {
+    public ResponseEntity<?> register( @Validated  @RequestBody AccountDTO accountDTO) {
         try {
             final int ROLE_USER = 2;
             accountService.registerNewUserAccount(accountDTO, ROLE_USER);
