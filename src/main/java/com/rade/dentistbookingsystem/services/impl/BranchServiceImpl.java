@@ -12,6 +12,7 @@ import com.rade.dentistbookingsystem.services.DistrictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ValidationException;
@@ -32,6 +33,11 @@ public class BranchServiceImpl implements BranchService {
 
     public BranchServiceImpl(BranchRepo branchRepo) {
         this.branchRepo = branchRepo;
+    }
+
+    @Override
+    public List<Branch> findAllWithSort(String filed) {
+        return branchRepo.findAll(Sort.by(Sort.Direction.DESC, filed));
     }
 
     public List<Branch> findAll() {

@@ -17,6 +17,8 @@ public interface BranchService {
 
     boolean existsById(Integer id);
 
+    List<Branch> findAllWithSort(String filed);
+
     List<Branch> findAll();
 
     Page<Branch> findAll(Pageable pageable);

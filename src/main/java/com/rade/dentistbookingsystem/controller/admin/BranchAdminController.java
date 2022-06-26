@@ -64,8 +64,14 @@ public class BranchAdminController {
 
 
     @GetMapping("list")
-    public List<Branch> ListBranch() {
+    public List<Branch> getListBranch() {
         return branchService.findAll();
+    }
+
+
+    @GetMapping("list/{field}")
+    public List<Branch> getListBranchWithSorting(@PathVariable String field) {
+        return branchService.findAllWithSort(field);
     }
 
     @PostMapping("add")

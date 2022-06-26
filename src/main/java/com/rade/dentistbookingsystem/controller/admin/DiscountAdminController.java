@@ -12,6 +12,9 @@ import com.rade.dentistbookingsystem.services.NotificationService;
 import com.rade.dentistbookingsystem.services.ServiceSv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,9 +39,11 @@ public class DiscountAdminController {
     @Autowired
     NotificationService notificationService;
 
-    @GetMapping("page")
-    public Page<Discount> discountListPage() {
-        return discount.findAllWithPagination();
+    @GetMapping("page/{field}")
+    public Page<Discount> discountListPage(@PathVariable String field) {
+        Pageable pageable = PageRequest.of(1,5, Sort.by(field));
+
+        return discount.findAll(pageable);
     }
 
     @GetMapping("list")
