@@ -44,6 +44,10 @@ public class BranchAdminController {
         } else throw new NotFoundException("Branch is not found ");
 
     }
+    @GetMapping("filter")
+    public List<Branch> filterByStatus(@RequestParam int status ){
+            return branchService.findByStatus(status);
+    }
 
     @PostMapping(value = "add-image")
     public ResponseEntity<?> addBranchImg(@RequestParam MultipartFile url) throws Exception {
@@ -101,7 +105,6 @@ public class BranchAdminController {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
 
-
-
     }
+
 }

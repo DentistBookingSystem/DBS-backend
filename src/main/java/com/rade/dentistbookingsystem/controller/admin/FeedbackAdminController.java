@@ -25,7 +25,7 @@ public class FeedbackAdminController {
     NotificationService notificationService;
     @Autowired
     AccountService accountService;
-    @PostMapping("")
+    @PostMapping("/filter")
     public List<Feedback> getFeedbackPage(@RequestBody PageForFeedback pageForFeedback){
         int page = pageForFeedback.getPage() - 1;
         Pageable pageable = PageRequest.of(page, 3, Sort.by("id").descending());
@@ -35,6 +35,11 @@ public class FeedbackAdminController {
                 pageForFeedback.getServiceId(),
                 pageForFeedback.getTime(),
                 pageable);
+    }
+
+    @PostMapping("/list")
+    public List<Feedback> getListFeedback(){
+        return feedbackService.findAllWithSort();
     }
 
     @PostMapping("/approve")

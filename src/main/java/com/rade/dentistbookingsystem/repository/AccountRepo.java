@@ -45,4 +45,9 @@ public interface AccountRepo extends JpaRepository<Account, Integer> {
                     "WHERE id = :id",
             nativeQuery = true)
     void checkAccount(@Param("status") Integer status, @Param("id") Integer id);
+
+    @Query(
+            value = "SELECT a from Account a where a.role.id = ?1 Or a.role.id = ?2")
+    List<Account> findAllStaffAndUser(int staff, int customer);
 }
+

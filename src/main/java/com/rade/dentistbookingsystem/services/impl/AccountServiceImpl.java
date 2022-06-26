@@ -113,4 +113,9 @@ public class AccountServiceImpl implements AccountService {
     public void checkAccount(Integer status, Integer id) {
         accountRepo.checkAccount(status, id);
     }
+
+    @Override
+    public List<Account> getListStaffAndUser(){
+        return accountRepo.findAllStaffAndUser(3,2);
+    }
 }

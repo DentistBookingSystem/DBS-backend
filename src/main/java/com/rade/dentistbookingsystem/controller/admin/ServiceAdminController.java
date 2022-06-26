@@ -37,6 +37,10 @@ public class ServiceAdminController {
         return serviceSv.findById(id);
     }
 
+    @GetMapping("filter")
+    public List<Service> filter(@RequestBody ServiceDTO serviceDTO){
+        return serviceSv.filterService(serviceDTO);
+    }
 
     @PostMapping(value = "add-image")
     public ResponseEntity<?> addServiceImg(@RequestParam MultipartFile url) throws Exception {

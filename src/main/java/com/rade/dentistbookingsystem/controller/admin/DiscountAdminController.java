@@ -47,8 +47,13 @@ public class DiscountAdminController {
     }
 
     @GetMapping("list")
-    public List<Discount> discountList() {
+    public List<Discount> findAllDiscountList() {
         return discount.findAll();
+    }
+
+    @GetMapping("list/{field}")
+    public List<Discount> findAllDiscountListWithSort(@PathVariable String field) {
+        return discount.findAllWithSort(field);
     }
 
 //    @GetMapping("list")

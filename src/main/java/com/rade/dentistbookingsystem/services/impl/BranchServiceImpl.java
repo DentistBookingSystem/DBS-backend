@@ -48,7 +48,6 @@ public class BranchServiceImpl implements BranchService {
         return branchRepo.findAll(pageable);
     }
 
-
     @Override
     public <S extends Branch> S save(S entity) {
         return branchRepo.save(entity);

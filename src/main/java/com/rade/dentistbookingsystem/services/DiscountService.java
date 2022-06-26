@@ -16,6 +16,8 @@ public interface DiscountService {
 
     List<Discount> findAll();
 
+    List<Discount> findAllWithSort(String field);
+
     Page<Discount> findAll(Pageable pageable);
 
     Page<Discount> findAllWithPagination();

@@ -1,6 +1,7 @@
 package com.rade.dentistbookingsystem.services.impl;
 
 import com.rade.dentistbookingsystem.componentform.ServiceDiscountComponent;
+import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.domain.ServiceType;
 import com.rade.dentistbookingsystem.exceptions.DuplicateRecordException;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 
 import javax.validation.ValidationException;
 import java.util.ArrayList;
@@ -165,5 +167,12 @@ public class ServiceSvImpl implements ServiceSv {
     @Override
     public List<Service> findByAppointmentId(Integer appointmentId) {
         return serviceRepo.findByAppointmentId(appointmentId);
+    }
+
+
+    @Override
+    public List<Service> filterService(ServiceDTO serviceDTO) {
+
+        return serviceRepo.filterService(serviceDTO.getId(), serviceDTO.getName(), Integer.valueOf(serviceDTO.getStatus()), serviceDTO.getMinPrice(), serviceDTO.getMaxPrice());
     }
 }

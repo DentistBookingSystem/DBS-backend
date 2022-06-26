@@ -12,6 +12,8 @@ public interface FeedbackService {
 
     Page<Feedback> findAll(Pageable pageable);
 
+    List<Feedback> findAllWithSort();
+
     //
     Feedback check(Integer status, Integer id);
 //

@@ -31,4 +31,10 @@ public class AccountAdminController {
     }
 
 
+    @GetMapping("list")
+   public List<Account> getAllUserAndStaff(){
+           return  accountService.getListStaffAndUser();
+   }
+
+
 }

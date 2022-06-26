@@ -26,4 +26,7 @@ public interface AccountService {
     Account findByPhone(String phone);
 
     void checkAccount(Integer status, Integer id);
+
+
+    List<Account> getListStaffAndUser();
 }

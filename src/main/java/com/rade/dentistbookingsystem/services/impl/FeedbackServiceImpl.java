@@ -11,6 +11,7 @@ import com.rade.dentistbookingsystem.services.ServiceSv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -49,6 +50,11 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     public <S extends Feedback> S save(S entity) {
         return feedBackRepo.save(entity);
+    }
+
+    @Override
+    public List<Feedback> findAllWithSort(){
+        return feedBackRepo.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     @Override
