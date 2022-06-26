@@ -26,23 +26,12 @@ public class FeedbackAdminController {
     NotificationService notificationService;
     @Autowired
     AccountService accountService;
-    @PostMapping("/filter")
-    public List<Feedback> getFeedbackPage(@RequestBody PageForFeedback pageForFeedback){
-        int page = pageForFeedback.getPage() - 1;
-        Pageable pageable = PageRequest.of(page, 3, Sort.by("id").descending());
-        return feedbackService.filterFeedback(
-                pageForFeedback.getPhone(),
-                pageForFeedback.getStatus(),
-                pageForFeedback.getServiceId(),
-                pageForFeedback.getTime(),
-                pageable);
-    }
 
     @PostMapping("/list")
     public List<Feedback> getListFeedback(){
         return feedbackService.findAllWithSort();
     }
-    @GetMapping("filter")
+    @PostMapping("filter")
     public List<Feedback> filterFeedbackForAdmin(@RequestBody PageForFeedback pageForFeedback){
         return feedbackService.filterFeedbackForAdmin(pageForFeedback.getPhone(),
                 pageForFeedback.getStatus(),
