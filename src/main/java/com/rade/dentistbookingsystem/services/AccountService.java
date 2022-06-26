@@ -28,5 +28,5 @@ public interface AccountService {
     void checkAccount(Integer status, Integer id);
 
 
-    List<Account> getListStaffAndUser();
+    List<Account> getAccountList(int statusId, short status);
 }

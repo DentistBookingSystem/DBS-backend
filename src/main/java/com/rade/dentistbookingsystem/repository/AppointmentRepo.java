@@ -132,15 +132,15 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "(a.phone LIKE CONCAT('%',:phone,'%') OR :phone IS NULL OR :phone = '') AND " +
                     "(Appointment.branch_id = :branchId OR :branchId = 0) AND " +
                     "(Appointment.doctor_id = :doctorId OR :doctorId = 0) AND " +
-                    "(ad.service_id = :serviceId OR :serviceId = 0)",
+                    "(ad.service_id = :serviceId OR :serviceId = 0) " +
+                    "ORDER BY Appointment.id DESC",
             nativeQuery = true)
     List<Appointment> filterAppointment(@Param("status") List<Integer> status,
                                         @Param("date") String date,
                                         @Param("phone") String phone,
                                         @Param("branchId") Integer branchId,
                                         @Param("doctorId") Integer doctorId,
-                                        @Param("serviceId") Integer serviceId,
-                                        Pageable pageable);
+                                        @Param("serviceId") Integer serviceId);
 
     @Query(value =
             "SELECT DISTINCT Appointment.* " +
@@ -152,14 +152,14 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "(a.phone LIKE CONCAT('%',:phone,'%') OR :phone IS NULL OR :phone = '') AND " +
                     "(Appointment.branch_id = :branchId OR :branchId = 0) AND " +
                     "(Appointment.doctor_id = :doctorId OR :doctorId = 0) AND " +
-                    "(ad.service_id = :serviceId OR :serviceId = 0)",
+                    "(ad.service_id = :serviceId OR :serviceId = 0) " +
+                    "ORDER BY Appointment.id DESC",
             nativeQuery = true)
     List<Appointment> filterAppointment(@Param("date") String date,
                                         @Param("phone") String phone,
                                         @Param("branchId") Integer branchId,
                                         @Param("doctorId") Integer doctorId,
-                                        @Param("serviceId") Integer serviceId,
-                                        Pageable pageable);
+                                        @Param("serviceId") Integer serviceId);
 
     //Appointment findByAccountIdAndAppointmentDateAndStatusIn(Integer accountId, Date date, int[] status);
 

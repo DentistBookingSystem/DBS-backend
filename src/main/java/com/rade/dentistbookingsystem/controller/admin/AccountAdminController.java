@@ -31,10 +31,10 @@ public class AccountAdminController {
     }
 
 
-    @GetMapping("list")
-   public List<Account> getAllUserAndStaff(){
-           return  accountService.getListStaffAndUser();
-   }
+    @GetMapping("list/{roleId}/{status}")
+    public List<Account> getAccountList(@PathVariable(name = "roleId") int roleId, @PathVariable(name = "status") short status){
+           return  accountService.getAccountList(roleId, status);
+    }
 
 
 }

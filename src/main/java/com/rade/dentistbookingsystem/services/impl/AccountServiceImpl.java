@@ -115,7 +115,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> getListStaffAndUser(){
-        return accountRepo.findAllStaffAndUser(3,2);
+    public List<Account> getAccountList(int roleId, short status){
+        return accountRepo.filterAccount(roleId, status);
     }
 }

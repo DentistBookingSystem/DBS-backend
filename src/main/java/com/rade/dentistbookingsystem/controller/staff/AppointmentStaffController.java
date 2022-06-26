@@ -38,11 +38,10 @@ public class AppointmentStaffController {
     @Autowired
     AccountService accountService;
 
-    @PostMapping("filter/{i}")
-    public List<Appointment> findAppointmentByMakingDateAndStatus(@RequestBody AppointmentComponentForFilter appointmentComponentForFilter, @PathVariable int i) {
+    @PostMapping("filter")
+    public List<Appointment> findAppointmentByMakingDateAndStatus(@RequestBody AppointmentComponentForFilter appointmentComponentForFilter) {
         try {
-            Pageable pageable = PageRequest.of(i - 1, 3, Sort.by("id").ascending());
-            return appointmentService.filterAppointment(appointmentComponentForFilter, pageable);
+            return appointmentService.filterAppointment(appointmentComponentForFilter);
         } catch (Exception e) {
             e.printStackTrace();
         }

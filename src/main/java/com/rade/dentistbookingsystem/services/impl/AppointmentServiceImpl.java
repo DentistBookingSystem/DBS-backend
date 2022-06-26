@@ -282,7 +282,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> filterAppointment(AppointmentComponentForFilter appointmentComponentForFilter, Pageable pageable) throws ParseException {
+    public List<Appointment> filterAppointment(AppointmentComponentForFilter appointmentComponentForFilter) throws ParseException {
         List<Integer> status = null;
         if (appointmentComponentForFilter.getStatus() != null && appointmentComponentForFilter.getStatus().length != 0){
             status = Arrays.asList(appointmentComponentForFilter.getStatus());
@@ -292,8 +292,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                     appointmentComponentForFilter.getPhone(),
                     appointmentComponentForFilter.getBranchId(),
                     appointmentComponentForFilter.getDoctorId(),
-                    appointmentComponentForFilter.getServiceId(),
-                    pageable
+                    appointmentComponentForFilter.getServiceId()
             );
         }
         else{
@@ -302,8 +301,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                     appointmentComponentForFilter.getPhone(),
                     appointmentComponentForFilter.getBranchId(),
                     appointmentComponentForFilter.getDoctorId(),
-                    appointmentComponentForFilter.getServiceId(),
-                    pageable
+                    appointmentComponentForFilter.getServiceId()
             );
         }
 
