@@ -47,7 +47,8 @@ public interface AccountRepo extends JpaRepository<Account, Integer> {
     void checkAccount(@Param("status") Integer status, @Param("id") Integer id);
 
     @Query(
-            value = "SELECT a from Account a where a.role.id = ?1 and a.status =?2 ORDER BY a.id DESC")
-    List<Account> filterAccount(int roleId, short status);
+            value = "SELECT a from Account a where a.role.id = ?1 and a.status =?2 AND " +
+                    "(a.phone LIKE ?3 OR ?3 IS NULL OR ?3 = '') ORDER BY a.id DESC")
+    List<Account> filterAccount(int roleId, short status, String phone);
 }
 

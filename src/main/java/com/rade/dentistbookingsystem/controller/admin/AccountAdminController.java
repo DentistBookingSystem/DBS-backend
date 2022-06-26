@@ -32,9 +32,10 @@ public class AccountAdminController {
     }
 
 
-    @GetMapping("list/{roleId}/{status}")
-    public List<Account> getAccountList(@PathVariable(name = "roleId") int roleId, @PathVariable(name = "status") short status){
-           return  accountService.getAccountList(roleId, status);
+    @GetMapping("list/{roleId}/{status}/phone={phone}")
+    public List<Account> getAccountList(@PathVariable(name = "roleId") int roleId, @PathVariable(name = "status") short status, @PathVariable(name = "phone") String phone){
+        if(phone != null && phone.length() > 0) phone = "%" + phone + "%";
+           return  accountService.getAccountList(roleId, status, phone);
     }
 
 
