@@ -40,26 +40,22 @@ public class AccountAdminController {
     }
 
 
-    @PostMapping("registration")
-    public ResponseEntity<?> register(@RequestBody AccountDTO accountDTO) {
-        try {
+    @PostMapping("register")
+    public ResponseEntity<?> register(@RequestBody AccountDTO accountDTO) throws Exception {
+
             final int ROLE_STAFF = 3;
-            accountService.registerNewUserAccount(accountDTO, ROLE_STAFF);
-            return ResponseEntity.ok("Register successfully");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            Account account = accountService.registerNewUserAccount(accountDTO, ROLE_STAFF);
+            if(account != null)
+                return ResponseEntity.ok("Register successfully");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not register");
     }
 
     @PostMapping("profile/edit")
-    public ResponseEntity<?> editStaff(@RequestBody AccountDTO accountDTO) {
-        try {
-            return ResponseEntity.ok(accountService.edit(accountDTO));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    public ResponseEntity<?> editStaff(@RequestBody AccountDTO accountDTO) throws Exception {
+        Account account = accountService.edit(accountDTO);
+        if(account != null)
+            return ResponseEntity.ok("Edit successfully");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not Edit");
     }
 
 }
