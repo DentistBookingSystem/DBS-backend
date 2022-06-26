@@ -27,7 +27,7 @@ public class Feedback implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date time;
 
-    @Column(nullable = false, columnDefinition = "nvarchar(MAX)")
+    @Column(nullable = false, columnDefinition = "nvarchar(150)")
     private String content;
 
     @Column(nullable = false)

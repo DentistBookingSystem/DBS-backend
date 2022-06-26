@@ -50,7 +50,7 @@ public class FeedbackPatientController {
             String content = feedbackAndPhone.getFeedbackDTO().getContent();
             if(!(appointment.getStatus()==1))
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-            if(!(content != null && !content.isEmpty()))
+            if(!(content != null && !content.isEmpty() && content.length() <= 150))
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
             Feedback feedback = feedbackService.save(feedbackAndPhone.getFeedbackDTO());
             if (feedback != null){
