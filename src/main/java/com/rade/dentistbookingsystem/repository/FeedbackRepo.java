@@ -19,7 +19,7 @@ public interface FeedbackRepo extends JpaRepository<Feedback, Integer> {
                     "(ac.phone LIKE CONCAT('%',:phone,'%') OR :phone IS NULL OR :phone = '' AND \n" +
                     "(Feedback.status = :status OR :status IS NULL) AND \n" +
                     "(ad.service_id = :service_id OR :service_id = 0) AND \n" +
-                    "(DATEDIFF(day, Feedback.time, :time) = 0 OR :time IS NULL) " +
+                    "(DATEDIFF(day, Feedback.time, :time) = 0 OR :time IS NULL)) " +
                     "GROUP BY Feedback.id, Feedback.content, Feedback.appointment_id, Feedback.status, Feedback.time",
             nativeQuery = true)
     List<Feedback> filterFeedback(@Param("phone") String phone,
