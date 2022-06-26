@@ -18,10 +18,13 @@ public interface NotificationRepo extends JpaRepository<Notification, Integer> {
     List<Notification> findByAccountId(@Param("account_id") Integer accountId, Pageable pageable);
 
     @Query(value =
-            "SELECT Notification.* " +
+            "SELECT TOP 1 Notification.* " +
                     "FROM Notification " +
                     "WHERE (account_id = :account_id OR account_id = NULL) AND " +
+                    "date = CAST(:date) AND " +
                     "description = :description", nativeQuery = true)
-    Notification findDuplicateDescriptionByAccountId(@Param("account_id") Integer accountId, @Param("description") String description);
+    Notification findDuplicateDescriptionByAccountId(@Param("account_id") Integer accountId,
+                                                     @Param("description") String description,
+                                                     @Param("date") String date);
 //    boolean existsBy
 }
