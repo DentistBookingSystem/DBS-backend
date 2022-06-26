@@ -13,7 +13,7 @@ public interface AccountService {
 
     <S extends Account> S save(S entity);
 
-    Account registerNewUserAccount(AccountDTO accountDTO) throws Exception;
+    Account registerNewUserAccount(AccountDTO accountDTO, int role) throws Exception;
 
     Account view(String phone);
 

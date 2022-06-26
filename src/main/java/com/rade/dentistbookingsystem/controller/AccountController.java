@@ -20,7 +20,8 @@ public class AccountController {
     @PostMapping("registration")
     public ResponseEntity<?> register(@RequestBody AccountDTO accountDTO) {
         try {
-            accountService.registerNewUserAccount(accountDTO);
+            final int ROLE_USER = 2;
+            accountService.registerNewUserAccount(accountDTO, ROLE_USER);
             return ResponseEntity.ok("Register successfully");
         } catch (Exception e) {
             e.printStackTrace();

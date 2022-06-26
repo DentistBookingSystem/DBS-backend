@@ -43,9 +43,9 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public Account registerNewUserAccount(AccountDTO accountDTO) throws Exception {
+    public Account registerNewUserAccount(AccountDTO accountDTO, int role) throws Exception {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        int roleUserId = 2;
+
         if (accountRepo.findByPhone(accountDTO.getPhone()) != null) {
             throw new Exception(
                     accountDTO.getPhone() + "is already exist");
@@ -54,7 +54,7 @@ public class AccountServiceImpl implements AccountService {
         account.setFullName(accountDTO.getFullName());
         account.setPhone(accountDTO.getPhone());
         account.setDateOfBirth(dateFormat.parse(accountDTO.getDateOfBirth()));
-        account.setRole(roleRepo.getById(roleUserId));
+        account.setRole(roleRepo.getById(role));
         account.setStatus((short) 1);
         account.setEmail(accountDTO.getEmail());
         account.setPassword(bCryptPasswordEncoder.encode(accountDTO.getPassword()));
@@ -76,7 +76,7 @@ public class AccountServiceImpl implements AccountService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         Account account = accountRepo.findByPhone(accountDTO.getPhone());
-        if (account == null) {
+        if (account == null || account.getRole().getId() == 1) {
             throw new Exception("Can not edit!! please try again");
         } else {
             account.setFullName(accountDTO.getFullName());
