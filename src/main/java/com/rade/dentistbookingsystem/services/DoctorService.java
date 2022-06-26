@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.services;
 
+import com.rade.dentistbookingsystem.domain.Discount;
 import com.rade.dentistbookingsystem.domain.Doctor;
 import com.rade.dentistbookingsystem.model.DoctorDTO;
 
@@ -17,6 +18,10 @@ public interface DoctorService {
 
     // Use for admin
     List<Doctor> findAll();
+
+    List<Doctor> findAllWithSort(String field);
+
+    List<Doctor> filterDoctor(int status, String name, int branchId);
 
     Doctor addDoctor(DoctorDTO doctorDTO);
 

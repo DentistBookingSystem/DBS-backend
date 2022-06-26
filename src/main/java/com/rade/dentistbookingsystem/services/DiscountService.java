@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import javax.validation.Valid;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,8 @@ public interface DiscountService {
     Discount editDiscount(DiscountDTO discountDTO) throws ParseException;
 
     Discount deleteDiscount(int discountId);
+
+    List<Discount> filterDiscount(int status, String name, Date endDate, int serviceId);
 
 
 }

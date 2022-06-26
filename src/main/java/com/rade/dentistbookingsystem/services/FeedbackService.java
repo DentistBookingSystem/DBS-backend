@@ -21,6 +21,8 @@ public interface FeedbackService {
 
     List<Feedback> filterFeedback(String phone, Integer status, Integer serviceId, String time, Pageable pageable);
 
+    List<Feedback> filterFeedbackForAdmin(String phone, Integer status, Integer serviceId, String time);
+
     boolean checkAccountToBanByFeedback(int accountId);
 
     Feedback updateFeedbackStatus(int feedbackId, int feedbackStatus);

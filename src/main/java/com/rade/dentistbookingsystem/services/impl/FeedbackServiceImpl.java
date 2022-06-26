@@ -74,6 +74,10 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
+    public List<Feedback> filterFeedbackForAdmin(String phone, Integer status, Integer serviceId, String time){
+        return feedBackRepo.filterFeedbackForAdmin(phone, status, serviceId, time);
+    }
+    @Override
     public boolean checkAccountToBanByFeedback(int accountId) {
         return feedBackRepo.checkAccountToBanByFeedback(accountId);
     }

@@ -28,6 +28,21 @@ public interface FeedbackRepo extends JpaRepository<Feedback, Integer> {
                                   @Param("time") String time,
                                   Pageable pageable);
 
+    @Query(value =
+            "SELECT Feedback.* \n" +
+                    "FROM Feedback, Appointment ap, Account ac, Appointment_Detail ad \n" +
+                    "WHERE Feedback.appointment_id = ap.id AND ap.account_id = ac.id AND ap.id = ad.appointment_id AND \n" +
+                    "(ac.phone LIKE '%:phone%'  OR :phone IS NULL) AND \n" +
+                    "(Feedback.status = :status OR :status IS NULL) AND \n" +
+                    "(ad.service_id = :service_id OR :service_id = 0) AND \n" +
+                    "(DATEDIFF(day, Feedback.time, :time) = 0 OR :time IS NULL) " +
+                    "GROUP BY Feedback.id, Feedback.content, Feedback.appointment_id, Feedback.status, Feedback.time",
+            nativeQuery = true)
+    List<Feedback> filterFeedbackForAdmin(@Param("phone") String phone,
+                                  @Param("status") Integer status,
+                                  @Param("service_id") Integer serviceId,
+                                  @Param("time") String time);
+
 @Query(value =
         "SELECT " +
         "CASE WHEN ( " +

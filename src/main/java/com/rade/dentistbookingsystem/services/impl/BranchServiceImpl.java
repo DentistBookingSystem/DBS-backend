@@ -36,8 +36,8 @@ public class BranchServiceImpl implements BranchService {
     }
 
     @Override
-    public List<Branch> findAllWithSort(String filed) {
-        return branchRepo.findAll(Sort.by(Sort.Direction.DESC, filed));
+    public List<Branch> findAllWithSort(String field) {
+        return branchRepo.findAll(Sort.by(Sort.Direction.DESC, field));
     }
 
     public List<Branch> findAll() {

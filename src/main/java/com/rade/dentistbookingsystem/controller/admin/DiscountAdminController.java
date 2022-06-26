@@ -1,6 +1,7 @@
 package com.rade.dentistbookingsystem.controller.admin;
 
 
+import com.rade.dentistbookingsystem.componentform.DiscountFilter;
 import com.rade.dentistbookingsystem.componentform.DiscountServiceComponentAdmin;
 import com.rade.dentistbookingsystem.componentform.ServiceDiscountComponent;
 import com.rade.dentistbookingsystem.domain.Discount;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ValidationException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 @CrossOrigin
@@ -65,6 +68,17 @@ public class DiscountAdminController {
 //            }
 //        }
 //    }
+
+    @GetMapping("filter")
+    public List<Discount> filterDiscount(@RequestBody DiscountFilter filter) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date endDate = null;
+        if(filter.getEndDate() != null){
+            endDate = sdf.parse(filter.getEndDate());
+        }
+
+        return discount.filterDiscount(filter.getStatus(), filter.getName(),endDate,filter.getServiceId());
+    }
 
     @GetMapping("{id}")
     public Optional<Discount> getDiscount(@PathVariable int id) {

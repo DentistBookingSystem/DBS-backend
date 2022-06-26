@@ -1,6 +1,7 @@
 package com.rade.dentistbookingsystem.controller.admin;
 
 
+import com.rade.dentistbookingsystem.componentform.DoctorFilter;
 import com.rade.dentistbookingsystem.domain.Doctor;
 import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.DoctorDTO;
@@ -53,6 +54,15 @@ public class DoctorAdminController {
         return null;
     }
 
+    @GetMapping("filter")
+    public List<Doctor> filterDoctor(@RequestBody DoctorFilter doctorFilter){
+        return doctorService.filterDoctor(doctorFilter.getStatus(), doctorFilter.getName(), doctorFilter.getBranch_Id());
+    }
+
+    @GetMapping("list/sort/{field}")
+    public List<Doctor> viewSortingListDoctor(@PathVariable String field){
+        return doctorService.findAllWithSort(field);
+    }
     @PostMapping(value = "add-image")
     public ResponseEntity<?> addDoctorImg(@RequestParam MultipartFile url) throws Exception {
         String id = imageService.validateAndDownload(url);

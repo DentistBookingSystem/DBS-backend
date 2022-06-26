@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +53,10 @@ public class DiscountServiceImpl implements DiscountService {
         return discountRepo.findAllByStatus(1, pageable);
     }
 
-
+   @Override
+    public List<Discount> filterDiscount(int status, String name, Date endDate, int serviceId) {
+        return discountRepo.filterDiscount(status, name, endDate, serviceId);
+    }
 
     @Override
     public Page<Discount> findAllWithPagination() {

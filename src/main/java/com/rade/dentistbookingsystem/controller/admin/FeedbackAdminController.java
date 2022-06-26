@@ -2,6 +2,7 @@ package com.rade.dentistbookingsystem.controller.admin;
 
 import com.rade.dentistbookingsystem.componentform.PageForFeedback;
 import com.rade.dentistbookingsystem.domain.Feedback;
+import com.rade.dentistbookingsystem.model.FeedbackDTO;
 import com.rade.dentistbookingsystem.services.AccountService;
 import com.rade.dentistbookingsystem.services.FeedbackService;
 import com.rade.dentistbookingsystem.services.NotificationService;
@@ -41,6 +42,14 @@ public class FeedbackAdminController {
     public List<Feedback> getListFeedback(){
         return feedbackService.findAllWithSort();
     }
+    @GetMapping("filter")
+    public List<Feedback> filterFeedbackForAdmin(@RequestBody PageForFeedback pageForFeedback){
+        return feedbackService.filterFeedbackForAdmin(pageForFeedback.getPhone(),
+                pageForFeedback.getStatus(),
+                pageForFeedback.getServiceId(),
+                pageForFeedback.getTime());
+    }
+
 
     @PostMapping("/approve")
     @Transactional(rollbackFor = Exception.class)
