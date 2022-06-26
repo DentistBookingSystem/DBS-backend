@@ -28,10 +28,6 @@ public class AccountAdminController {
         return accountService.findViolatedAccountsAndViolationTimes(pageable);
     }
 
-    @GetMapping("accountDetail/{phone}")
-    public Account findByPhone(@PathVariable String phone) {
-        return accountService.view(phone);
-    }
 
 
     @GetMapping("list/{roleId}/{status}")
