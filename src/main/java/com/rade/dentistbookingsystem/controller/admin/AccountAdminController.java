@@ -57,8 +57,8 @@ public class AccountAdminController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not Edit");
     }
 
-    @GetMapping("remove")
-    public ResponseEntity<?> removeStaff(@RequestBody Integer id){
+    @GetMapping("remove/{id}")
+    public ResponseEntity<?> removeStaff(@PathVariable Integer id){
         try {
             Account account = accountService.findId(id);
             if(account.getRole().getId() == 3) accountService.checkAccount(2, id);
