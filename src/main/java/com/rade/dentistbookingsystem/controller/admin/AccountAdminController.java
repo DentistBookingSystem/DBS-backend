@@ -60,7 +60,8 @@ public class AccountAdminController {
     @GetMapping("remove")
     public ResponseEntity<?> removeStaff(@RequestBody Integer id){
         try {
-            accountService.checkAccount(2, id);
+            Account account = accountService.findId(id);
+            if(account.getRole().getId() == 3) accountService.checkAccount(2, id);
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
