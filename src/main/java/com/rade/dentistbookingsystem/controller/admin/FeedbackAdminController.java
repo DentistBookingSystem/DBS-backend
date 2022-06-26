@@ -27,7 +27,7 @@ public class FeedbackAdminController {
     @Autowired
     AccountService accountService;
 
-    @PostMapping("/list")
+    @PostMapping("list")
     public List<Feedback> getListFeedback(){
         return feedbackService.findAllWithSort();
     }
@@ -40,9 +40,9 @@ public class FeedbackAdminController {
     }
 
 
-    @PostMapping("/approve")
+    @PostMapping("approve/{id}")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> approveFeedback(@RequestParam int feedbackId) {
+    public ResponseEntity<?> approveFeedback(@PathVariable int feedbackId) {
         Feedback feedback = feedbackService.updateFeedbackStatus(feedbackId, 1);
         notificationService.createNotificationForApprovingFeedbackFromAdmin(feedback);
         return ResponseEntity.ok().build();
@@ -50,9 +50,9 @@ public class FeedbackAdminController {
 
     }
 
-    @PostMapping("/disapprove")
+    @PostMapping("disapprove/{id}")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> disapproveFeedback(@RequestParam int feedbackId) {
+    public ResponseEntity<?> disapproveFeedback(@PathVariable int feedbackId) {
         Feedback feedback = feedbackService.updateFeedbackStatus(feedbackId, 2);
         notificationService.createNotificationForDisapprovingFeedbackFromAdmin(feedback);
         int accountId = feedback.getAppointment().getAccount().getId();
