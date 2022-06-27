@@ -4,6 +4,7 @@ import com.rade.dentistbookingsystem.domain.Branch;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,6 +33,14 @@ public interface BranchRepo extends JpaRepository<Branch,Integer> {
     public List<Branch> findByStatus(int status);
 
     List<Branch> findByNameIgnoreCase(String name);
+
+
+
+    @Query(value = "SELECT Branch.* FROM Branch WHERE " +
+            "(Branch.name LIKE CONCAT('%', :name, '%') OR :name IS NULL OR :name LIKE '')" +
+            " AND (Branch.district_id = :districtId) OR :districtId = 0 OR :districtId IS NULL) " +
+            " AND(Branch.status = :status) OR :status = 0 OR :status IS NULL)" , nativeQuery = true)
+    List<Branch> filter(@Param("districtId") int districtId, @Param("name") String name, @Param("status") int status);
 
 
 

@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.controller.admin;
 
+import com.rade.dentistbookingsystem.componentform.BranchFilter;
 import com.rade.dentistbookingsystem.domain.Branch;
 import com.rade.dentistbookingsystem.exceptions.DuplicateRecordException;
 import com.rade.dentistbookingsystem.exceptions.NotFoundException;
@@ -45,8 +46,9 @@ public class BranchAdminController {
 
     }
     @GetMapping("filter")
-    public List<Branch> filterByStatus(@RequestParam int status ){
-            return branchService.findByStatus(status);
+    public List<Branch> filterByStatus(@RequestBody BranchFilter branchFilter ){
+
+            return branchService.filter(branchFilter.getStatus(), branchFilter.getName(), branchFilter.getDistrictId());
     }
 
     @PostMapping(value = "add-image")

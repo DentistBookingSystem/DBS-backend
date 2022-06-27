@@ -46,4 +46,6 @@ public interface BranchService {
     List<Branch> getListForChoosing(JsonPhone jsonPhone);
 
     List<Integer> getRecommendList(JsonPhone jsonPhone);
+
+    List<Branch> filter(int districtId, String name, int status);
 }

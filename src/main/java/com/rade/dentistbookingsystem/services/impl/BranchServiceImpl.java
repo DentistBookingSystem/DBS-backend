@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ValidationException;
@@ -177,5 +178,10 @@ public class BranchServiceImpl implements BranchService {
             }
         }
         return recommendList;
+    }
+
+    @Override
+    public List<Branch> filter(int districtId, String name, int status){
+        return branchRepo.filter(districtId, name, status);
     }
 }
