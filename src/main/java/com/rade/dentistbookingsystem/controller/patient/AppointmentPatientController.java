@@ -119,7 +119,7 @@ public class AppointmentPatientController {
             Appointment appointment = appointmentService.findId(jsonAppointment.getAppointmentDTO().getId());
             if (!(appointment != null && appointment.getAccount().getId() == account.getId()))
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); //appointment không tồn tại (chung với tài khoản không khớp với appointment)
-            if(appointment.getStatus() != 0)
+            if(!(appointment.getStatus() == 0 && appointmentService.checkAppointmentToCancel(appointment.getId(), account.getId())))
                 return ResponseEntity.status(HttpStatus.GONE).build(); //appointment phải là đang chờ và chưa được edit
             if (appointmentService.checkValidAndSave(jsonAppointment) != null){
                 return ResponseEntity.ok(appointment);
