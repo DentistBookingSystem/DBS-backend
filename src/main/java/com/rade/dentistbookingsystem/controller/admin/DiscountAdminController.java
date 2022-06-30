@@ -101,7 +101,7 @@ public class DiscountAdminController {
                     discountServiceDTO.setServiceId(serviceList[i]);
                     discountSv.addServiceDiscount(discountServiceDTO);
                 }
-
+                notificationService.newDiscount(tmpDiscount);
 
                 return ResponseEntity.ok(tmpDiscount);
 
