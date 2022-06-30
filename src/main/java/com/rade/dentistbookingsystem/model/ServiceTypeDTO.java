@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ServiceTypeDTO  implements Serializable {
+public class ServiceTypeDTO implements Serializable {
     private int id;
     @NotNull(message = "Service type is required")
     @NotBlank(message = "Service type is required")

@@ -11,34 +11,34 @@ public class StoreOTPList {
     public static int VALID_TIME_FOR_VERIFICATION_AS_SECOND = 120;
     private static ArrayList<StoreOTP> storeOTPList = new ArrayList<>();
 
-    public static StoreOTP getStoredOTP(String phone){
+    public static StoreOTP getStoredOTP(String phone) {
         for (StoreOTP tmp : storeOTPList) {
-            if(tmp.getPhone().equals(phone)){
+            if (tmp.getPhone().equals(phone)) {
                 return tmp;
             }
         }
         return null;
     }
 
-    public static boolean verifyOTP(StoreOTP storeOTP, StoreOTP receivedOTP){
+    public static boolean verifyOTP(StoreOTP storeOTP, StoreOTP receivedOTP) {
         return
                 storeOTP.getOtp().equals(receivedOTP.getOtp()) &&
-                TimeUnit.MILLISECONDS.toSeconds(
-                        (new Date()).getTime() - storeOTP.getGeneratedDate().getTime()
-                ) <= VALID_TIME_FOR_VERIFICATION_AS_SECOND;
+                        TimeUnit.MILLISECONDS.toSeconds(
+                                (new Date()).getTime() - storeOTP.getGeneratedDate().getTime()
+                        ) <= VALID_TIME_FOR_VERIFICATION_AS_SECOND;
     }
 
-    public static void storeOTP(StoreOTP storeOTP){
+    public static void storeOTP(StoreOTP storeOTP) {
         boolean exist = false;
         for (StoreOTP tmp : storeOTPList) {
-            if(tmp.getPhone().equals(storeOTP.getPhone())){
+            if (tmp.getPhone().equals(storeOTP.getPhone())) {
                 tmp.setOtp(storeOTP.getOtp());
                 tmp.setGeneratedDate(storeOTP.getGeneratedDate());
                 exist = true;
                 break;
             }
         }
-        if(!exist){
+        if (!exist) {
             storeOTPList.add(storeOTP);
         }
     }

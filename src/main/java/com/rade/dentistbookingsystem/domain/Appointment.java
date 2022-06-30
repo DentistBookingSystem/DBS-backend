@@ -15,7 +15,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "Appointment")
-public class Appointment implements Serializable, Comparable<Appointment>{
+public class Appointment implements Serializable, Comparable<Appointment> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -54,7 +54,7 @@ public class Appointment implements Serializable, Comparable<Appointment>{
     @OneToOne(mappedBy = "appointment")
     private Feedback feedback;
 
-    public Appointment(Account account, Branch branch, Doctor doctor, Date date, String time, int status, Date timeMaking){
+    public Appointment(Account account, Branch branch, Doctor doctor, Date date, String time, int status, Date timeMaking) {
         this.account = account;
         this.branch = branch;
         this.doctor = doctor;

@@ -16,18 +16,19 @@ public class ServiceController {
     ServiceSv serviceSv;
 
     @GetMapping("{serviceTypeId}")
-    public List<Service> getServiceByServiceTypeId(@PathVariable int serviceTypeId){
+    public List<Service> getServiceByServiceTypeId(@PathVariable int serviceTypeId) {
         short available = 1;
         return serviceSv.findByServiceTypeIdAndStatus(serviceTypeId, available);
     }
 
     @GetMapping("discount/{serviceTypeId}")
-    public List<ServiceDiscountComponent> getServiceByServiceTypeIdIncludeDiscount(@PathVariable int serviceTypeId){
+    public List<ServiceDiscountComponent> getServiceByServiceTypeIdIncludeDiscount(@PathVariable int serviceTypeId) {
         short available = 1;
         return serviceSv.findByServiceTypeIdAndStatusIncludeDiscount(serviceTypeId, available);
     }
+
     @GetMapping("")
-    public List<Service> getAllService(){
+    public List<Service> getAllService() {
         short available = 1;
         return serviceSv.findAll();
     }

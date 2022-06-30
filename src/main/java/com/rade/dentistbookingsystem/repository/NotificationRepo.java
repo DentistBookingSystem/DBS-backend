@@ -13,8 +13,8 @@ import java.util.List;
 public interface NotificationRepo extends JpaRepository<Notification, Integer> {
     @Query(value =
             "SELECT Notification.* " +
-            "FROM Notification " +
-            "WHERE (account_id = :account_id OR account_id = NULL)", nativeQuery = true)
+                    "FROM Notification " +
+                    "WHERE (account_id = :account_id OR account_id = NULL)", nativeQuery = true)
     List<Notification> findByAccountId(@Param("account_id") Integer accountId, Pageable pageable);
 
     @Query(value =

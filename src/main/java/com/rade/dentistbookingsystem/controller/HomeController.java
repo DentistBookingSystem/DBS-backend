@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
  * @author Masterkien
  */
 @RestController
@@ -27,8 +26,9 @@ public class HomeController {
     BranchService branchService;
     @Autowired
     ServiceTypeSv serviceTypeSv;
+
     @GetMapping("")
-    public HomeComponent list(Model model){
+    public HomeComponent list(Model model) {
         int available = 1;
         return new HomeComponent(serviceTypeSv.findAll(), branchService.findByStatus(available));
     }

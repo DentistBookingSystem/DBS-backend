@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ValidationException;
@@ -26,11 +25,11 @@ import java.util.Optional;
 
 @Service
 public class BranchServiceImpl implements BranchService {
-    private BranchRepo branchRepo;
     @Autowired
     AccountService accountService;
     @Autowired
     DistrictService districtService;
+    private BranchRepo branchRepo;
 
     public BranchServiceImpl(BranchRepo branchRepo) {
         this.branchRepo = branchRepo;
@@ -127,7 +126,7 @@ public class BranchServiceImpl implements BranchService {
         branchRepo.deleteById(id);
     }
 
-    public Branch findByName(String name){
+    public Branch findByName(String name) {
         return branchRepo.findByName(name);
     }
 
@@ -143,12 +142,13 @@ public class BranchServiceImpl implements BranchService {
     public List<Branch> findByStatus(int status) {
         return branchRepo.findByStatus(status);
     }
+
     @Override
-    public List<Branch> getListForChoosing(JsonPhone jsonPhone){
+    public List<Branch> getListForChoosing(JsonPhone jsonPhone) {
         int available = 1;
         Account account = accountService.findByPhone(jsonPhone.getPhone());
         List<Branch> branchList = new ArrayList<>();
-        if(account == null) return branchList;
+        if (account == null) return branchList;
         branchList.addAll(findByDistrictIdAndStatus(account.getDistrict().getId(), available));
         List<Branch> branchListByProvince = findByProvinceIdAndStatus(account.getDistrict().getProvince().getId(), available);
         branchListByProvince.removeAll(branchList);
@@ -158,21 +158,20 @@ public class BranchServiceImpl implements BranchService {
         branchList.addAll(branchListNotRecommend);
         return branchList;
     }
+
     @Override
-    public List<Integer> getRecommendList(JsonPhone jsonPhone){
+    public List<Integer> getRecommendList(JsonPhone jsonPhone) {
         Account account = accountService.findByPhone(jsonPhone.getPhone());
         List<Integer> recommendList = new ArrayList<>();
-        if(account == null) return recommendList;
+        if (account == null) return recommendList;
         List<Branch> branchList = getListForChoosing(jsonPhone);
         for (Branch branch : branchList) {
-            if (account.getDistrict().getId() == branch.getDistrict().getId()){
+            if (account.getDistrict().getId() == branch.getDistrict().getId()) {
                 recommendList.add(2);
-            }
-            else {
+            } else {
                 if (account.getDistrict().getProvince().getId() == branch.getDistrict().getProvince().getId()) {
                     recommendList.add(1);
-                }
-                else {
+                } else {
                     recommendList.add(0);
                 }
             }
@@ -181,7 +180,7 @@ public class BranchServiceImpl implements BranchService {
     }
 
     @Override
-    public List<Branch> filter(int districtId, String name, int status){
+    public List<Branch> filter(int districtId, String name, int status) {
         return branchRepo.filter(districtId, name, status);
     }
 }

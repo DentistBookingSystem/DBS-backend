@@ -1,13 +1,11 @@
 package com.rade.dentistbookingsystem.repository;
 
-import com.rade.dentistbookingsystem.domain.Discount;
 import com.rade.dentistbookingsystem.domain.Doctor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -23,7 +21,7 @@ public interface DoctorRepo extends JpaRepository<Doctor, Integer> {
     @Query(value =
             "SELECT Distinct  Doctor.* " +
                     "FROM " +
-                    "Doctor "+
+                    "Doctor " +
                     "WHERE " +
                     "(Doctor.name LIKE CONCAT('%',:name,'%') OR :name IS NULL) AND " +
                     "(Doctor.status = :status OR  :status IS NULL OR :status = 0) AND " +

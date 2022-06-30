@@ -55,14 +55,15 @@ public class DoctorAdminController {
     }
 
     @GetMapping("filter")
-    public List<Doctor> filterDoctor(@RequestBody DoctorFilter doctorFilter){
+    public List<Doctor> filterDoctor(@RequestBody DoctorFilter doctorFilter) {
         return doctorService.filterDoctor(doctorFilter.getStatus(), doctorFilter.getName(), doctorFilter.getBranch_Id());
     }
 
     @GetMapping("list/sort/{field}")
-    public List<Doctor> viewSortingListDoctor(@PathVariable String field){
+    public List<Doctor> viewSortingListDoctor(@PathVariable String field) {
         return doctorService.findAllWithSort(field);
     }
+
     @PostMapping(value = "add-image")
     public ResponseEntity<?> addDoctorImg(@RequestParam MultipartFile url) throws Exception {
         String id = imageService.validateAndDownload(url);
@@ -76,13 +77,13 @@ public class DoctorAdminController {
     public ResponseEntity<?> insertDoctor(@RequestBody @Validated DoctorDTO doctorDTO) throws Exception {
 
 
-            Doctor doctor = doctorService.addDoctor(doctorDTO);
-            if (doctor != null)
-                return ResponseEntity.ok(doctor);
-            else  {
-                imageService.removeImg(doctorDTO.getUrl());
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-            }
+        Doctor doctor = doctorService.addDoctor(doctorDTO);
+        if (doctor != null)
+            return ResponseEntity.ok(doctor);
+        else {
+            imageService.removeImg(doctorDTO.getUrl());
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        }
 
 
     }
@@ -92,7 +93,7 @@ public class DoctorAdminController {
         Doctor doctor = doctorService.editDoctor(doctorDTO);
         if (doctor != null)
             return ResponseEntity.ok(doctor);
-        else  {
+        else {
             imageService.removeImg(doctorDTO.getUrl());
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
@@ -109,7 +110,6 @@ public class DoctorAdminController {
         }
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
-
 
 
 }

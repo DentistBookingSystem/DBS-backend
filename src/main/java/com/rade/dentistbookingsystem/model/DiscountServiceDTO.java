@@ -9,7 +9,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class DiscountServiceDTO  implements Serializable {
+public class DiscountServiceDTO implements Serializable {
     private int serviceId;
     private int discountId;
 }

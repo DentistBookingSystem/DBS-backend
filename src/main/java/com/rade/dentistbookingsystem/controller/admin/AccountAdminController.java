@@ -22,7 +22,7 @@ public class AccountAdminController {
     AccountService accountService;
 
     @GetMapping("violated/page/{page}")
-    public List<AccountAndViolationTimes> getViolatedAccounts(@PathVariable int page){
+    public List<AccountAndViolationTimes> getViolatedAccounts(@PathVariable int page) {
         Pageable pageable = PageRequest.of(page - 1, 3);
         return accountService.findViolatedAccountsAndViolationTimes(pageable);
     }
@@ -34,40 +34,39 @@ public class AccountAdminController {
 
 
     @GetMapping("list/{roleId}/{status}/phone={phone}")
-    public List<Account> getAccountList(@PathVariable(name = "roleId") int roleId, @PathVariable(name = "status") short status, @PathVariable(name = "phone") String phone){
-        if(phone != null && phone.length() > 0) phone = "%" + phone + "%";
-           return  accountService.getAccountList(roleId, status, phone);
+    public List<Account> getAccountList(@PathVariable(name = "roleId") int roleId, @PathVariable(name = "status") short status, @PathVariable(name = "phone") String phone) {
+        if (phone != null && phone.length() > 0) phone = "%" + phone + "%";
+        return accountService.getAccountList(roleId, status, phone);
     }
 
 
     @PostMapping("register")
-    public ResponseEntity<?> register( @Validated @RequestBody AccountDTO accountDTO) throws Exception {
+    public ResponseEntity<?> register(@Validated @RequestBody AccountDTO accountDTO) throws Exception {
 
-            final int ROLE_STAFF = 3;
-            Account account = accountService.registerNewUserAccount(accountDTO, ROLE_STAFF);
-            if(account != null)
-                return ResponseEntity.ok("Register successfully");
+        final int ROLE_STAFF = 3;
+        Account account = accountService.registerNewUserAccount(accountDTO, ROLE_STAFF);
+        if (account != null)
+            return ResponseEntity.ok("Register successfully");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not register");
     }
 
     @PostMapping("profile/edit")
-    public ResponseEntity<?> editStaff(@Validated  @RequestBody AccountDTO accountDTO) throws Exception {
+    public ResponseEntity<?> editStaff(@Validated @RequestBody AccountDTO accountDTO) throws Exception {
         Account account = accountService.edit(accountDTO);
-        if(account != null)
+        if (account != null)
             return ResponseEntity.ok("Edit successfully");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not Edit");
     }
 
     @GetMapping("remove/{id}")
-    public ResponseEntity<?> removeStaff(@PathVariable Integer id){
+    public ResponseEntity<?> removeStaff(@PathVariable Integer id) {
         try {
             Account account = accountService.findId(id);
-            if(account.getRole().getId() == 3) accountService.checkAccount(2, id);
-        } catch (Exception e){
+            if (account.getRole().getId() == 3) accountService.checkAccount(2, id);
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
         return ResponseEntity.ok("Remove Successfully");
-
 
 
     }

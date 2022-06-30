@@ -3,7 +3,6 @@ package com.rade.dentistbookingsystem.controller.admin;
 
 import com.rade.dentistbookingsystem.componentform.DiscountFilter;
 import com.rade.dentistbookingsystem.componentform.DiscountServiceComponentAdmin;
-import com.rade.dentistbookingsystem.componentform.ServiceDiscountComponent;
 import com.rade.dentistbookingsystem.domain.Discount;
 import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.DiscountServiceDTO;
@@ -22,12 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ValidationException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
 @CrossOrigin
 @RestController
 @RequestMapping("rade/admin/discount")
@@ -44,7 +43,7 @@ public class DiscountAdminController {
 
     @GetMapping("page/{field}")
     public Page<Discount> discountListPage(@PathVariable String field) {
-        Pageable pageable = PageRequest.of(1,5, Sort.by(field));
+        Pageable pageable = PageRequest.of(1, 5, Sort.by(field));
 
         return discount.findAll(pageable);
     }
@@ -73,11 +72,11 @@ public class DiscountAdminController {
     public List<Discount> filterDiscount(@RequestBody DiscountFilter filter) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date endDate = null;
-        if(filter.getEndDate() != null){
+        if (filter.getEndDate() != null) {
             endDate = sdf.parse(filter.getEndDate());
         }
 
-        return discount.filterDiscount(filter.getStatus(), filter.getName(),endDate,filter.getServiceId());
+        return discount.filterDiscount(filter.getStatus(), filter.getName(), endDate, filter.getServiceId());
     }
 
     @GetMapping("{id}")
@@ -90,29 +89,28 @@ public class DiscountAdminController {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> addDiscount(@Validated @RequestBody DiscountServiceComponentAdmin discountServiceComponent) throws ParseException {
 
-            Discount tmpDiscount = discount.addDiscount(discountServiceComponent.getDiscountDTO());
-            int discountID = tmpDiscount.getId();
-            int[] serviceList = discountServiceComponent.getServiceIDList();
-            if (serviceList != null) {
+        Discount tmpDiscount = discount.addDiscount(discountServiceComponent.getDiscountDTO());
+        int discountID = tmpDiscount.getId();
+        int[] serviceList = discountServiceComponent.getServiceIDList();
+        if (serviceList != null) {
 
-                for (int i = 0; i < serviceList.length; i++) {
-                    DiscountServiceDTO discountServiceDTO = new DiscountServiceDTO();
-                    discountServiceDTO.setDiscountId(discountID);
-                    discountServiceDTO.setServiceId(serviceList[i]);
-                    discountSv.addServiceDiscount(discountServiceDTO);
-                }
-                notificationService.newDiscount(tmpDiscount);
+            for (int i = 0; i < serviceList.length; i++) {
+                DiscountServiceDTO discountServiceDTO = new DiscountServiceDTO();
+                discountServiceDTO.setDiscountId(discountID);
+                discountServiceDTO.setServiceId(serviceList[i]);
+                discountSv.addServiceDiscount(discountServiceDTO);
+            }
+            notificationService.newDiscount(tmpDiscount);
 
-                return ResponseEntity.ok(tmpDiscount);
+            return ResponseEntity.ok(tmpDiscount);
 
-            } else throw new  NotFoundException(" Service list not found");
+        } else throw new NotFoundException(" Service list not found");
 
     }
 
     @PostMapping("/edit")
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> updateDiscount(@RequestBody @Validated DiscountServiceComponentAdmin discountServiceComponent) {
-
         try {
 
             Discount tmpDiscount = discount.editDiscount(discountServiceComponent.getDiscountDTO());

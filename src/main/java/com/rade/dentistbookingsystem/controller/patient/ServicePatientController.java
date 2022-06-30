@@ -15,7 +15,7 @@ public class ServicePatientController {
     ServiceSv serviceSv;
 
     @GetMapping("{stId}")
-    public List<Service> getServiceByServiceTypeIdForPatient(@PathVariable int stId){
+    public List<Service> getServiceByServiceTypeIdForPatient(@PathVariable int stId) {
         short available = 1;
         return serviceSv.findByServiceTypeIdAndStatus(stId, available);
     }

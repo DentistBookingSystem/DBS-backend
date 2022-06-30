@@ -1,6 +1,5 @@
 package com.rade.dentistbookingsystem.services;
 
-import com.rade.dentistbookingsystem.domain.Discount;
 import com.rade.dentistbookingsystem.domain.Doctor;
 import com.rade.dentistbookingsystem.model.DoctorDTO;
 

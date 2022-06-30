@@ -12,7 +12,7 @@ public class DiscountFilter {
 
     private int status;
     private String name;
-    private String  endDate;
+    private String endDate;
     private int serviceId;
 
 }

@@ -19,29 +19,28 @@ import java.util.List;
 @Service
 public class NotificationServiceImpl implements NotificationService {
     NotificationRepo notificationRepo;
+    @Autowired
+    AccountService accountService;
+    @Autowired
+    AppointmentService appointmentService;
 
     public NotificationServiceImpl(NotificationRepo notificationRepo) {
         this.notificationRepo = notificationRepo;
     }
 
-    @Autowired
-    AccountService accountService;
-
-    @Autowired
-    AppointmentService appointmentService;
     @Override
     public <S extends Notification> S save(S entity) {
         return notificationRepo.save(entity);
     }
 
     @Override
-    public Notification newDiscount(Discount discount){
+    public Notification newDiscount(Discount discount) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         int status = 0;
         String description = "Khuyến mãi mới" + discount.getName() + " trong thời gian giới hạn! " +
                 "Bắt đầu từ " + sdf.format(discount.getStartDate()) + " đến " + sdf.format(discount.getEndDate()) + "! " +
                 "Ưu đãi " + discount.getPercentage() + "% áp dụng cho dịch vụ: ";
-        for(DiscountService discountService: discount.getDiscountServiceSet()){
+        for (DiscountService discountService : discount.getDiscountServiceSet()) {
             description += discountService.getService().getName() + ", ";
         }
         description.substring(0, description.length() - 2);
@@ -61,13 +60,12 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public List<Notification> findByAccountId(PhoneAndPage phoneAndPage) {
-        try{
+        try {
             int accountId = accountService.findByPhone(phoneAndPage.getPhone()).getId();
             int page = phoneAndPage.getPage() - 1;
             Pageable pageable = PageRequest.of(page, 3, Sort.by("id").descending());
             return notificationRepo.findByAccountId(accountId, pageable);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -88,11 +86,11 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void createRemindNotificationIfNeeded(String phone){
+    public void createRemindNotificationIfNeeded(String phone) {
         Account account = accountService.findByPhone(phone);
         if (account == null) return;
         Appointment appointment = appointmentService.findAppointmentByAccountIdInNext24h(account.getId());
-        if(appointment != null){
+        if (appointment != null) {
             SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
             String date = sdfDate.format(appointment.getAppointmentDate());
             String time = appointment.getAppointmentTime().split("-")[0];
@@ -103,15 +101,15 @@ public class NotificationServiceImpl implements NotificationService {
                     description,
                     new Date()
             );
-            if(findDuplicateDescription(notification) == null) save(notification);
+            if (findDuplicateDescription(notification) == null) save(notification);
         }
     }
 
     @Override
-    public void createNotificationForAbsent(Appointment appointment){
+    public void createNotificationForAbsent(Appointment appointment) {
         Account account = appointment.getAccount();
         if (account == null) return;
-        if(appointment != null){
+        if (appointment != null) {
             SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
             String date = sdfDate.format(appointment.getAppointmentDate());
             String time = appointment.getAppointmentTime().split("-")[0];
@@ -127,9 +125,9 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void createNotificationForBannedByAbsent(Integer accountId){
+    public void createNotificationForBannedByAbsent(Integer accountId) {
         Account account = accountService.findId(accountId);
-        if(account != null){
+        if (account != null) {
             String description = "Bạn đã bị liệt vào danh sách đen của trung tâm vì đã vắng liên tục quá 3 lịch hẹn. Hiện tại bạn sẽ chỉ còn có thể tham khảo các thông tin mà trung tâm cung cấp.";
             Notification notification = new Notification(
                     account,
@@ -141,9 +139,9 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void createNotificationForBannedByFeedback(Integer accountId){
+    public void createNotificationForBannedByFeedback(Integer accountId) {
         Account account = accountService.findId(accountId);
-        if(account != null){
+        if (account != null) {
             String description = "Bạn đã bị liệt vào danh sách đen của trung tâm vì đã phản hồi vi phạm, quấy rối quá 2 lần. Hiện tại bạn sẽ chỉ còn có thể tham khảo các thông tin mà trung tâm cung cấp.";
             Notification notification = new Notification(
                     account,
@@ -155,8 +153,8 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void createNotificationForSendingFeedback(Feedback feedback){
-        if(feedback == null) return;
+    public void createNotificationForSendingFeedback(Feedback feedback) {
+        if (feedback == null) return;
         Account account = accountService.findId(feedback.getAppointment().getAccount().getId());
         String description = "Phản hồi của bạn đã được gửi tới trung tâm, cảm ơn bãn đã để lại đánh giá cho RaDe.";
         Notification notification = new Notification(
@@ -168,10 +166,10 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void createNotificationForCancellingAppointment(Appointment appointment){
+    public void createNotificationForCancellingAppointment(Appointment appointment) {
         Account account = appointment.getAccount();
         if (account == null) return;
-        if(appointment != null){
+        if (appointment != null) {
             SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
             String date = sdfDate.format(appointment.getAppointmentDate());
             String time = appointment.getAppointmentTime().split("-")[0];
@@ -187,8 +185,8 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void createNotificationForUpdatingAppointment(Appointment appointment){
-        if(appointment != null && appointment.getAccount() != null){
+    public void createNotificationForUpdatingAppointment(Appointment appointment) {
+        if (appointment != null && appointment.getAccount() != null) {
             String description = "Lịch hẹn sắp tới của bạn đã được cập nhật";
             Notification notification = new Notification(
                     appointment.getAccount(),
@@ -200,12 +198,12 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void createNotificationForCancellingAppointmentFromAdmin(Appointment appointment, String description){
+    public void createNotificationForCancellingAppointmentFromAdmin(Appointment appointment, String description) {
         Account account = appointment.getAccount();
         if (description == null) return;
         else description = description.trim();
         if (account == null) return;
-        if(appointment != null){
+        if (appointment != null) {
             SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
             String date = sdfDate.format(appointment.getAppointmentDate());
             String time = appointment.getAppointmentTime().split("-")[0];
@@ -222,8 +220,8 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void createNotificationForApprovingFeedbackFromAdmin(Feedback feedback){
-        if(feedback != null && feedback.getAppointment() != null && feedback.getAppointment().getAccount() != null){
+    public void createNotificationForApprovingFeedbackFromAdmin(Feedback feedback) {
+        if (feedback != null && feedback.getAppointment() != null && feedback.getAppointment().getAccount() != null) {
             Appointment appointment = feedback.getAppointment();
             Account account = feedback.getAppointment().getAccount();
             SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
@@ -241,8 +239,8 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void createNotificationForDisapprovingFeedbackFromAdmin(Feedback feedback){
-        if(feedback != null && feedback.getAppointment() != null && feedback.getAppointment().getAccount() != null){
+    public void createNotificationForDisapprovingFeedbackFromAdmin(Feedback feedback) {
+        if (feedback != null && feedback.getAppointment() != null && feedback.getAppointment().getAccount() != null) {
             Appointment appointment = feedback.getAppointment();
             Account account = feedback.getAppointment().getAccount();
             SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
@@ -260,8 +258,8 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void createNotificationFromAdmin(String description){
-        if(description != null){
+    public void createNotificationFromAdmin(String description) {
+        if (description != null) {
             description = description.trim();
             Notification notification = new Notification(
                     null,

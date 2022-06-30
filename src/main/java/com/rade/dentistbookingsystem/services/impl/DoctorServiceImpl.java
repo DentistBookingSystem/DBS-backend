@@ -1,7 +1,6 @@
 package com.rade.dentistbookingsystem.services.impl;
 
 import com.rade.dentistbookingsystem.domain.Branch;
-import com.rade.dentistbookingsystem.domain.Discount;
 import com.rade.dentistbookingsystem.domain.Doctor;
 import com.rade.dentistbookingsystem.model.DoctorDTO;
 import com.rade.dentistbookingsystem.repository.DoctorRepo;
@@ -9,7 +8,6 @@ import com.rade.dentistbookingsystem.services.BranchService;
 import com.rade.dentistbookingsystem.services.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,10 +49,8 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
 
-
-
     @Override
-    public List<Doctor> findAllWithSort(String field){
+    public List<Doctor> findAllWithSort(String field) {
         return doctorRepo.findAll(Sort.by(Sort.Direction.DESC, field));
     }
 

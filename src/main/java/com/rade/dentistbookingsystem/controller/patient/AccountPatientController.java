@@ -36,14 +36,15 @@ public class AccountPatientController {
     }
 
     @GetMapping("{phone}")
-    public ResponseEntity<?> checkValidAccountToMakeAppointment(@PathVariable String phone){
+    public ResponseEntity<?> checkValidAccountToMakeAppointment(@PathVariable String phone) {
         try {
+            final int LOCKED_STATUS = 2;
             Account account = accountService.findByPhone(phone);
             if (accountService.findByPhone(phone) == null)
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build(); //406
-            if(account.getStatus() == 2)
+            if (account.getStatus() == LOCKED_STATUS)
                 return ResponseEntity.status(HttpStatus.LOCKED).build(); //423
-            if(appointmentService.findByAccountAndStatusIn(account, new int[]{0}) != null)
+            if (appointmentService.findByAccountAndStatusIn(account, new int[]{0}) != null)
                 return ResponseEntity.status(HttpStatus.GONE).build(); //410
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (Exception e) {

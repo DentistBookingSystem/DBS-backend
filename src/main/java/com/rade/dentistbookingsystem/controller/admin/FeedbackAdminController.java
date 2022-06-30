@@ -2,16 +2,10 @@ package com.rade.dentistbookingsystem.controller.admin;
 
 import com.rade.dentistbookingsystem.componentform.PageForFeedback;
 import com.rade.dentistbookingsystem.domain.Feedback;
-import com.rade.dentistbookingsystem.model.FeedbackDTO;
 import com.rade.dentistbookingsystem.services.AccountService;
 import com.rade.dentistbookingsystem.services.FeedbackService;
 import com.rade.dentistbookingsystem.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,11 +22,12 @@ public class FeedbackAdminController {
     AccountService accountService;
 
     @PostMapping("list")
-    public List<Feedback> getListFeedback(){
+    public List<Feedback> getListFeedback() {
         return feedbackService.findAllWithSort();
     }
+
     @PostMapping("filter")
-    public List<Feedback> filterFeedbackForAdmin(@RequestBody PageForFeedback pageForFeedback){
+    public List<Feedback> filterFeedbackForAdmin(@RequestBody PageForFeedback pageForFeedback) {
         return feedbackService.filterFeedbackForAdmin(pageForFeedback.getPhone(),
                 pageForFeedback.getStatus(),
                 pageForFeedback.getServiceId(),

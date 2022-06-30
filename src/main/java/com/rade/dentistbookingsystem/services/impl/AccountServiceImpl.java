@@ -3,7 +3,10 @@ package com.rade.dentistbookingsystem.services.impl;
 import com.rade.dentistbookingsystem.componentform.AccountAndViolationTimes;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.model.AccountDTO;
-import com.rade.dentistbookingsystem.repository.*;
+import com.rade.dentistbookingsystem.repository.AccountRepo;
+import com.rade.dentistbookingsystem.repository.AppointmentRepo;
+import com.rade.dentistbookingsystem.repository.DistrictRepo;
+import com.rade.dentistbookingsystem.repository.RoleRepo;
 import com.rade.dentistbookingsystem.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -42,7 +45,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean isRegistrable(AccountDTO accountDTO){
+    public boolean isRegistrable(AccountDTO accountDTO) {
         if (accountRepo.findByPhone(accountDTO.getPhone()) != null) return false;
         else return true;
     }
@@ -101,7 +104,8 @@ public class AccountServiceImpl implements AccountService {
         List<AccountAndViolationTimes> accountAndViolationTimesList = new ArrayList<>();
         for (Account account : accountList) {
             int violationTimes =
-                    appointmentRepo.countByAccountIdAndStatus(account.getId(), 2);                ;
+                    appointmentRepo.countByAccountIdAndStatus(account.getId(), 2);
+            ;
             accountAndViolationTimesList.add(new AccountAndViolationTimes(
                     account,
                     violationTimes
@@ -120,7 +124,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> getAccountList(int roleId, short status, String phone){
+    public List<Account> getAccountList(int roleId, short status, String phone) {
         return accountRepo.filterAccount(roleId, status, phone);
     }
 }

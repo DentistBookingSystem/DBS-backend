@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -26,21 +25,19 @@ public class ServiceTypeAdminController {
         return serviceTypeSv.findAll();
     }
 
-    // add service type cho admin
-    @RolesAllowed({"ROLE_ADMIN"})
+
     @PostMapping("add")
     public ResponseEntity<?> addServiceType(@Valid @RequestBody ServiceTypeDTO serviceTypeDTO) {
-            ServiceType serviceType = serviceTypeSv.insert(serviceTypeDTO);
-            if (serviceType != null)
-                return ResponseEntity.ok(serviceType);
-            else
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        ServiceType serviceType = serviceTypeSv.insert(serviceTypeDTO);
+        if (serviceType != null)
+            return ResponseEntity.ok(serviceType);
+        else
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    @RolesAllowed({"ROLE_ADMIN"})
     @PostMapping("edit/{id}")
     public ResponseEntity<?> editServiceType(@Validated @RequestBody ServiceTypeDTO serviceTypeDTO, @PathVariable int id) {
-            return ResponseEntity.ok(serviceTypeSv.edit(serviceTypeDTO, id));
+        return ResponseEntity.ok(serviceTypeSv.edit(serviceTypeDTO, id));
 
     }
 

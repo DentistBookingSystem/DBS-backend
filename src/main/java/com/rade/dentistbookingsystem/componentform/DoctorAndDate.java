@@ -12,5 +12,5 @@ public class DoctorAndDate {
     private int branchId;
     private int doctorId;
     private String date;
-    private int [] serviceId;
+    private int[] serviceId;
 }

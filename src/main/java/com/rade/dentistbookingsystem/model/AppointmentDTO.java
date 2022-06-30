@@ -5,10 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class AppointmentDTO  implements Serializable {
+public class AppointmentDTO implements Serializable {
     private Integer id;
     private Integer accountId;
     private int branchId;
@@ -18,7 +19,7 @@ public class AppointmentDTO  implements Serializable {
     private int status;
     private String phone;
 
-    public AppointmentDTO(int branchId){
+    public AppointmentDTO(int branchId) {
         this.branchId = branchId;
     }
 }

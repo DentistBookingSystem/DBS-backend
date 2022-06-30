@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,7 +31,7 @@ public class Notification implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    public Notification(Account account, String description, Date date){
+    public Notification(Account account, String description, Date date) {
         this.account = account;
         this.description = description;
         this.date = date;

@@ -1,7 +1,6 @@
 package com.rade.dentistbookingsystem.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +23,7 @@ public class DiscountService implements Serializable {
 
     @ManyToOne
     @MapsId("service_id")
-    @JsonIncludeProperties({"service_id","name"})
+    @JsonIncludeProperties({"service_id", "name"})
     @JoinColumn(name = "service_id")
     private Service service;
 

@@ -38,7 +38,7 @@ public class ServiceAdminController {
     }
 
     @GetMapping("filter")
-    public List<Service> filter(@RequestBody ServiceDTO serviceDTO){
+    public List<Service> filter(@RequestBody ServiceDTO serviceDTO) {
         return serviceSv.filterService(serviceDTO);
     }
 
@@ -51,7 +51,6 @@ public class ServiceAdminController {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-
     @PostMapping(value = "add-service")
     public ResponseEntity<?> addService(@Valid @RequestBody ServiceDTO serviceDTO) throws Exception {
         Service service = serviceSv.insert(serviceDTO);
@@ -61,11 +60,6 @@ public class ServiceAdminController {
             imageService.removeImg(serviceDTO.getUrl());
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
-
-
-
-
-
 
     }
 

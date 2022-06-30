@@ -8,11 +8,11 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class DiscountDTO  implements Serializable {
+public class DiscountDTO implements Serializable {
     private int id;
     @NotNull
     private String name;

@@ -11,7 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class NotificationDTO  implements Serializable {
+public class NotificationDTO implements Serializable {
     private int id;
     private int accountId;
     @NotNull

@@ -1,9 +1,7 @@
 package com.rade.dentistbookingsystem.controller;
 
 import com.rade.dentistbookingsystem.domain.District;
-import com.rade.dentistbookingsystem.domain.Province;
 import com.rade.dentistbookingsystem.services.DistrictService;
-import com.rade.dentistbookingsystem.services.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +15,7 @@ public class DistrictController {
     DistrictService districtService;
 
     @GetMapping("{provinceId}")
-    public List<District> getDistrictListByProvinceID(@PathVariable int provinceId){
+    public List<District> getDistrictListByProvinceID(@PathVariable int provinceId) {
         return districtService.findByProvinceId(provinceId);
     }
 }

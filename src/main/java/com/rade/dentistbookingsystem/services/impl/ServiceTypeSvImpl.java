@@ -84,7 +84,7 @@ public class ServiceTypeSvImpl implements ServiceTypeSv {
         if (serviceTypeData.isPresent()) {
 
             ServiceType serviceType = serviceTypeData.get();
-            if(findByName(serviceTypeDTO.getName()) != null && findByName(serviceTypeDTO.getName()).getId() != id )
+            if (findByName(serviceTypeDTO.getName()) != null && findByName(serviceTypeDTO.getName()).getId() != id)
                 throw new ValidationException("This service type has been use");
             serviceType.setName(serviceTypeDTO.getName());
             serviceType.setDescription(serviceTypeDTO.getDescription());
@@ -98,7 +98,6 @@ public class ServiceTypeSvImpl implements ServiceTypeSv {
     public <S extends ServiceType> List<S> findAll(Example<S> example) {
         return serviceTypeRepo.findAll(example);
     }
-
 
 
 }

@@ -6,12 +6,13 @@ public class AuthResponse {
 
     private String roleName;
 
-    public AuthResponse() { }
+    public AuthResponse() {
+    }
 
     public AuthResponse(String phone, String accessToken, String roleName) {
         this.phone = phone;
         this.accessToken = accessToken;
-        this.roleName= roleName;
+        this.roleName = roleName;
     }
 
     public String getPhone() {

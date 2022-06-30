@@ -5,7 +5,6 @@ import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.DiscountDTO;
 import com.rade.dentistbookingsystem.repository.AccountRepo;
 import com.rade.dentistbookingsystem.repository.DiscountRepo;
-import com.rade.dentistbookingsystem.services.AccountService;
 import com.rade.dentistbookingsystem.services.DiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,7 +43,7 @@ public class DiscountServiceImpl implements DiscountService {
     }
 
     @Override
-    public List<Discount> findAllWithSort(String field){
+    public List<Discount> findAllWithSort(String field) {
         return discountRepo.findAll(Sort.by(Sort.Direction.DESC, field));
     }
 
@@ -53,7 +52,7 @@ public class DiscountServiceImpl implements DiscountService {
         return discountRepo.findAllByStatus(1, pageable);
     }
 
-   @Override
+    @Override
     public List<Discount> filterDiscount(int status, String name, Date endDate, int serviceId) {
         return discountRepo.filterDiscount(status, name, endDate, serviceId);
     }

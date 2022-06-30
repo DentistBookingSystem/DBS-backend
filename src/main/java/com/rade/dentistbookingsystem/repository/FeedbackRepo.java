@@ -39,21 +39,21 @@ public interface FeedbackRepo extends JpaRepository<Feedback, Integer> {
                     "GROUP BY Feedback.id, Feedback.content, Feedback.appointment_id, Feedback.status, Feedback.time",
             nativeQuery = true)
     List<Feedback> filterFeedbackForAdmin(@Param("phone") String phone,
-                                  @Param("status") Integer status,
-                                  @Param("service_id") Integer serviceId,
-                                  @Param("time") String time);
+                                          @Param("status") Integer status,
+                                          @Param("service_id") Integer serviceId,
+                                          @Param("time") String time);
 
-@Query(value =
-        "SELECT " +
-        "CASE WHEN ( " +
-        "SELECT COUNT(Feedback.id) " +
-        "FROM Feedback LEFT JOIN Appointment a ON Feedback.appointment_id = a.id " +
-        "WHERE a.account_id = :account_id AND Feedback.status = 2 " +
-        ") >= 3 " +
-        "THEN 'TRUE' " +
-        "ELSE 'FALSE' " +
-        "END",
-        nativeQuery = true)
+    @Query(value =
+            "SELECT " +
+                    "CASE WHEN ( " +
+                    "SELECT COUNT(Feedback.id) " +
+                    "FROM Feedback LEFT JOIN Appointment a ON Feedback.appointment_id = a.id " +
+                    "WHERE a.account_id = :account_id AND Feedback.status = 2 " +
+                    ") >= 3 " +
+                    "THEN 'TRUE' " +
+                    "ELSE 'FALSE' " +
+                    "END",
+            nativeQuery = true)
     boolean checkAccountToBanByFeedback(@Param("account_id") int accountId);
 
 

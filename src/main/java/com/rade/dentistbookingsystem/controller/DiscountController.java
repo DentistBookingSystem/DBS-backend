@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.*;
 public class DiscountController {
     @Autowired
     DiscountService discountService;
+
     @GetMapping("{serviceId}")
-    public Discount getDiscountByServiceId(@PathVariable int serviceId){
+    public Discount getDiscountByServiceId(@PathVariable int serviceId) {
         return discountService.findAvailableByServiceId(serviceId);
     }
 }

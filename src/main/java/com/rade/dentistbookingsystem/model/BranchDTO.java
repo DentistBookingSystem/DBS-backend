@@ -13,7 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class BranchDTO  implements Serializable {
+public class BranchDTO implements Serializable {
     private int id;
 
     @NotNull(message = "Branch's name is required")

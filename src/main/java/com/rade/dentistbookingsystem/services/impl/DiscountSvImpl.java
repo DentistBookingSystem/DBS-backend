@@ -9,11 +9,8 @@ import com.rade.dentistbookingsystem.repository.DiscountRepo;
 import com.rade.dentistbookingsystem.repository.DiscountServiceRepo;
 import com.rade.dentistbookingsystem.repository.ServiceRepo;
 import com.rade.dentistbookingsystem.services.DiscountSvService;
-import com.rade.dentistbookingsystem.services.ServiceSv;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,11 +23,9 @@ public class DiscountSvImpl implements DiscountSvService {
     DiscountRepo discountRepo;
 
 
-
-    public DiscountSvImpl (DiscountServiceRepo discountServiceRepo) {
+    public DiscountSvImpl(DiscountServiceRepo discountServiceRepo) {
         this.discountServiceRepo = discountServiceRepo;
     }
-
 
 
     public <S extends DiscountService> S save(S entity) {
@@ -39,11 +34,9 @@ public class DiscountSvImpl implements DiscountSvService {
 
 
     @Override
-    public List<DiscountService> findByDiscountId(int id){
+    public List<DiscountService> findByDiscountId(int id) {
         return discountServiceRepo.findAllByDiscount_Id(id);
     }
-
-
 
 
     @Override
@@ -77,7 +70,6 @@ public class DiscountSvImpl implements DiscountSvService {
         return addServiceDiscount(discountServiceDTO);
 
     }
-
 
 
 }

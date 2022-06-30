@@ -21,9 +21,11 @@ public class AppointmentDetailServiceImpl implements AppointmentDetailService {
     ServiceSv serviceSv;
     @Autowired
     DiscountService discountService;
+
     public AppointmentDetailServiceImpl(AppointmentDetailRepo appointmentDetailRepo) {
         this.appointmentDetailRepo = appointmentDetailRepo;
     }
+
     @Override
     public AppointmentDetail save(AppointmentDetail appointmentDetail) {
         return appointmentDetailRepo.save(appointmentDetail);
@@ -42,6 +44,7 @@ public class AppointmentDetailServiceImpl implements AppointmentDetailService {
         }
         return appointmentDetailList;
     }
+
     @Override
     public List<AppointmentDetail> findByAppointmentId(int appointmentId) {
         return appointmentDetailRepo.findByAppointmentId(appointmentId);

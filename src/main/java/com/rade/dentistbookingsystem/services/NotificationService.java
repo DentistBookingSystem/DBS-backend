@@ -6,7 +6,6 @@ import com.rade.dentistbookingsystem.domain.Discount;
 import com.rade.dentistbookingsystem.domain.Feedback;
 import com.rade.dentistbookingsystem.domain.Notification;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

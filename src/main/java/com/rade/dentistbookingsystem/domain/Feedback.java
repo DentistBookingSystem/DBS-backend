@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "Feedback", uniqueConstraints={@UniqueConstraint(columnNames = {"appointment_id"})})
+@Table(name = "Feedback", uniqueConstraints = {@UniqueConstraint(columnNames = {"appointment_id"})})
 public class Feedback implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +33,7 @@ public class Feedback implements Serializable {
     @Column(nullable = false)
     private int status;
 
-    public Feedback(Appointment appointment, Date time, String content, int status){
+    public Feedback(Appointment appointment, Date time, String content, int status) {
         this.appointment = appointment;
         this.time = time;
         this.content = content;

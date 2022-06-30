@@ -33,13 +33,14 @@ public class FeedbackServiceImpl implements FeedbackService {
     public FeedbackServiceImpl(FeedbackRepo feedBackRepo) {
         this.feedBackRepo = feedBackRepo;
     }
+
     @Override
     public Feedback save(FeedbackDTO feedbackDTO) {
         Feedback feedback = new Feedback(
-            appointmentService.findId(feedbackDTO.getAppointmentId()),
-            new Date(),
-            feedbackDTO.getContent(),
-            0);
+                appointmentService.findId(feedbackDTO.getAppointmentId()),
+                new Date(),
+                feedbackDTO.getContent(),
+                0);
         return feedBackRepo.save(feedback);
     }
 
@@ -53,14 +54,14 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public List<Feedback> findAllWithSort(){
+    public List<Feedback> findAllWithSort() {
         return feedBackRepo.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     @Override
     public Feedback check(Integer status, Integer id) {
         Optional<Feedback> feedbackData = feedBackRepo.findById(id);
-        if(feedbackData.isPresent()){
+        if (feedbackData.isPresent()) {
             Feedback feedback = feedbackData.get();
             feedback.setStatus(status);
             return save(feedback);
@@ -74,9 +75,10 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public List<Feedback> filterFeedbackForAdmin(String phone, Integer status, Integer serviceId, String time){
+    public List<Feedback> filterFeedbackForAdmin(String phone, Integer status, Integer serviceId, String time) {
         return feedBackRepo.filterFeedbackForAdmin(phone, status, serviceId, time);
     }
+
     @Override
     public boolean checkAccountToBanByFeedback(int accountId) {
         return feedBackRepo.checkAccountToBanByFeedback(accountId);

@@ -28,7 +28,7 @@ public class AccountDTO implements Serializable {
     @Length(min = 10, max = 11)
     @NotNull(message = "Phone is required")
     private String phone;
-    @Pattern( regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+    @Pattern(regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
             + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", message = "Email not valid")
     private String email;
     private int status;

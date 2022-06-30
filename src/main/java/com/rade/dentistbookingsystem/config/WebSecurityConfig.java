@@ -29,12 +29,14 @@ import javax.servlet.http.HttpServletResponse;
         securedEnabled = true
 )
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    JwtTokenFilter jwtTokenFilter;
+
     @Bean
     public UserDetailsService userDetailsService() {
         return new AccountDetailServiceImpl();
     }
-    @Autowired
-    JwtTokenFilter jwtTokenFilter;
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -53,6 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
     }
+
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -65,7 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-                .antMatchers("/rade/auth/login","/rade/province",
+                .antMatchers("/rade/auth/login", "/rade/province",
                         "/rade/district/**").permitAll()
                 .antMatchers(
                         "/rade/appointment",
@@ -78,7 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/rade/feedback/**",
                         "/rade/discount",
                         "/rade/discount/**").access("not( hasRole('ADMIN') ) and not( hasRole('STAFF') )")
-               .antMatchers("/rade/admin/**").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/rade/admin/**").hasAnyAuthority("ROLE_ADMIN")
                 .antMatchers("/rade/patient/**").hasAuthority("ROLE_USER").
                 antMatchers("/rade/staff/**").hasAuthority("ROLE_STAFF")
                 .anyRequest().authenticated();

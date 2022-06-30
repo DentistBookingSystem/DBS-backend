@@ -1,6 +1,5 @@
 package com.rade.dentistbookingsystem;
 
-import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.services.AccountService;
 import com.rade.dentistbookingsystem.services.AppointmentService;
 import com.rade.dentistbookingsystem.services.FeedbackService;
@@ -11,12 +10,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-
-import java.util.List;
 
 @SpringBootApplication
-public class DentistBookingSystemApplication{
+public class DentistBookingSystemApplication {
     @Autowired
     AppointmentService appointmentService;
     @Autowired
@@ -25,6 +21,7 @@ public class DentistBookingSystemApplication{
     NotificationService notificationService;
     @Autowired
     FeedbackService feedbackService;
+
     public static void main(String[] args) {
         SpringApplication.run(DentistBookingSystemApplication.class, args);
     }
@@ -42,9 +39,10 @@ public class DentistBookingSystemApplication{
 //        }
 //    }
 }
+
 @Configuration
 @EnableScheduling
 @ConditionalOnProperty(name = "scheduling.enabled", matchIfMissing = true)
-class SchedulingOnConfiguration{
+class SchedulingOnConfiguration {
 
 }

@@ -1,9 +1,7 @@
 package com.rade.dentistbookingsystem.repository;
 
-import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.domain.ServiceType;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,7 +14,6 @@ public interface ServiceRepo extends JpaRepository<Service, Integer> {
     public List<Service> findByServiceTypeId(int id);
 
     public Service findByName(String name);
-
 
 
     @Query(value = "SELECT * FROM Service WHERE id = ?1", nativeQuery = true)
@@ -42,8 +39,8 @@ public interface ServiceRepo extends JpaRepository<Service, Integer> {
                     " (Service.max_price = :maxPrice OR :maxPrice = 0)",
             nativeQuery = true)
     List<Service> filterService(@Param("id") int id,
-                                        @Param("name") String name,
-                                        @Param("status") Integer status,
-                                        @Param("minPrice") double minPrice,
-                                        @Param("maxPrice") double maxPrice);
+                                @Param("name") String name,
+                                @Param("status") Integer status,
+                                @Param("minPrice") double minPrice,
+                                @Param("maxPrice") double maxPrice);
 }

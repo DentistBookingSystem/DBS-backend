@@ -1,7 +1,6 @@
 package com.rade.dentistbookingsystem.services.impl;
 
 import com.rade.dentistbookingsystem.componentform.ServiceDiscountComponent;
-import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.domain.ServiceType;
 import com.rade.dentistbookingsystem.exceptions.DuplicateRecordException;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Query;
 
 import javax.validation.ValidationException;
 import java.util.ArrayList;
@@ -87,7 +85,7 @@ public class ServiceSvImpl implements ServiceSv {
         Optional<Service> serviceData = findById(serviceDTO.getId());
         if (serviceData.isPresent()) {
             Service service = serviceData.get();
-            if(serviceRepo.findByName(serviceDTO.getName()) != null && serviceRepo.findByName(serviceDTO.getName()).getId() != serviceDTO.getId())
+            if (serviceRepo.findByName(serviceDTO.getName()) != null && serviceRepo.findByName(serviceDTO.getName()).getId() != serviceDTO.getId())
                 throw new ValidationException("This service name has been use");
             service.setName(serviceDTO.getName());
             service.setDescription(serviceDTO.getDescription());
@@ -138,7 +136,7 @@ public class ServiceSvImpl implements ServiceSv {
 
     @Override
     public List<ServiceDiscountComponent> findByServiceTypeIdAndStatusIncludeDiscount(int id, short status) {
-        List<Service> serviceList =  findByServiceTypeIdAndStatus(id, status);
+        List<Service> serviceList = findByServiceTypeIdAndStatus(id, status);
         List<ServiceDiscountComponent> serviceDiscountComponentList = new ArrayList<>();
         for (Service service : serviceList) {
             ServiceDiscountComponent serviceDiscountComponent = new ServiceDiscountComponent(

@@ -1,7 +1,6 @@
 package com.rade.dentistbookingsystem.services;
 
 import com.rade.dentistbookingsystem.componentform.ServiceDiscountComponent;
-import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.domain.ServiceType;
 import com.rade.dentistbookingsystem.model.ServiceDTO;
@@ -22,6 +21,7 @@ public interface ServiceSv {
     List<Service> findAll();
 
     Service findId(Integer id);
+
     Optional<Service> findById(Integer integer);
 
     Service edit(ServiceDTO serviceDTO);

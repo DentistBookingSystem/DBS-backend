@@ -31,12 +31,11 @@ public class AccountController {
     @PostMapping("sendOTP")
     public ResponseEntity<?> smsSubmit(@RequestBody JsonPhone jsonPhone) {
         String otp;
-        try{
+        try {
             otp = service.send(jsonPhone);
-            if(otp.length() != 6)
+            if (otp.length() != 6)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -45,29 +44,27 @@ public class AccountController {
     }
 
     @PostMapping("verifyOTP")
-    public ResponseEntity<?> verifyOTP(@RequestBody StoreOTP receivedOTP){
-        try{
+    public ResponseEntity<?> verifyOTP(@RequestBody StoreOTP receivedOTP) {
+        try {
             StoreOTP storeOTP = StoreOTPList.getStoredOTP(receivedOTP.getPhone());
-            if(storeOTP == null) ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            if (storeOTP == null) ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             return StoreOTPList.verifyOTP(storeOTP, receivedOTP) ? ResponseEntity.status(HttpStatus.OK).build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
     @PostMapping("checkphone")
-    public ResponseEntity<?> isRegistrable( @Validated  @RequestBody AccountDTO accountDTO) {
-        try{
+    public ResponseEntity<?> isRegistrable(@Validated @RequestBody AccountDTO accountDTO) {
+        try {
             return accountService.isRegistrable(accountDTO) ? ResponseEntity.status(HttpStatus.OK).build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
     @PostMapping("registration")
-    public ResponseEntity<?> register( @Validated  @RequestBody AccountDTO accountDTO) {
+    public ResponseEntity<?> register(@Validated @RequestBody AccountDTO accountDTO) {
         try {
             final int ROLE_USER = 2;
             accountService.registerNewUserAccount(accountDTO, ROLE_USER);

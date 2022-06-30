@@ -16,6 +16,7 @@ import java.util.List;
 public class ServiceStaffController {
     @Autowired
     ServiceSv serviceSv;
+
     @GetMapping("list")
     public List<Service> loadServiceComponent() {
         return serviceSv.findAll();

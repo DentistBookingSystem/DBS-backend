@@ -13,8 +13,9 @@ import java.util.List;
 public class DoctorStaffController {
     @Autowired
     DoctorService doctorService;
+
     @GetMapping("{branchId}")
-    public List<Doctor> getByBrandId(@PathVariable int branchId){
+    public List<Doctor> getByBrandId(@PathVariable int branchId) {
         return doctorService.findByBranchIdAndStatus(branchId, 1);
     }
 }

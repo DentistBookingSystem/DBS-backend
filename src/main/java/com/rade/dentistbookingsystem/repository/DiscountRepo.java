@@ -1,7 +1,6 @@
 package com.rade.dentistbookingsystem.repository;
 
 import com.rade.dentistbookingsystem.domain.Discount;
-import com.rade.dentistbookingsystem.domain.ServiceType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,9 +15,9 @@ import java.util.List;
 public interface DiscountRepo extends JpaRepository<Discount, Integer> {
     @Query(value =
             "SELECT Discount.* " +
-            "FROM Discount, Discount_Service ds " +
-            "WHERE Discount.id = ds.discount_id AND ds.service_id = ?1 AND Discount.status = 1 " +
-            "AND getdate() >= Discount.start_date AND getdate() <= Discount.end_date " +
+                    "FROM Discount, Discount_Service ds " +
+                    "WHERE Discount.id = ds.discount_id AND ds.service_id = ?1 AND Discount.status = 1 " +
+                    "AND getdate() >= Discount.start_date AND getdate() <= Discount.end_date " +
                     "AND Discount.percentage >= ALL( " +
                     "SELECT Discount.percentage " +
                     "FROM Discount Discount, Discount_Service ds " +
@@ -30,9 +29,9 @@ public interface DiscountRepo extends JpaRepository<Discount, Integer> {
     public Discount findByName(String name);
 
 
-     List<Discount> findByStatus(int status);
+    List<Discount> findByStatus(int status);
 
-     Page<Discount> findAllByStatus(int status, Pageable pageable);
+    Page<Discount> findAllByStatus(int status, Pageable pageable);
 
     @Query(value =
             "SELECT Distinct  Discount.* " +
@@ -44,9 +43,9 @@ public interface DiscountRepo extends JpaRepository<Discount, Integer> {
                     "(DATEDIFF(day,Discount.end_date, :endDate) = 0 OR :endDate IS NULL) AND " +
                     "(Discount_Service.service_id = :serviceId OR :serviceId = 0)"
             , nativeQuery = true)
-     List<Discount> filterDiscount(
-             @Param("status") int status,
-             @Param("name") String name,
-             @Param("endDate") Date endDate,
-             @Param("serviceId") int serviceId);
+    List<Discount> filterDiscount(
+            @Param("status") int status,
+            @Param("name") String name,
+            @Param("endDate") Date endDate,
+            @Param("serviceId") int serviceId);
 }

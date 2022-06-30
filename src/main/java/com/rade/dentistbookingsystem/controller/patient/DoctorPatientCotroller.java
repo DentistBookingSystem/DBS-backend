@@ -5,7 +5,6 @@ import com.rade.dentistbookingsystem.services.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.Doc;
 import java.util.List;
 
 @RestController
@@ -14,8 +13,9 @@ import java.util.List;
 public class DoctorPatientCotroller {
     @Autowired
     DoctorService doctorService;
+
     @GetMapping("{branchId}")
-    public List<Doctor> getByBrandId(@PathVariable int branchId){
+    public List<Doctor> getByBrandId(@PathVariable int branchId) {
         return doctorService.findByBranchIdAndStatus(branchId, 1);
     }
 }

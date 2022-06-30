@@ -40,9 +40,10 @@ public class AccountDetail implements UserDetails {
         return account.getPhone();
     }
 
-    public String getRoleName(){
+    public String getRoleName() {
         return account.getRole().getName();
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

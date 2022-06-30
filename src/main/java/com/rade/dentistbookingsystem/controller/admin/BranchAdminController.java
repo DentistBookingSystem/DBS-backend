@@ -2,7 +2,6 @@ package com.rade.dentistbookingsystem.controller.admin;
 
 import com.rade.dentistbookingsystem.componentform.BranchFilter;
 import com.rade.dentistbookingsystem.domain.Branch;
-import com.rade.dentistbookingsystem.exceptions.DuplicateRecordException;
 import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.BranchDTO;
 import com.rade.dentistbookingsystem.services.BranchService;
@@ -13,12 +12,10 @@ import com.rade.dentistbookingsystem.utils.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import javax.validation.executable.ValidateOnExecution;
 import java.util.List;
 
 @RestController
@@ -45,27 +42,24 @@ public class BranchAdminController {
         } else throw new NotFoundException("Branch is not found ");
 
     }
-    @GetMapping("filter")
-    public List<Branch> filterByStatus(@RequestBody BranchFilter branchFilter ){
 
-            return branchService.filter(branchFilter.getStatus(), branchFilter.getName(), branchFilter.getDistrictId());
+    @GetMapping("filter")
+    public List<Branch> filterByStatus(@RequestBody BranchFilter branchFilter) {
+
+        return branchService.filter(branchFilter.getStatus(), branchFilter.getName(), branchFilter.getDistrictId());
     }
 
     @PostMapping(value = "add-image")
     public ResponseEntity<?> addBranchImg(@RequestParam MultipartFile url) throws Exception {
         String id;
         try {
-           id = imageService.validateAndDownload(url);
+            id = imageService.validateAndDownload(url);
             if (id != null)
                 return ResponseEntity.ok(id); // lấy id gán vào cột url của serviceDTO sẽ gửi lên requeest
-
-
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-
-
     }
 
 
@@ -83,26 +77,24 @@ public class BranchAdminController {
     @PostMapping("add")
     //@ExceptionHandler({NotFoundException.class, DuplicateRecordException.class})
     public ResponseEntity<?> addBranch(@Valid @RequestBody BranchDTO branchDTO) throws Exception {
-            Branch branch = branchService.saveBranch(branchDTO);
-            if (branch != null)
-                return ResponseEntity.status(HttpStatus.CREATED).build();
-            else{
-                imageService.removeImg(branchDTO.getUrl());
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-            }
-
-
-
+        Branch branch = branchService.saveBranch(branchDTO);
+        if (branch != null)
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        else {
+            imageService.removeImg(branchDTO.getUrl());
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        }
 
 
     }
+
     @PostMapping("edit")
     public ResponseEntity<?> updateBranch(@Valid @RequestBody BranchDTO branchDTO) throws Exception {
         System.out.println(branchDTO.getUrl());
         Branch branch = branchService.updateBranch(branchDTO, branchDTO.getId());
         if (branch != null)
             return ResponseEntity.status(HttpStatus.OK).build();
-        else{
+        else {
             imageService.removeImg(branchDTO.getUrl());
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }

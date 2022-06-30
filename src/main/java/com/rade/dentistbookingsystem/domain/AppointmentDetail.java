@@ -1,7 +1,6 @@
 package com.rade.dentistbookingsystem.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,7 +32,7 @@ public class AppointmentDetail implements Serializable {
     @JoinColumn(name = "discount_id")
     private Discount discount;
 
-    public AppointmentDetail(Appointment appointment, Service service, Discount discount){
+    public AppointmentDetail(Appointment appointment, Service service, Discount discount) {
         this.id = new AppointmentDetailKey(service.getId(), appointment.getId());
         this.appointment = appointment;
         this.service = service;

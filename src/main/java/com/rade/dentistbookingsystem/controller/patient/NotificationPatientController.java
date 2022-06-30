@@ -14,8 +14,9 @@ import java.util.List;
 public class NotificationPatientController {
     @Autowired
     NotificationService notificationService;
+
     @PostMapping("")
-    public List<Notification> getPageNotification(@RequestBody PhoneAndPage phoneAndPage){
+    public List<Notification> getPageNotification(@RequestBody PhoneAndPage phoneAndPage) {
         notificationService.createRemindNotificationIfNeeded(phoneAndPage.getPhone());
         return notificationService.findByAccountId(phoneAndPage);
     }
