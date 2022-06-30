@@ -13,13 +13,13 @@ public interface AccountService {
 
     <S extends Account> S save(S entity);
 
+    boolean isRegistrable(AccountDTO accountDTO);
+
     Account registerNewUserAccount(AccountDTO accountDTO, int role) throws Exception;
 
     Account view(String phone);
 
     Account edit(AccountDTO accountDTO) throws Exception;
-
-//    List<AccountAndViolationTimes> findAccountViolated(Pageable pageable);
 
     List<AccountAndViolationTimes> findViolatedAccountsAndViolationTimes(Pageable pageable);
 
