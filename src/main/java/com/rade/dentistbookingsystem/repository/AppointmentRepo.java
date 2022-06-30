@@ -47,7 +47,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "                    SELECT a.*, DATEDIFF(DAY, a.appointment_date, GETDATE())  " +
                     "                    FROM Appointment a  " +
                     "                    WHERE a.id = :id AND (a.status = 0) AND " +
-                    "                    DATEDIFF(DAY, a.appointment_date, GETDATE()) <= 1 AND a.account_id = :account_id)  " +
+                    "                    DATEDIFF(DAY, a.appointment_date, GETDATE()) <= -1 AND a.account_id = :account_id)  " +
                     "                    THEN 'TRUE'  " +
                     "                    ELSE 'FALSE'  " +
                     "            END",
