@@ -21,7 +21,7 @@ public interface NotificationRepo extends JpaRepository<Notification, Integer> {
             "SELECT TOP 1 Notification.* " +
                     "FROM Notification " +
                     "WHERE (account_id = :account_id OR account_id = NULL) AND " +
-                    "date = CAST(:date) AND " +
+                    "date = CAST(:date  AS DATE) AND " +
                     "description = :description", nativeQuery = true)
     Notification findDuplicateDescriptionByAccountId(@Param("account_id") Integer accountId,
                                                      @Param("description") String description,
