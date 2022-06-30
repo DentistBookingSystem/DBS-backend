@@ -14,6 +14,15 @@ import java.util.List;
 
 @Repository
 public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
+    final static int ABSENT_TIME_IN_A_ROW_TO_BAN = 3;
+    final static int ABSENT_STATUS = 2;
+    final static int CANCEL_STATUS = 3;
+    final static int WAITING_STATUS = 0;
+    final static int CANCEL_TIMES_LIMIT = 3;
+    final static int DAYS_BEFORE_ALLOW_TO_CANCEL_OR_UPDATE = 1;
+    final static int TIME_FOR_REMIND_APPOINTMENT_AS_HOUR = 24;
+    final static int TIME_FOR_MARK_ABSENT_AS_MINUTE = 15;
+    final static int DAYS_INTERVAL_FOR_CANCEL_APPOINTMENT = 30;
     @Modifying
     @Transactional
     @Query(value = "UPDATE Appointment SET status = :status WHERE id = :id", nativeQuery = true)
@@ -29,7 +38,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "FROM Appointment " +
                     "WHERE " +
                     "(doctor_id = :doctor_id OR :doctor_id = 0) AND " +
-                    "(status = 0) AND " +
+                    "(status = "+WAITING_STATUS+") AND " +
                     "appointment_date = :time",
             nativeQuery = true)
     List<Appointment> findByDoctorIdAndTime(
@@ -45,8 +54,8 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "            CASE WHEN EXISTS ( " +
                     "                    SELECT a.*, DATEDIFF(DAY, a.appointment_date, GETDATE())  " +
                     "                    FROM Appointment a  " +
-                    "                    WHERE a.id = :id AND (a.status = 0) AND " +
-                    "                    DATEDIFF(DAY, a.appointment_date, GETDATE()) <= -1 AND a.account_id = :account_id)  " +
+                    "                    WHERE a.id = :id AND (a.status = "+WAITING_STATUS+") AND " +
+                    "                    DATEDIFF(DAY, a.appointment_date, GETDATE()) <= -"+DAYS_BEFORE_ALLOW_TO_CANCEL_OR_UPDATE+" AND a.account_id = :account_id)  " +
                     "                    THEN 'TRUE'  " +
                     "                    ELSE 'FALSE'  " +
                     "            END",
@@ -58,14 +67,14 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "                    CASE WHEN not exists (  " +
                     "                    SELECT COUNT (a.account_id)  " +
                     "                    FROM Appointment a  " +
-                    "                    WHERE a.account_id = :account_id AND (a.status = 3) AND DATEDIFF(DAY, a.appointment_date, GETDATE()) < 30  " +
+                    "                    WHERE a.account_id = :account_id AND (a.status = "+CANCEL_STATUS+") AND DATEDIFF(DAY, a.appointment_date, GETDATE()) < "+DAYS_INTERVAL_FOR_CANCEL_APPOINTMENT+"  " +
                     "                    GROUP BY a.account_id  " +
                     "                    ) OR (  " +
                     "                    SELECT COUNT (a.account_id)  " +
                     "                    FROM Appointment a  " +
-                    "                    WHERE a.account_id = :account_id AND (a.status = 3) AND DATEDIFF(DAY, a.appointment_date, GETDATE()) < 30  " +
+                    "                    WHERE a.account_id = :account_id AND (a.status = "+CANCEL_STATUS+") AND DATEDIFF(DAY, a.appointment_date, GETDATE()) < "+DAYS_INTERVAL_FOR_CANCEL_APPOINTMENT+"  " +
                     "                    GROUP BY a.account_id  " +
-                    "                    ) < 3  " +
+                    "                    ) < "+CANCEL_TIMES_LIMIT+"  " +
                     "                    THEN 'TRUE'  " +
                     "                    ELSE 'FALSE'  " +
                     "                    END",
@@ -77,7 +86,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "FROM Appointment " +
                     "WHERE (status = 0) AND DATEDIFF(MINUTE," +
                     "(CAST(appointment_date AS varchar) + ' ' + SUBSTRING(appointment_time, 0, 6) + ':00')," +
-                    "GETDATE()) > 15 ",
+                    "GETDATE()) > " + TIME_FOR_MARK_ABSENT_AS_MINUTE,
             nativeQuery = true)
     List<Appointment> findAllAppointmentToMarkAbsent();
 
@@ -86,7 +95,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "FROM Appointment " +
                     "WHERE (status = 0) AND DATEDIFF(HOUR," +
                     "(CAST(appointment_date AS varchar) + ' ' + SUBSTRING(appointment_time, 0, 6) + ':00')," +
-                    "GETDATE()) <= 24 AND " +
+                    "GETDATE()) <= " + TIME_FOR_REMIND_APPOINTMENT_AS_HOUR + " AND " +
                     "account_id = :account_id",
             nativeQuery = true)
     Appointment findAppointmentByAccountIdInNext24h(@Param("account_id") Integer accountId);
@@ -106,14 +115,14 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "    ORDER BY id DESC " +
                     "OFFSET @i ROWS  " +
                     "FETCH NEXT 1 ROWS ONLY) " +
-                    "                     WHEN 2 THEN @count_absent + 1 " +
+                    "                     WHEN " + ABSENT_STATUS + " THEN @count_absent + 1 " +
                     "ELSE 0 " +
                     "                   END  " +
-                    "IF @count_absent >= 3 BEGIN BREAK END " +
+                    "IF @count_absent >= " + ABSENT_TIME_IN_A_ROW_TO_BAN +" BEGIN BREAK END " +
                     "    SET @i = @i + 1 " +
                     "END " +
                     "SELECT " +
-                    "CASE WHEN @count_absent >= 3 " +
+                    "CASE WHEN @count_absent >= " + ABSENT_TIME_IN_A_ROW_TO_BAN +" " +
                     "THEN 'TRUE' " +
                     "ELSE 'FALSE' " +
                     "END", nativeQuery = true)
@@ -159,17 +168,4 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                                         @Param("branchId") Integer branchId,
                                         @Param("doctorId") Integer doctorId,
                                         @Param("serviceId") Integer serviceId);
-
-    //Appointment findByAccountIdAndAppointmentDateAndStatusIn(Integer accountId, Date date, int[] status);
-
-//    @Query(value = "SELECT a FROM Appointment a join a.account"
-//            + " WHERE (a.status = :status OR :status IS NULL) AND " +
-//            // "(a.appointmentDate = :appointmentDate  OR :appointmentDate IS NULL) AND " +
-//            //"(a.account.phone = :phone OR :phone IS NULL)" +
-//            "(a.branch.id = :branchId OR :branchId IS NULL) AND " +
-//            "(a.doctor.id = :doctorId OR :doctorId IS NULL)")
-//    List<Appointment> filter(@Param("status") int status, @Param("branchId") int branchId, @Param("doctorId") int doctorId);
-
-//    List<Appointment> findByStatusInOrAppointmentDateOrAccount_PhoneOrDoctor_IdOrBranch_Id(int[] status, Date appointmentDate, String account_phone, int doctor_id, int branch_id, Pageable pageable);
-    //List<Appointment> findByStatusNullOrStatusAndAppointmentDateNullOrAppointmentDateDAndDoctorIsNull;
 }

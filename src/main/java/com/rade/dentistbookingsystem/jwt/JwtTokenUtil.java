@@ -14,7 +14,7 @@ public class JwtTokenUtil {
 
     private static final long EXPIRE_DURATION = 60 * 60 * 1000;
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
-    private String SECRET_KEY = "hihhi";
+    private String SECRET_KEY = "7DE2F49FA1691939F7A8A9951E2EB7DE2F49FA1691939F7A8A9951E2EB7DE2F49FA1691939F7A8A9951E2EB7DE2F49FA1691939F7A8A9951E2EB";
 
     public String generateAccessToken(AccountDetail user) {
         return Jwts.builder()
