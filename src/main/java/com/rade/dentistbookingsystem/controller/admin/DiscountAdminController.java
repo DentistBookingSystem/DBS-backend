@@ -43,7 +43,8 @@ public class DiscountAdminController {
 
     @GetMapping("page/{field}")
     public Page<Discount> discountListPage(@PathVariable String field) {
-        Pageable pageable = PageRequest.of(1, 5, Sort.by(field));
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(1, pageSize, Sort.by(field));
 
         return discount.findAll(pageable);
     }
@@ -57,16 +58,6 @@ public class DiscountAdminController {
     public List<Discount> findAllDiscountListWithSort(@PathVariable String field) {
         return discount.findAllWithSort(field);
     }
-
-//    @GetMapping("list")
-//    public List<ServiceDiscountComponent> discountList(){
-//        List<Discount> discountList = discount.findAll();
-//        if(discountList != null){
-//            for (Discount tmp: discountList) {
-//                discountSv.findByDiscountId(tmp.getId())
-//            }
-//        }
-//    }
 
     @GetMapping("filter")
     public List<Discount> filterDiscount(@RequestBody DiscountFilter filter) throws ParseException {

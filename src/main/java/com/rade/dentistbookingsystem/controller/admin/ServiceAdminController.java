@@ -2,7 +2,6 @@ package com.rade.dentistbookingsystem.controller.admin;
 
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.model.ServiceDTO;
-import com.rade.dentistbookingsystem.services.GoogleDriveFileService;
 import com.rade.dentistbookingsystem.services.ServiceSv;
 import com.rade.dentistbookingsystem.services.ServiceTypeSv;
 import com.rade.dentistbookingsystem.utils.image.ImageService;
@@ -25,8 +24,6 @@ public class ServiceAdminController {
     ServiceSv serviceSv;
     @Autowired
     ServiceTypeSv serviceTypeSv;
-    @Autowired
-    GoogleDriveFileService googleDriveFileService;
     @Autowired
     ImageService imageService;
 

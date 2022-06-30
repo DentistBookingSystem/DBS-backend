@@ -30,17 +30,22 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Autowired
     AppointmentService appointmentService;
 
+    private static final int FEEDBACK_WAITING_STATUS = 0;
+    private static final int FEEDBACK_APPROVE_STATUS = 1;
+    private static final int FEEDBACK_DISAPPROVE_STATUS = 3;
+
     public FeedbackServiceImpl(FeedbackRepo feedBackRepo) {
         this.feedBackRepo = feedBackRepo;
     }
 
     @Override
     public Feedback save(FeedbackDTO feedbackDTO) {
+
         Feedback feedback = new Feedback(
                 appointmentService.findId(feedbackDTO.getAppointmentId()),
                 new Date(),
                 feedbackDTO.getContent(),
-                0);
+                FEEDBACK_WAITING_STATUS);
         return feedBackRepo.save(feedback);
     }
 
@@ -89,7 +94,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         Optional<Feedback> feedback = feedBackRepo.findById(feedbackId);
         if (feedback.isPresent()) {
             Feedback tmpFeedback = feedback.get();
-            if (tmpFeedback.getStatus() == 0) {
+            if (tmpFeedback.getStatus() == FEEDBACK_WAITING_STATUS) {
                 tmpFeedback.setStatus(feedbackStatus);
                 return feedBackRepo.save(tmpFeedback);
 

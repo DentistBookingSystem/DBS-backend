@@ -6,7 +6,6 @@ import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.BranchDTO;
 import com.rade.dentistbookingsystem.services.BranchService;
 import com.rade.dentistbookingsystem.services.DistrictService;
-import com.rade.dentistbookingsystem.services.GoogleDriveFileService;
 import com.rade.dentistbookingsystem.services.ProvinceService;
 import com.rade.dentistbookingsystem.utils.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,7 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("rade/admin/branch")
 public class BranchAdminController {
-    @Autowired
-    GoogleDriveFileService googleDriveFileService;
+
     @Autowired
     BranchService branchService;
     @Autowired
@@ -55,9 +53,10 @@ public class BranchAdminController {
         try {
             id = imageService.validateAndDownload(url);
             if (id != null)
-                return ResponseEntity.ok(id); // lấy id gán vào cột url của serviceDTO sẽ gửi lên requeest
+                return ResponseEntity.ok(id); // lấy id gán vào cột url của serviceDTO sẽ gửi lên request
         } catch (Exception e) {
             e.printStackTrace();
+
         }
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }

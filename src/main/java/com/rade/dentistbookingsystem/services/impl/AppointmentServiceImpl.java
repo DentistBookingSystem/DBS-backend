@@ -31,6 +31,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     private DoctorService doctorService;
 
+    private static final int APPOINTMENT_WAITING_STATUS = 0;
+    private static final int APPOINTMENT_DONE_STATUS = 1;
+    private static final int APPOINTMENT_CANCEL_ADMIN_STATUS = 0;
+
     public AppointmentServiceImpl(AppointmentRepo appointmentRepo) {
         this.appointmentRepo = appointmentRepo;
     }
@@ -48,7 +52,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                         doctorService.findId(appointmentDTO.getDoctorId()),
                         dateFormat.parse(appointmentDTO.getDate()),
                         appointmentDTO.getTime(),
-                        0,
+                        APPOINTMENT_WAITING_STATUS,
                         new Date()
                 );
             } else {
@@ -312,8 +316,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         Optional<Appointment> appointment = appointmentRepo.findById(appointmentId);
         if (appointment.isPresent()) {
             Appointment cancelAppointment = appointment.get();
-            if (cancelAppointment.getStatus() == 0) {
-                cancelAppointment.setStatus(6);
+            if (cancelAppointment.getStatus() == APPOINTMENT_WAITING_STATUS) {
+                cancelAppointment.setStatus(APPOINTMENT_CANCEL_ADMIN_STATUS);
                 return appointmentRepo.save(cancelAppointment);
             } else throw new RuntimeException("Can not cancel appointment");
         } else throw new NotFoundException("Appointment not found");
@@ -325,8 +329,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         Optional<Appointment> appointment = appointmentRepo.findById(appointmentId);
         if (appointment.isPresent()) {
             Appointment acceptAppointment = appointment.get();
-            if (acceptAppointment.getStatus() == 0) {
-                acceptAppointment.setStatus(1);
+            if (acceptAppointment.getStatus() == APPOINTMENT_WAITING_STATUS) {
+                acceptAppointment.setStatus(APPOINTMENT_DONE_STATUS);
                 return appointmentRepo.save(acceptAppointment);
             } else throw new RuntimeException("Can not mark done this appointment");
         } else throw new NotFoundException("Appointment not found");

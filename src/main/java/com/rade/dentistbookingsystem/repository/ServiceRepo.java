@@ -9,17 +9,17 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ServiceRepo extends JpaRepository<Service, Integer> {
-    public List<Service> findByServiceType(ServiceType serviceType);
+     List<Service> findByServiceType(ServiceType serviceType);
 
-    public List<Service> findByServiceTypeId(int id);
+    List<Service> findByServiceTypeId(int id);
 
-    public Service findByName(String name);
+    Service findByName(String name);
 
 
     @Query(value = "SELECT * FROM Service WHERE id = ?1", nativeQuery = true)
     Service findId(Integer id);
 
-    public List<Service> findByServiceTypeIdAndStatus(int id, short status);
+    List<Service> findByServiceTypeIdAndStatus(int id, short status);
 
     @Query(value = "SELECT Service.* " +
             "FROM Service, Appointment_Detail ad, Appointment a " +

@@ -27,13 +27,18 @@ public class FeedbackPatientController {
     @Autowired
     NotificationService notificationService;
 
+
+    final static int BLOCKED_ACCOUNT_STATUS = 2;
+    final static int APPOINTMENT_DONE_STATUS = 1;
+    final static int APPOINTMENT_FEEDBACK_STATUS = 5;
+
     @PostMapping("send")
     public ResponseEntity<?> sendFeedback(@RequestBody FeedbackAndPhone feedbackAndPhone) {
         try {
             Account account = accountService.findByPhone(feedbackAndPhone.getPhone());
             if (account == null)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            if (account.getStatus() == 2)
+            if (account.getStatus() == BLOCKED_ACCOUNT_STATUS)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             Appointment appointment = appointmentService.findId(feedbackAndPhone.getFeedbackDTO().getAppointmentId());
             if (appointment == null) {
@@ -43,13 +48,13 @@ public class FeedbackPatientController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             String content = feedbackAndPhone.getFeedbackDTO().getContent();
-            if (!(appointment.getStatus() == 1))
+            if (!(appointment.getStatus() == APPOINTMENT_DONE_STATUS))
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
             if (!(content != null && !content.isEmpty() && content.length() <= 150))
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
             Feedback feedback = feedbackService.save(feedbackAndPhone.getFeedbackDTO());
             if (feedback != null) {
-                appointmentService.check(5, feedback.getAppointment().getId());
+                appointmentService.check(APPOINTMENT_FEEDBACK_STATUS, feedback.getAppointment().getId());
                 notificationService.createNotificationForSendingFeedback(feedback);
                 return ResponseEntity.ok(feedback);
             } else {

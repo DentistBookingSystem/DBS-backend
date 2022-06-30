@@ -23,8 +23,9 @@ public class AppointmentAdminController {
 
     @GetMapping("{i}")
     public Page<Appointment> getAppointmentList(@PathVariable Integer i) {
+        int size = 20;
         if (i == null) i = 1;
-        return appointmentService.findAll(PageRequest.of(i - 1, 20, Sort.by("id").descending()));
+        return appointmentService.findAll(PageRequest.of(i - 1, size, Sort.by("id").descending()));
     }
 
     @PostMapping("filter")

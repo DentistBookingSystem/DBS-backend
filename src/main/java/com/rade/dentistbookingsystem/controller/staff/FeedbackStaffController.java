@@ -40,7 +40,8 @@ public class FeedbackStaffController {
     @PostMapping("approve/{id}")
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> approveFeedback(@PathVariable int id) {
-        Feedback feedback = feedbackService.updateFeedbackStatus(id, 1);
+        final int APPROVE_FEEDBACK_STATUS = 1;
+        Feedback feedback = feedbackService.updateFeedbackStatus(id, APPROVE_FEEDBACK_STATUS);
         notificationService.createNotificationForApprovingFeedbackFromAdmin(feedback);
         return ResponseEntity.ok().build();
 
@@ -50,7 +51,8 @@ public class FeedbackStaffController {
     @PostMapping("disapprove/{id}")
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> disapproveFeedback(@PathVariable int id) {
-        Feedback feedback = feedbackService.updateFeedbackStatus(id, 2);
+        final int DISAPPROVE_FEEDBACK_STATUS = 1;
+        Feedback feedback = feedbackService.updateFeedbackStatus(id, DISAPPROVE_FEEDBACK_STATUS);
         notificationService.createNotificationForDisapprovingFeedbackFromAdmin(feedback);
         int accountId = feedback.getAppointment().getAccount().getId();
         if (feedbackService.checkAccountToBanByFeedback(accountId)) {

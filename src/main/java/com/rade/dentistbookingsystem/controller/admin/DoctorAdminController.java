@@ -76,7 +76,6 @@ public class DoctorAdminController {
     @PostMapping("add")
     public ResponseEntity<?> insertDoctor(@RequestBody @Validated DoctorDTO doctorDTO) throws Exception {
 
-
         Doctor doctor = doctorService.addDoctor(doctorDTO);
         if (doctor != null)
             return ResponseEntity.ok(doctor);

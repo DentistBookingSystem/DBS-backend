@@ -24,6 +24,7 @@ public class BranchDTO implements Serializable {
     @NotNull(message = "District is required")
     private int districtId;
 
+    @NotNull(message = "Image is required")
     private String url;
 
     @NotNull(message = "Branch's open time is required")
