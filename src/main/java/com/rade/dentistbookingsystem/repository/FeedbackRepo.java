@@ -15,8 +15,8 @@ public interface FeedbackRepo extends JpaRepository<Feedback, Integer> {
     @Query(value =
             "SELECT Feedback.* \n" +
                     "FROM Feedback, Appointment ap, Account ac, Appointment_Detail ad \n" +
-                    "WHERE Feedback.appointment_id = ap.id AND ap.account_id = ac.id AND ap.id = ad.appointment_id AND \n" +
-                    "(ac.phone LIKE CONCAT('%',:phone,'%') OR :phone IS NULL OR :phone = '' AND \n" +
+                    "WHERE Feedback.appointment_id = ap.id AND ap.id = ad.appointment_id AND ac.id = ap.account_id AND \n" +
+                    "((ac.phone LIKE CONCAT('%',:phone,'%') OR :phone IS NULL OR :phone = '') AND \n" +
                     "(Feedback.status = :status OR :status IS NULL) AND \n" +
                     "(ad.service_id = :service_id OR :service_id = 0) AND \n" +
                     "(DATEDIFF(day, Feedback.time, :time) = 0 OR :time IS NULL)) " +
