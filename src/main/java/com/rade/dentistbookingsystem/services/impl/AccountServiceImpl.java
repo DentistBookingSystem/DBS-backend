@@ -41,6 +41,11 @@ public class AccountServiceImpl implements AccountService {
         return accountRepo.save(entity);
     }
 
+    @Override
+    public boolean isRegistrable(AccountDTO accountDTO){
+        if (accountRepo.findByPhone(accountDTO.getPhone()) != null) return false;
+        else return true;
+    }
 
     @Override
     public Account registerNewUserAccount(AccountDTO accountDTO, int role) throws Exception {
