@@ -73,7 +73,7 @@ public class DoctorAdminController {
     }
 
     @PostMapping("add")
-    public ResponseEntity<?> insertDoctor(@RequestPart @Validated DoctorDTO doctorDTO) throws Exception {
+    public ResponseEntity<?> insertDoctor(@RequestBody @Validated DoctorDTO doctorDTO) throws Exception {
 
 
             Doctor doctor = doctorService.addDoctor(doctorDTO);
