@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 
 @NoArgsConstructor
@@ -33,6 +31,8 @@ public class BranchDTO implements Serializable {
     @NotNull(message = "Branch's close time is required")
     private String closeTime;
 
+    @Min(value = 1)
+    @Max(value = 2)
     @NotNull(message = "Branch's status is required")
     private Integer status;
 }

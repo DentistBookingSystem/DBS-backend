@@ -99,10 +99,11 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public Doctor deleteDoctor(int id) {
+        final int DOCTOR_STATUS_INACTIVE = 2;
         Optional<Doctor> doctorData = findById(id);
         if (doctorData.isPresent()) {
             Doctor doctor = doctorData.get();
-            doctor.setStatus(0);
+            doctor.setStatus(DOCTOR_STATUS_INACTIVE);
             return save(doctor);
 
         } else throw new RuntimeException("Doctor do not exist!!!");

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -28,6 +30,8 @@ public class DoctorDTO implements Serializable {
     @NotNull(message = "Branch is require")
     private int branchId;
 
+    @Min(value = 1)
+    @Max(value = 2)
     private int status;
 
 }

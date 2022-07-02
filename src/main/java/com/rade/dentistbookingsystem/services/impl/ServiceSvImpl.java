@@ -106,10 +106,11 @@ public class ServiceSvImpl implements ServiceSv {
 
     @Override
     public Service deleteService(int id) {
+        final int SERVICE_STATUS_INACTIVE = 2;
         Optional<Service> serviceData = findById(id);
         if (serviceData.isPresent()) {
             Service service = serviceData.get();
-            service.setStatus((short) 0);
+            service.setStatus((short) SERVICE_STATUS_INACTIVE);
             return save(service);
         } else throw new NotFoundException("Service is not found");
 
