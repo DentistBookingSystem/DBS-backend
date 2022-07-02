@@ -33,7 +33,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private static final int APPOINTMENT_WAITING_STATUS = 0;
     private static final int APPOINTMENT_DONE_STATUS = 1;
-    private static final int APPOINTMENT_CANCEL_ADMIN_STATUS = 0;
+    private static final int APPOINTMENT_CANCEL_ADMIN_STATUS = 3;
 
     public AppointmentServiceImpl(AppointmentRepo appointmentRepo) {
         this.appointmentRepo = appointmentRepo;

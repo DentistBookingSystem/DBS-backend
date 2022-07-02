@@ -51,7 +51,7 @@ public class FeedbackStaffController {
     @PostMapping("disapprove/{id}")
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> disapproveFeedback(@PathVariable int id) {
-        final int DISAPPROVE_FEEDBACK_STATUS = 1;
+        final int DISAPPROVE_FEEDBACK_STATUS = 2;
         Feedback feedback = feedbackService.updateFeedbackStatus(id, DISAPPROVE_FEEDBACK_STATUS);
         notificationService.createNotificationForDisapprovingFeedbackFromAdmin(feedback);
         int accountId = feedback.getAppointment().getAccount().getId();
