@@ -66,7 +66,7 @@ public class ServiceAdminController {
         if (service != null)
             return ResponseEntity.ok(service);
         else {
-            imageService.removeImg(serviceDTO.getUrl());
+           // imageService.removeImg(serviceDTO.getUrl());
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
 

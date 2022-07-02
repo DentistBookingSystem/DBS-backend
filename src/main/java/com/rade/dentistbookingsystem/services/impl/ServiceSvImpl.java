@@ -92,6 +92,7 @@ public class ServiceSvImpl implements ServiceSv {
             service.setStatus(serviceDTO.getStatus());
             service.setMinPrice(serviceDTO.getMinPrice());
             service.setMaxPrice(serviceDTO.getMaxPrice());
+            service.setUrl(serviceDTO.getUrl());
             service.setServiceType(serviceTypeSv.findById(serviceDTO.getServiceTypeId()).orElseThrow(() -> new NotFoundException("Service type id not found")));
             service.setEstimatedTime(serviceDTO.getEstimatedTime());
             return save(service);
