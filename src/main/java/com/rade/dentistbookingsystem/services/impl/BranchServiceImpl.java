@@ -56,14 +56,20 @@ public class BranchServiceImpl implements BranchService {
     @Override
     public Branch saveBranch(BranchDTO branchDTO) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        int gapTime = 1000 * 60 * 30;
         try {
+
+            Date openTime = sdf.parse(branchDTO.getOpenTime());
+            Date closeTime = sdf.parse(branchDTO.getCloseTime());
             if (branchRepo.findByName(branchDTO.getName()) != null)
                 throw new DuplicateRecordException("This branch name already use");
+            if (openTime.after(closeTime) || (closeTime.getTime() - openTime.getTime() < gapTime))
+                throw new ValidationException("Open time and close time are invalid");
             Branch branch = new Branch(
                     branchDTO.getName(),
                     districtService.getById(branchDTO.getDistrictId()),
-                    sdf.parse(branchDTO.getOpenTime()),
-                    sdf.parse(branchDTO.getCloseTime()),
+                    openTime,
+                    closeTime,
                     branchDTO.getStatus(),
                     branchDTO.getUrl());
             return branchRepo.save(branch);
@@ -76,6 +82,7 @@ public class BranchServiceImpl implements BranchService {
     @Override
     public Branch updateBranch(BranchDTO branchDTO, int id) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        int gapTime = 1000 * 60 * 30;
         try {
             if (existsById(id) == false) {
                 throw new Exception("Branch not found");
@@ -83,7 +90,8 @@ public class BranchServiceImpl implements BranchService {
                 Branch branch = branchRepo.getById(id);
                 Date openTime = sdf.parse(branchDTO.getOpenTime());
                 Date closeTime = sdf.parse(branchDTO.getCloseTime());
-                if (openTime.after(closeTime)) throw new ValidationException("Open time and close time are invalid");
+                if (openTime.after(closeTime) || (closeTime.getTime() - openTime.getTime() < gapTime))
+                    throw new ValidationException("Open time and close time are invalid");
                 branch.setName(branchDTO.getName());
                 branch.setStatus(branchDTO.getStatus());
                 branch.setUrl(branchDTO.getUrl());
