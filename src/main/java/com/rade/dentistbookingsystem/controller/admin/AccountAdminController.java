@@ -44,6 +44,10 @@ public class AccountAdminController {
         return accountService.getAccountList(roleId, status, phone);
     }
 
+    @GetMapping("{id}")
+    public Account findByPhone(@PathVariable int id) {
+        return accountService.findId(id);
+    }
 
     @PostMapping("register")
     public ResponseEntity<?> register(@Validated @RequestBody AccountDTO accountDTO) throws Exception {
