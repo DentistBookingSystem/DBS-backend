@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("rade/admin/service-type")
+@RequestMapping("rade/admin/service_type")
 public class ServiceTypeAdminController {
     @Autowired
     ServiceTypeSv serviceTypeSv;
