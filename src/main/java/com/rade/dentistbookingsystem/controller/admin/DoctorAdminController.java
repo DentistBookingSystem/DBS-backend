@@ -36,8 +36,8 @@ public class DoctorAdminController {
     @Autowired
     ImageService imageService;
 
-    @GetMapping()
-    public Optional<Doctor> findById(@RequestParam int id) {
+    @GetMapping("{id}")
+    public Optional<Doctor> findById(@PathVariable int id) {
         Optional<Doctor> doctor = doctorService.findById(id);
         if (doctor.isPresent()) {
             return doctor;
