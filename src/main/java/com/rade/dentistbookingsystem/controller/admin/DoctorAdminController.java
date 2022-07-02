@@ -98,7 +98,7 @@ public class DoctorAdminController {
         }
 
     }
-
+    
     @GetMapping("delete/{id}")
     public ResponseEntity<?> deleteDoctor(@PathVariable int id) {
         try {
