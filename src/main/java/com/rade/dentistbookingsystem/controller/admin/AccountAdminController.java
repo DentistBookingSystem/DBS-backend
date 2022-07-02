@@ -1,9 +1,11 @@
 package com.rade.dentistbookingsystem.controller.admin;
 
 import com.rade.dentistbookingsystem.componentform.AccountAndViolationTimes;
+import com.rade.dentistbookingsystem.componentform.JsonPhone;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.model.AccountDTO;
 import com.rade.dentistbookingsystem.services.AccountService;
+import com.rade.dentistbookingsystem.services.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +22,9 @@ import java.util.List;
 public class AccountAdminController {
     @Autowired
     AccountService accountService;
+
+    @Autowired
+    AppointmentService appointmentService;
 
     @GetMapping("violated/page/{page}")
     public List<AccountAndViolationTimes> getViolatedAccounts(@PathVariable int page) {
@@ -83,12 +88,15 @@ public class AccountAdminController {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    @PostMapping("/ban")
-    public ResponseEntity<?> unbanAccount(@RequestParam String phone) {
+    @PostMapping("/unban")
+    public ResponseEntity<?> unbanAccount(@RequestBody JsonPhone jsonPhone) {
         try {
             int UN_BAN_STATUS = 1;
-            accountService.editStatus(phone, UN_BAN_STATUS);
-            return ResponseEntity.ok().build();
+            Account account = accountService.findByPhone(jsonPhone.getPhone());
+            if(appointmentService.isAbleToUnBan(account.getId())){
+                accountService.editStatus(jsonPhone.getPhone(), UN_BAN_STATUS);
+                return ResponseEntity.ok().build();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

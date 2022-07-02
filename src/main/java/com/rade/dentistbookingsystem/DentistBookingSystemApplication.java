@@ -26,22 +26,23 @@ public class DentistBookingSystemApplication {
     @Autowired
     FeedbackService feedbackService;
     final static int ABSENT_STATUS = 2;
+    final static int BAN_STATUS = 2;
     public static void main(String[] args) {
         SpringApplication.run(DentistBookingSystemApplication.class, args);
     }
 
-    @Scheduled(fixedDelayString = "PT1M")
-    void checkAllAppointmentToMarkAbsent() throws InterruptedException{
-        List<Appointment> appointmentList = appointmentService.findAllAppointmentToMarkAbsent();
-        for (Appointment appointment : appointmentList) {
-            Integer accountId = appointment.getAccount().getId();
-            appointmentService.check(ABSENT_STATUS, appointment.getId());
-            notificationService.createNotificationForAbsent(appointment);
-            if (appointmentService.checkAccountToBanByAppointment(accountId)) {
-                accountService.checkAccount(ABSENT_STATUS, accountId);
-            }
-        }
-    }
+//    @Scheduled(fixedDelayString = "PT1M")
+//    void checkAllAppointmentToMarkAbsent() throws InterruptedException{
+//        List<Appointment> appointmentList = appointmentService.findAllAppointmentToMarkAbsent();
+//        for (Appointment appointment : appointmentList) {
+//            Integer accountId = appointment.getAccount().getId();
+//            appointmentService.check(ABSENT_STATUS, appointment.getId());
+//            notificationService.createNotificationForAbsent(appointment);
+//            if (appointmentService.checkAccountToBanByAppointment(accountId)) {
+//                accountService.checkAccount(BAN_STATUS, accountId);
+//            }
+//        }
+//    }
 }
 
 @Configuration
