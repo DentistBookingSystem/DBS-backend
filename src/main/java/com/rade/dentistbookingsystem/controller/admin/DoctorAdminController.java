@@ -88,7 +88,7 @@ public class DoctorAdminController {
     }
 
     @PostMapping("edit")
-    public ResponseEntity<?> updateDoctor(@RequestPart @Validated DoctorDTO doctorDTO) throws Exception {
+    public ResponseEntity<?> updateDoctor(@RequestBody @Validated DoctorDTO doctorDTO) throws Exception {
         Doctor doctor = doctorService.editDoctor(doctorDTO);
         if (doctor != null)
             return ResponseEntity.ok(doctor);

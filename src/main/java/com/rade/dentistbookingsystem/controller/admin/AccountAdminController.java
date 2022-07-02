@@ -81,7 +81,7 @@ public class AccountAdminController {
     }
 
     @PostMapping("/ban")
-    public ResponseEntity<?> banAccount(@RequestParam String phone) {
+    public ResponseEntity<?> banAccount(@RequestBody String phone) {
         try {
             int BAN_STATUS = 2;
             accountService.editStatus(phone, BAN_STATUS);

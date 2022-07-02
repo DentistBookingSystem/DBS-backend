@@ -33,6 +33,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void removeImg(String id) throws Exception {
+
         googleDriveFileService.deleteFile(id);
     }
 }
