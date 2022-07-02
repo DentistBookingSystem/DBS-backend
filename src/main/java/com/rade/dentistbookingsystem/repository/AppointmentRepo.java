@@ -128,6 +128,55 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "END", nativeQuery = true)
     boolean checkAccountToBanByAppointment(@Param("account_id") int accountId);
 
+    @Query(value =
+            "DECLARE @count_absent INT = 0  " +
+                    "DECLARE @i INT = 0  " +
+                    "DECLARE @count INT =   " +
+                    "(SELECT COUNT(account_id) " +
+                    "FROM Appointment " +
+                    "WHERE account_id = :account_id) " +
+                    "WHILE @i < @count " +
+                    "BEGIN " +
+                    "SET @count_absent = CASE (SELECT status " +
+                    "FROM Appointment " +
+                    "WHERE account_id = :account_id " +
+                    "ORDER BY id DESC " +
+                    "OFFSET @i ROWS " +
+                    "FETCH NEXT 1 ROWS ONLY) " +
+                    "WHEN "+ ABSENT_STATUS +" " +
+                    "THEN @count_absent + 1 " +
+                    "ELSE 0 " +
+                    "END " +
+                    "IF @count_absent >= "+ ABSENT_TIME_IN_A_ROW_TO_BAN +" BEGIN BREAK END " +
+                    "SET @i = @i +  1 " +
+                    "END " +
+                    "SET @count_absent = 0 " +
+                    "SET @i = @i + 1 " +
+                    "SET @count = " +
+                    "(SELECT COUNT(account_id) " +
+                    "FROM Appointment " +
+                    "WHERE account_id = :account_id) " +
+                    "WHILE @i < @count " +
+                    "BEGIN " +
+                    "SET @count_absent = CASE (SELECT status " +
+                    "FROM Appointment " +
+                    "WHERE account_id = :account_id " +
+                    "ORDER BY id DESC " +
+                    "OFFSET @i ROWS " +
+                    "FETCH NEXT 1 ROWS ONLY) " +
+                    "WHEN "+ ABSENT_STATUS +" " +
+                    "THEN @count_absent + 1 " +
+                    "ELSE 0 " +
+                    "END " +
+                    "IF @count_absent >= "+ABSENT_TIME_IN_A_ROW_TO_BAN+" BEGIN BREAK END " +
+                    "SET @i = @i +  1 " +
+                    "END " +
+                    "SELECT " +
+                    "CASE WHEN @count_absent >= "+ ABSENT_TIME_IN_A_ROW_TO_BAN +" " +
+                    "THEN 'FALSE' " +
+                    "ELSE 'TRUE' " +
+                    "END", nativeQuery = true)
+    boolean isAbleToUnBan(@Param("account_id") int accountId);
 
     @Query(value =
             "SELECT DISTINCT Appointment.* " +

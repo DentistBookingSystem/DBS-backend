@@ -336,4 +336,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         } else throw new NotFoundException("Appointment not found");
 
     }
+
+    @Override
+    public boolean isAbleToUnBan(int accountId) {
+        return appointmentRepo.isAbleToUnBan(accountId);
+    }
 }

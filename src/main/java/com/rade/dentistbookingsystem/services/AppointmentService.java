@@ -50,5 +50,7 @@ public interface AppointmentService {
     Appointment cancelAppointmentForAdmin(int appointmentId);
 
     Appointment checkDoneAppointmentForAdmin(int appointmentId);
+
+    boolean isAbleToUnBan(int accountId);
 }
 
