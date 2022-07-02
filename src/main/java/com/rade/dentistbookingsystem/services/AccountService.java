@@ -28,4 +28,6 @@ public interface AccountService {
 
 
     List<Account> getAccountList(int statusId, short status, String phone);
+
+    boolean editStatus(String phone, int status) throws Exception;
 }

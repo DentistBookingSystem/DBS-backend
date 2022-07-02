@@ -71,4 +71,27 @@ public class AccountAdminController {
 
     }
 
+    @PostMapping("/ban")
+    public ResponseEntity<?> banAccount(@RequestParam String phone) {
+        try {
+            int BAN_STATUS = 2;
+            accountService.editStatus(phone, BAN_STATUS);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    }
+
+    @PostMapping("/ban")
+    public ResponseEntity<?> unbanAccount(@RequestParam String phone) {
+        try {
+            int UN_BAN_STATUS = 1;
+            accountService.editStatus(phone, UN_BAN_STATUS);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    }
 }

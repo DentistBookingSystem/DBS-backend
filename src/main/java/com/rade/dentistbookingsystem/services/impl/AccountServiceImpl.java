@@ -31,6 +31,10 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     DistrictRepo districtRepo;
 
+    private final int ROLE_ADMIN_ID = 1;
+    private final int ROLE_USER_ID = 2;
+    private final int ROLE_STAFF_ID = 3;
+
     public AccountServiceImpl(AccountRepo accountRepo) {
         this.accountRepo = accountRepo;
     }
@@ -84,7 +88,7 @@ public class AccountServiceImpl implements AccountService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         Account account = accountRepo.findByPhone(accountDTO.getPhone());
-        if (account == null || account.getRole().getId() == 1 || account.getStatus() == 2) {
+        if (account == null || account.getRole().getId() == ROLE_ADMIN_ID || account.getStatus() == 2) {
             throw new Exception("Can not edit!! please try again");
         } else {
             account.setFullName(accountDTO.getFullName());
@@ -126,5 +130,17 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<Account> getAccountList(int roleId, short status, String phone) {
         return accountRepo.filterAccount(roleId, status, phone);
+    }
+
+    @Override
+    public boolean editStatus(String phone, int status) throws Exception {
+        Account account = accountRepo.findByPhone(phone);
+        if (account != null && account.getRole().getId() != ROLE_ADMIN_ID) {
+            account.setStatus((short) status);
+            accountRepo.save(account);
+            return true;
+
+        } else throw new Exception("You do not allow to edit");
+
     }
 }
