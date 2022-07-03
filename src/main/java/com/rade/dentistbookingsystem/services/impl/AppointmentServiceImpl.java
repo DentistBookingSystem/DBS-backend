@@ -110,37 +110,14 @@ public class AppointmentServiceImpl implements AppointmentService {
             float totalTime = 0;
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             Date startTimeAtMorning = branchService.findId(doctorAndDate.getBranchId()).getOpenTime();
-            Date endTimeAtMorning = sdf.parse("12:00");
-            Date startTimeAtNoon = sdf.parse("13:00");
             Date endTimeAtNoon = branchService.findId(doctorAndDate.getBranchId()).getCloseTime();
-            boolean endOfMorning = false;
             boolean endOfNoon = false;
             if (doctorAndDate.getDoctorId() != 0) {
                 for (int serviceId : doctorAndDate.getServiceId()) {
                     totalTime = totalTime + serviceSv.findId(serviceId).getEstimatedTime();
                 }
-                while (!endOfMorning) {
-                    String start = sdf.format(startTimeAtMorning);
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(sdf.parse(start));
-                    cal.add(Calendar.MINUTE, Math.round(totalTime * 60));
-
-                    Calendar calForEndOfMorning = Calendar.getInstance();
-                    calForEndOfMorning.setTime(endTimeAtMorning);
-
-                    if (!cal.after(calForEndOfMorning)) {
-                        String end = sdf.format(cal.getTime());
-                        timeOptionByDateList.add(start + "-" + end);
-                        cal.setTime(sdf.parse(start));
-                        cal.add(Calendar.MINUTE, 30);
-                        startTimeAtMorning = cal.getTime();
-                    } else {
-                        endOfMorning = true;
-                    }
-                }
-
                 while (!endOfNoon) {
-                    String start = sdf.format(startTimeAtNoon);
+                    String start = sdf.format(startTimeAtMorning);
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(sdf.parse(start));
                     cal.add(Calendar.MINUTE, Math.round(totalTime * 60));
@@ -153,7 +130,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                         timeOptionByDateList.add(start + "-" + end);
                         cal.setTime(sdf.parse(start));
                         cal.add(Calendar.MINUTE, 30);
-                        startTimeAtNoon = cal.getTime();
+                        startTimeAtMorning = cal.getTime();
                     } else {
                         endOfNoon = true;
                     }
