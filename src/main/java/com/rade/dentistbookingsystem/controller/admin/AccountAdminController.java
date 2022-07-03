@@ -81,10 +81,10 @@ public class AccountAdminController {
     }
 
     @PostMapping("/ban")
-    public ResponseEntity<?> banAccount(@RequestBody String phone) {
+    public ResponseEntity<?> banAccount(@RequestBody JsonPhone jsonPhone) {
         try {
             int BAN_STATUS = 2;
-            accountService.editStatus(phone, BAN_STATUS);
+            accountService.editStatus(jsonPhone.getPhone(), BAN_STATUS);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
