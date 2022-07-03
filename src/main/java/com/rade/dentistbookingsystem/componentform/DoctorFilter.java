@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class DoctorFilter {
     private String name;
     private int status;
-    private int branch_Id;
+    private int branchId;
 }
