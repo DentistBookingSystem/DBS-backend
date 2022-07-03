@@ -59,7 +59,7 @@ public class DiscountAdminController {
         return discount.findAllWithSort(field);
     }
 
-    @GetMapping("filter")
+    @PostMapping("filter")
     public List<Discount> filterDiscount(@RequestBody DiscountFilter filter) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date endDate = null;
