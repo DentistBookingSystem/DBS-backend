@@ -1,6 +1,7 @@
 package com.rade.dentistbookingsystem.services.impl;
 
 import com.rade.dentistbookingsystem.componentform.ServiceDiscountComponent;
+import com.rade.dentistbookingsystem.componentform.ServiceFilter;
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.domain.ServiceType;
 import com.rade.dentistbookingsystem.exceptions.DuplicateRecordException;
@@ -171,8 +172,8 @@ public class ServiceSvImpl implements ServiceSv {
 
 
     @Override
-    public List<Service> filterService(ServiceDTO serviceDTO) {
+    public List<Service> filterService(ServiceFilter serviceFilter) {
 
-        return serviceRepo.filterService(serviceDTO.getId(), serviceDTO.getName(), Integer.valueOf(serviceDTO.getStatus()), serviceDTO.getMinPrice(), serviceDTO.getMaxPrice());
+        return serviceRepo.filterService(serviceFilter.getId(), serviceFilter.getName(), Integer.valueOf(serviceFilter.getStatus()), serviceFilter.getMinPrice(), serviceFilter.getMaxPrice());
     }
 }

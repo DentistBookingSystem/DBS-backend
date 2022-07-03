@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.controller.admin;
 
+import com.rade.dentistbookingsystem.componentform.ServiceFilter;
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.model.ServiceDTO;
 import com.rade.dentistbookingsystem.services.ServiceSv;
@@ -34,9 +35,9 @@ public class ServiceAdminController {
         return serviceSv.findById(id);
     }
 
-    @GetMapping("filter")
-    public List<Service> filter(@RequestBody ServiceDTO serviceDTO) {
-        return serviceSv.filterService(serviceDTO);
+    @PostMapping("filter")
+    public List<Service> filter(@RequestBody ServiceFilter serviceFilter) {
+        return serviceSv.filterService(serviceFilter);
     }
 
     @PostMapping(value = "add-image")
