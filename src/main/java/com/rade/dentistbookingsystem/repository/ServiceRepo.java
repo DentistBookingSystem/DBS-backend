@@ -35,7 +35,7 @@ public interface ServiceRepo extends JpaRepository<Service, Integer> {
                     "(Service.name LIKE CONCAT('%',:name,'%') OR :name IS NULL OR :name = '') AND " +
                     "(Service.service_type_id = :serviceTypeId OR :serviceTypeId = 0) AND " +
                     "(Service.status = :status OR :status = 0) AND " +
-                    "(Service.min_price => :minPrice OR :minPrice = 0) AND " +
+                    "(Service.min_price >= :minPrice OR :minPrice = 0) AND " +
                     " (Service.max_price <= :maxPrice OR :maxPrice = 0)",
             nativeQuery = true)
     List<Service> filterService(@Param("serviceTypeId") int serviceTypeId,
