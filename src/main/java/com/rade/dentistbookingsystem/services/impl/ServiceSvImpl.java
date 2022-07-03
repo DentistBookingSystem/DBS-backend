@@ -174,6 +174,6 @@ public class ServiceSvImpl implements ServiceSv {
     @Override
     public List<Service> filterService(ServiceFilter serviceFilter) {
 
-        return serviceRepo.filterService(serviceFilter.getId(), serviceFilter.getName(), Integer.valueOf(serviceFilter.getStatus()), serviceFilter.getMinPrice(), serviceFilter.getMaxPrice());
+        return serviceRepo.filterService(serviceFilter.getServiceTypeId(), serviceFilter.getName(), Integer.valueOf(serviceFilter.getStatus()), serviceFilter.getMinPrice(), serviceFilter.getMaxPrice());
     }
 }

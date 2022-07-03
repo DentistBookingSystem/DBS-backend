@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 public class ServiceFilter implements Serializable {
 
-    private int id;
+    private int serviceTypeId;
     private String name;
     private short status;
     private float minPrice;
