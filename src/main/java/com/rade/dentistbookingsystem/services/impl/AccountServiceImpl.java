@@ -2,6 +2,7 @@ package com.rade.dentistbookingsystem.services.impl;
 
 import com.rade.dentistbookingsystem.componentform.AccountAndViolationTimes;
 import com.rade.dentistbookingsystem.domain.Account;
+import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.AccountDTO;
 import com.rade.dentistbookingsystem.repository.AccountRepo;
 import com.rade.dentistbookingsystem.repository.AppointmentRepo;
@@ -101,6 +102,18 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    @Override
+    public boolean confirmPassword(String phone, String password) {
+        Account account = accountRepo.findByPhone(phone);
+        if (account == null) throw new NotFoundException("Phone number are not found");
+        else {
+            if (bCryptPasswordEncoder.matches(password, account.getPassword())) {
+                return true;
+            }
+
+        }
+        return false;
+    }
 
     @Override
     public List<AccountAndViolationTimes> findViolatedAccountsAndViolationTimes(Pageable pageable) {

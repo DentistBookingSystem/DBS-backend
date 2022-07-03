@@ -20,6 +20,8 @@ public interface AccountService {
 
     Account edit(AccountDTO accountDTO) throws Exception;
 
+    boolean confirmPassword(String phone, String password);
+
     List<AccountAndViolationTimes> findViolatedAccountsAndViolationTimes(Pageable pageable);
 
     Account findByPhone(String phone);
