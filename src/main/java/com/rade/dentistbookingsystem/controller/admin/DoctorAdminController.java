@@ -54,7 +54,7 @@ public class DoctorAdminController {
         return null;
     }
 
-    @GetMapping("filter")
+    @PostMapping("filter")
     public List<Doctor> filterDoctor(@RequestBody DoctorFilter doctorFilter) {
         return doctorService.filterDoctor(doctorFilter.getStatus(), doctorFilter.getName(), doctorFilter.getBranchId());
     }
