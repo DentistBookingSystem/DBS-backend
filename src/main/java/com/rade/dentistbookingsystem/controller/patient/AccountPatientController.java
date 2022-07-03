@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.controller.patient;
 
+import com.rade.dentistbookingsystem.authetcation.AuthRequest;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.model.AccountDTO;
 import com.rade.dentistbookingsystem.services.AccountService;
@@ -23,6 +24,20 @@ public class AccountPatientController {
     public Account viewProfile(@RequestParam String phone) {
 
         return accountService.view(phone);
+    }
+
+    @PostMapping("confirmPassword")
+    public ResponseEntity<?> confirmPassword(@RequestBody AuthRequest authRequest) {
+        try {
+            if (accountService.confirmPassword(authRequest.getPhone(), authRequest.getPassword()))
+                return ResponseEntity.ok().build();
+            else
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
     @PostMapping("profile/edit")
