@@ -26,4 +26,13 @@ public class AccountStaffController {
             return ResponseEntity.ok("Edit successfully");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not Edit");
     }
+
+    @GetMapping("profile")
+    public Account viewProfile(@RequestParam String phone) {
+
+        return accountService.view(phone);
+
+    }
+
+
 }
