@@ -1,7 +1,7 @@
 package com.rade.dentistbookingsystem.services.impl;
 
 import com.rade.dentistbookingsystem.domain.Account;
-import com.rade.dentistbookingsystem.model.AccountDetail;
+import com.rade.dentistbookingsystem.domain.AccountDetail;
 import com.rade.dentistbookingsystem.repository.AccountRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
