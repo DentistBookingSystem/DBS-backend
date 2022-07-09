@@ -40,7 +40,7 @@ public class DoctorAdminController {
     public Optional<Doctor> findById(@PathVariable int id) {
         Optional<Doctor> doctor = doctorService.findById(id);
         if (doctor.isPresent()) {
-            return doctor;
+            return doctor;  
         } else throw new NotFoundException("Doctor not found");
     }
 
