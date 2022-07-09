@@ -1,7 +1,5 @@
-package com.rade.dentistbookingsystem.model;
+package com.rade.dentistbookingsystem.domain;
 
-import com.rade.dentistbookingsystem.domain.Account;
-import com.rade.dentistbookingsystem.domain.Role;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

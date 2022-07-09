@@ -60,7 +60,7 @@ public class AccountAdminController {
     }
 
     @PostMapping("profile/edit")
-    public ResponseEntity<?> editStaff(@Validated @RequestBody AccountDTO accountDTO) throws Exception {
+    public ResponseEntity<?> edit(@Validated @RequestBody AccountDTO accountDTO) throws Exception {
         Account account = accountService.edit(accountDTO);
         if (account != null)
             return ResponseEntity.ok("Edit successfully");
@@ -97,7 +97,7 @@ public class AccountAdminController {
         try {
             int UN_BAN_STATUS = 1;
             Account account = accountService.findByPhone(jsonPhone.getPhone());
-            if(appointmentService.isAbleToUnBan(account.getId())){
+            if (appointmentService.isAbleToUnBan(account.getId())) {
                 accountService.editStatus(jsonPhone.getPhone(), UN_BAN_STATUS);
                 return ResponseEntity.ok().build();
             }
@@ -105,5 +105,13 @@ public class AccountAdminController {
             e.printStackTrace();
         }
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    }
+
+
+    @GetMapping("profile")
+    public Account viewProfile(@RequestParam String phone) {
+
+        return accountService.view(phone);
+
     }
 }

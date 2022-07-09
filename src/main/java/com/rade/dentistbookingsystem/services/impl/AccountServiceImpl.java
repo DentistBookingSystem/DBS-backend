@@ -89,7 +89,7 @@ public class AccountServiceImpl implements AccountService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         Account account = accountRepo.findByPhone(accountDTO.getPhone());
-        if (account == null || account.getRole().getId() == ROLE_ADMIN_ID || account.getStatus() == 2) {
+        if (account == null || account.getStatus() == 2) {
             throw new Exception("Can not edit!! please try again");
         } else {
             account.setFullName(accountDTO.getFullName());

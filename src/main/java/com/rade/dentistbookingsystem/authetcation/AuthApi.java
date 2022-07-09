@@ -1,8 +1,8 @@
 package com.rade.dentistbookingsystem.authetcation;
 
 
+import com.rade.dentistbookingsystem.domain.AccountDetail;
 import com.rade.dentistbookingsystem.jwt.JwtTokenUtil;
-import com.rade.dentistbookingsystem.model.AccountDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

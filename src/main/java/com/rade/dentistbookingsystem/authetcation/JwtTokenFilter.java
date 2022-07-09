@@ -1,9 +1,9 @@
 package com.rade.dentistbookingsystem.authetcation;
 
 import com.rade.dentistbookingsystem.domain.Account;
+import com.rade.dentistbookingsystem.domain.AccountDetail;
 import com.rade.dentistbookingsystem.domain.Role;
 import com.rade.dentistbookingsystem.jwt.JwtTokenUtil;
-import com.rade.dentistbookingsystem.model.AccountDetail;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,7 +1,7 @@
 package com.rade.dentistbookingsystem.jwt;
 
 
-import com.rade.dentistbookingsystem.model.AccountDetail;
+import com.rade.dentistbookingsystem.domain.AccountDetail;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
