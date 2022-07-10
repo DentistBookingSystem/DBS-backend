@@ -18,6 +18,7 @@ public class AccountDTO implements Serializable {
     @NotNull(message = "Password is required")
     @Length(min = 8, max = 32)
     private String password;
+    private String confirmPassword;
     @NotNull(message = "Date of birth is required")
     private String dateOfBirth;
     @NotNull(message = "Gender is required")
