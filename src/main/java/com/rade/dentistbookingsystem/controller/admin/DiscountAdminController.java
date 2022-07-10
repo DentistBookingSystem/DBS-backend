@@ -61,7 +61,6 @@ public class DiscountAdminController {
 
     @PostMapping("filter")
     public List<Discount> filterDiscount(@RequestBody DiscountFilter filter) throws ParseException {
-        System.out.println("Hihhi");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         Date endDate = null;
