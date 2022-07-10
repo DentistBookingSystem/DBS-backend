@@ -20,7 +20,6 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     final static int WAITING_STATUS = 0;
     final static int CANCEL_TIMES_LIMIT = 3;
     final static int DAYS_BEFORE_ALLOW_TO_CANCEL_OR_UPDATE = 1;
-    final static int TIME_FOR_REMIND_APPOINTMENT_AS_HOUR = 24;
     final static int TIME_FOR_MARK_ABSENT_AS_MINUTE = 15;
     final static int DAYS_INTERVAL_FOR_CANCEL_APPOINTMENT = 30;
     @Modifying
@@ -93,9 +92,9 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
     @Query(value =
             "SELECT TOP 1 Appointment.* " +
                     "FROM Appointment " +
-                    "WHERE (status = 0) AND DATEDIFF(HOUR," +
-                    "(CAST(appointment_date AS varchar) + ' ' + SUBSTRING(appointment_time, 0, 6) + ':00')," +
-                    "GETDATE()) <= " + TIME_FOR_REMIND_APPOINTMENT_AS_HOUR + " AND " +
+                    "WHERE (status = 0) AND DATEDIFF(DAY, " +
+                    "                    appointment_date, " +
+                    "                    GETDATE()) >  -"+ DAYS_BEFORE_ALLOW_TO_CANCEL_OR_UPDATE +" AND " +
                     "account_id = :account_id",
             nativeQuery = true)
     Appointment findAppointmentByAccountIdInNext24h(@Param("account_id") Integer accountId);
