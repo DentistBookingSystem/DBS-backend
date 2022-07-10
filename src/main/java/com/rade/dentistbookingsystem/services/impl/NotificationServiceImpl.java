@@ -91,22 +91,28 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void createRemindNotificationIfNeeded(String phone) {
-        Account account = accountService.findByPhone(phone);
-        if (account == null) return;
-        Appointment appointment = appointmentService.findAppointmentByAccountIdInNext24h(account.getId());
-        if (appointment != null) {
-            SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
-            String date = sdfDate.format(appointment.getAppointmentDate());
-            String time = appointment.getAppointmentTime().split("-")[0];
-            String description = "Nhắc yêu: Bạn có lịch hẹn khám răng vào lúc " + time + " ngày " + date +
-                    " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + ". Nhớ đến đúng giờ nhé <3";
-            Notification notification = new Notification(
-                    account,
-                    description,
-                    new Date()
-            );
-            if (findDuplicateDescription(notification) == null) save(notification);
+    public void createRemindNotificationIfNeeded(String phone){
+        try{
+            Account account = accountService.findByPhone(phone);
+            if (account == null) return;
+            Appointment appointment = appointmentService.findAppointmentByAccountIdInNext24h(account.getId());
+            if (appointment != null) {
+                SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MM-yyyy");
+                String date = sdfDate.format(appointment.getAppointmentDate());
+                String time = appointment.getAppointmentTime().split("-")[0];
+                Date dateForNotification = sdfDate.parse(sdfDate.format(new Date()));
+                String description = "Nhắc yêu: Bạn có lịch hẹn khám răng vào lúc " + time + " ngày " + date +
+                        " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + ". Nhớ đến đúng giờ nhé <3";
+                Notification notification = new Notification(
+                        account,
+                        description,
+                        dateForNotification
+                );
+                if (findDuplicateDescription(notification) == null) save(notification);
+            }
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
         }
     }
 

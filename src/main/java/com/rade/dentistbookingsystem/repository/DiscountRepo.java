@@ -40,7 +40,7 @@ public interface DiscountRepo extends JpaRepository<Discount, Integer> {
                     "WHERE " +
                     "(Discount.name LIKE CONCAT('%',:name,'%') OR :name IS NULL OR :name ='') AND " +
                     "(Discount.status = :status OR :status = 0) AND " +
-                    "(:date >= Discount.start_date AND :date <= Discount.end_date) OR :date IS NULL) AND " +
+                    "((:date >= Discount.start_date AND :date <= Discount.end_date) OR :date IS NULL) AND " +
                     "(Discount_Service.service_id = :serviceId OR :serviceId = 0)"
             , nativeQuery = true)
     List<Discount> filterDiscount(

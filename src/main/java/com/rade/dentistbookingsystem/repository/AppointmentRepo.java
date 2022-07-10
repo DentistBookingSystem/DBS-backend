@@ -94,7 +94,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "FROM Appointment " +
                     "WHERE (status = 0) AND DATEDIFF(DAY, " +
                     "                    appointment_date, " +
-                    "                    GETDATE()) >  -"+ DAYS_BEFORE_ALLOW_TO_CANCEL_OR_UPDATE +" AND " +
+                    "                    GETDATE()) >  -"+ (DAYS_BEFORE_ALLOW_TO_CANCEL_OR_UPDATE + 1) +" AND " +
                     "account_id = :account_id",
             nativeQuery = true)
     Appointment findAppointmentByAccountIdInNext24h(@Param("account_id") Integer accountId);
