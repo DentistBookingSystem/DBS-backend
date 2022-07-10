@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 
 @RestController
@@ -28,6 +29,14 @@ public class AccountController {
     public ResponseEntity<?> smsSubmit(@RequestBody JsonPhone jsonPhone) {
         String otp;
         try {
+            StoreOTP storeOTP = StoreOTPList.getStoredOTP(jsonPhone.getPhone());
+            if(storeOTP != null){
+                if(TimeUnit.MILLISECONDS.toSeconds((new Date()).getTime() - storeOTP.getGeneratedDate().getTime())
+                        <= StoreOTPList.VALID_TIME_FOR_VERIFICATION_AS_SECOND)
+                {
+                    return ResponseEntity.status(410).body("Tin nhắn chứa OTP đã được gửi đi trước đó. \nVui lòng nhấn gửi lại sau 2 phút nếu vẫn chưa nhận được tin nhắn.");
+                }
+            }
             otp = service.send(jsonPhone);
             if (otp.length() != 6)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -43,7 +52,7 @@ public class AccountController {
     public ResponseEntity<?> verifyOTP(@RequestBody StoreOTP receivedOTP) {
         try {
             StoreOTP storeOTP = StoreOTPList.getStoredOTP(receivedOTP.getPhone());
-            if (storeOTP == null) ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            if (storeOTP == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             return StoreOTPList.verifyOTP(storeOTP, receivedOTP) ? ResponseEntity.status(HttpStatus.OK).build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
