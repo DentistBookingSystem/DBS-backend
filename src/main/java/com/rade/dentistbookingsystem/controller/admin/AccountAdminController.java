@@ -60,11 +60,22 @@ public class AccountAdminController {
     }
 
     @PostMapping("profile/edit")
-    public ResponseEntity<?> edit(@Validated @RequestBody AccountDTO accountDTO) throws Exception {
-        Account account = accountService.edit(accountDTO);
-        if (account != null)
-            return ResponseEntity.ok("Edit successfully");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not Edit");
+    public ResponseEntity<?> edit(@Validated @RequestBody AccountDTO accountDTO) {
+        try {
+
+            if (accountService.confirmPassword(accountDTO.getPhone(), accountDTO.getPassword())) {
+                return ResponseEntity.ok(accountService.edit(accountDTO));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Your old password is wrong");
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        }
+
+
     }
 
     @GetMapping("remove/{id}")
