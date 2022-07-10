@@ -19,11 +19,7 @@ public class NotificationPatientController {
     @PostMapping("")
     public List<Notification> getPageNotification(@RequestBody PhoneAndPage phoneAndPage) {
         notificationService.createRemindNotificationIfNeeded(phoneAndPage.getPhone());
-        List<Notification> notificationList = new ArrayList<>();
-        for (Notification notification : notificationService.findByAccountId(phoneAndPage)){
-            notificationList.add(notification);
-        }
-        return notificationList;
+        return notificationService.findByAccountId(phoneAndPage);
     }
 
 
