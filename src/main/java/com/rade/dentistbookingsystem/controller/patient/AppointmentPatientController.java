@@ -47,6 +47,7 @@ public class AppointmentPatientController {
     final static int ACTIVE_ACCOUNT_STATUS = 1;
     final static int APPOINTMENT_CANCEL_STATUS = 3;
     final static int APPOINTMENT_WAITING_STATUS = 0;
+    final static int SIZE_OF_PAGE_FOR_HISTORY = 3;
 
     @GetMapping("{branchId}")
     public AppointmentComponent chooseBranch(@PathVariable int branchId) {
@@ -77,7 +78,7 @@ public class AppointmentPatientController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             if (account.getStatus() == BLOCKED_ACCOUNT_STATUS)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            if (appointmentService.findByAccountAndStatusIn(account, new int[]{0}) != null)
+            if (appointmentService.findByAccountAndStatusIn(account, new int[]{APPOINTMENT_WAITING_STATUS}) != null)
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
             if (jsonAppointment.getServiceIdList().length == 0)
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
@@ -145,7 +146,7 @@ public class AppointmentPatientController {
         String phone = phoneAndPage.getPhone();
         int accountId = accountService.findByPhone(phone).getId();
         int page = phoneAndPage.getPage();
-        Pageable pageable = PageRequest.of(page - 1, 3, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(page - 1, SIZE_OF_PAGE_FOR_HISTORY, Sort.by("id").descending());
         return appointmentService.findByAccountId(accountId, pageable);
     }
 

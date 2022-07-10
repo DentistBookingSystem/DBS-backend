@@ -30,6 +30,7 @@ public class ServiceSvImpl implements ServiceSv {
     @Autowired
     DiscountService discountService;
 
+    private final int SERVICE_STATUS_INACTIVE = 2;
     public ServiceSvImpl(ServiceRepo serviceRepo) {
         this.serviceRepo = serviceRepo;
     }
@@ -108,7 +109,6 @@ public class ServiceSvImpl implements ServiceSv {
 
     @Override
     public Service deleteService(int id) {
-        final int SERVICE_STATUS_INACTIVE = 2;
         Optional<Service> serviceData = findById(id);
         if (serviceData.isPresent()) {
             Service service = serviceData.get();

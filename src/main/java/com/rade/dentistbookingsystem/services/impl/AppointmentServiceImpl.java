@@ -33,7 +33,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private static final int APPOINTMENT_WAITING_STATUS = 0;
     private static final int APPOINTMENT_DONE_STATUS = 1;
-    private static final int APPOINTMENT_CANCEL_ADMIN_STATUS = 3;
+    private static final int APPOINTMENT_CANCEL_ADMIN_STATUS = 6;
+    private static final int INTERVAL_TIME_FOR_EACH_WORKING_SLOT_AS_MINUTE = 30;
+    private static final int ACTIVE_STATUS = 1;
 
     public AppointmentServiceImpl(AppointmentRepo appointmentRepo) {
         this.appointmentRepo = appointmentRepo;
@@ -129,7 +131,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                         String end = sdf.format(cal.getTime());
                         timeOptionByDateList.add(start + "-" + end);
                         cal.setTime(sdf.parse(start));
-                        cal.add(Calendar.MINUTE, 30);
+                        cal.add(Calendar.MINUTE, INTERVAL_TIME_FOR_EACH_WORKING_SLOT_AS_MINUTE);
                         startTimeAtMorning = cal.getTime();
                     } else {
                         endOfNoon = true;
@@ -169,7 +171,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         if (doctorAndDate.getDoctorId() != 0) {
             return checkTimeOptionOfDoctorByDate(doctorAndDate);
         } else {
-            List<Doctor> doctorList = doctorService.findByBranchIdAndStatus(doctorAndDate.getBranchId(), 1);
+            List<Doctor> doctorList = doctorService.findByBranchIdAndStatus(doctorAndDate.getBranchId(), ACTIVE_STATUS);
             List<String> generalOptionList = new ArrayList<>();
             for (Doctor doctor : doctorList) {
                 doctorAndDate.setDoctorId(doctor.getId());
@@ -204,7 +206,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 }
             } else {
 
-                List<Doctor> doctorList = doctorService.findByBranchIdAndStatus(branchId, 1);
+                List<Doctor> doctorList = doctorService.findByBranchIdAndStatus(branchId, ACTIVE_STATUS);
                 List<Doctor> availableDoctorList = new ArrayList<>();
                 for (Doctor doctor : doctorList) {
                     DoctorAndDate doctorAndDate = new DoctorAndDate(appointmentId, branchId, doctor.getId(), date, serviceId);
