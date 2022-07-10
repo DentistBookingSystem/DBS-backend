@@ -33,7 +33,7 @@ public class AuthApi {
             Authentication authentication = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getPhone(), request.getPassword())
-            );
+                    );
             AccountDetail account = (AccountDetail) authentication.getPrincipal();
             String accessToken = jwtUtil.generateAccessToken(account);
             AuthResponse response = new AuthResponse(account.getUsername(), accessToken, account.getRoleName());
