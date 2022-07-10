@@ -67,6 +67,9 @@ public class DiscountAdminController {
         if (filter.getEndDate() != null) {
             endDate = sdf.parse(filter.getEndDate());
         }
+        else{
+            endDate = sdf.parse(sdf.format(new Date()));
+        }
 
         return discount.filterDiscount(filter.getStatus(), filter.getName(), endDate, filter.getServiceId());
     }
