@@ -41,7 +41,13 @@ public class ServiceTypeAdminController {
 
     @PostMapping("edit")
     public ResponseEntity<?> editServiceType(@Validated @RequestBody ServiceTypeDTO serviceTypeDTO) {
-        return ResponseEntity.ok(serviceTypeSv.edit(serviceTypeDTO));
+        ServiceType serviceType = serviceTypeSv.edit(serviceTypeDTO);
+        if (serviceType != null) {
+            return ResponseEntity.ok(serviceType);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        }
+
 
     }
 
