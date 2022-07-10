@@ -5,6 +5,7 @@ import com.rade.dentistbookingsystem.domain.*;
 import com.rade.dentistbookingsystem.repository.NotificationRepo;
 import com.rade.dentistbookingsystem.services.AccountService;
 import com.rade.dentistbookingsystem.services.AppointmentService;
+import com.rade.dentistbookingsystem.services.DiscountSvService;
 import com.rade.dentistbookingsystem.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +25,9 @@ public class NotificationServiceImpl implements NotificationService {
     @Autowired
     AppointmentService appointmentService;
 
+    @Autowired
+    DiscountSvService discountSvService;
+
     public NotificationServiceImpl(NotificationRepo notificationRepo) {
         this.notificationRepo = notificationRepo;
     }
@@ -40,7 +44,8 @@ public class NotificationServiceImpl implements NotificationService {
         String description = "Khuyến mãi mới" + discount.getName() + " trong thời gian giới hạn! " +
                 "Bắt đầu từ " + sdf.format(discount.getStartDate()) + " đến " + sdf.format(discount.getEndDate()) + "! " +
                 "Ưu đãi " + discount.getPercentage() + "% áp dụng cho dịch vụ: ";
-        for (DiscountService discountService : discount.getDiscountServiceSet()) {
+
+        for (DiscountService discountService : discountSvService.findByDiscountId(discount.getId())) {
             description += discountService.getService().getName() + ", ";
         }
         description.substring(0, description.length() - 2);
