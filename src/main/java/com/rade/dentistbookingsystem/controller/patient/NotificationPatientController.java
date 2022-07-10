@@ -6,6 +6,7 @@ import com.rade.dentistbookingsystem.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,7 +19,11 @@ public class NotificationPatientController {
     @PostMapping("")
     public List<Notification> getPageNotification(@RequestBody PhoneAndPage phoneAndPage) {
         notificationService.createRemindNotificationIfNeeded(phoneAndPage.getPhone());
-        return notificationService.findByAccountId(phoneAndPage);
+        List<Notification> notificationList = new ArrayList<>();
+        for (Notification notification : notificationService.findByAccountId(phoneAndPage)){
+            notificationList.add(notification);
+        }
+        return notificationList;
     }
 
 
