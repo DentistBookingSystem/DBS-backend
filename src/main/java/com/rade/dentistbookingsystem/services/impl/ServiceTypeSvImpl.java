@@ -79,12 +79,12 @@ public class ServiceTypeSvImpl implements ServiceTypeSv {
     }
 
     @Override
-    public ServiceType edit(ServiceTypeDTO serviceTypeDTO, int id) {
-        Optional<ServiceType> serviceTypeData = findById(id);
+    public ServiceType edit(ServiceTypeDTO serviceTypeDTO) {
+        Optional<ServiceType> serviceTypeData = findById(serviceTypeDTO.getId());
         if (serviceTypeData.isPresent()) {
 
             ServiceType serviceType = serviceTypeData.get();
-            if (findByName(serviceTypeDTO.getName()) != null && findByName(serviceTypeDTO.getName()).getId() != id)
+            if (findByName(serviceTypeDTO.getName()) != null && findByName(serviceTypeDTO.getName()).getId() != serviceTypeDTO.getId())
                 throw new ValidationException("This service type has been use");
             serviceType.setName(serviceTypeDTO.getName());
             serviceType.setDescription(serviceTypeDTO.getDescription());

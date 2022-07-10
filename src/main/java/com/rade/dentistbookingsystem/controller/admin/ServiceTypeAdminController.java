@@ -25,6 +25,10 @@ public class ServiceTypeAdminController {
         return serviceTypeSv.findAll();
     }
 
+    @GetMapping("/{id}")
+    public ServiceType getServiceType(@PathVariable int id) {
+        return serviceTypeSv.getById(id);
+    }
 
     @PostMapping("add")
     public ResponseEntity<?> addServiceType(@Valid @RequestBody ServiceTypeDTO serviceTypeDTO) {
@@ -35,9 +39,9 @@ public class ServiceTypeAdminController {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-    @PostMapping("edit/{id}")
-    public ResponseEntity<?> editServiceType(@Validated @RequestBody ServiceTypeDTO serviceTypeDTO, @PathVariable int id) {
-        return ResponseEntity.ok(serviceTypeSv.edit(serviceTypeDTO, id));
+    @PostMapping("edit")
+    public ResponseEntity<?> editServiceType(@Validated @RequestBody ServiceTypeDTO serviceTypeDTO) {
+        return ResponseEntity.ok(serviceTypeSv.edit(serviceTypeDTO));
 
     }
 
