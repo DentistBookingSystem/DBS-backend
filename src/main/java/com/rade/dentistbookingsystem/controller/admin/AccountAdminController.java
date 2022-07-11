@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.controller.admin;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.componentform.JsonPhone;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.model.AccountDTO;
@@ -42,9 +43,7 @@ public class AccountAdminController {
 
     @PostMapping("register")
     public ResponseEntity<?> register(@Validated @RequestBody AccountDTO accountDTO) throws Exception {
-
-        final int ROLE_STAFF = 3;
-        Account account = accountService.registerNewUserAccount(accountDTO, ROLE_STAFF);
+        Account account = accountService.registerNewUserAccount(accountDTO, Constant.ACCOUNT_ROLE_STAFF);
         if (account != null)
             return ResponseEntity.ok("Register successfully");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can not register");
@@ -53,40 +52,32 @@ public class AccountAdminController {
     @PostMapping("profile/edit")
     public ResponseEntity<?> edit(@Validated @RequestBody AccountDTO accountDTO) {
         try {
-
             if (accountService.confirmPassword(accountDTO.getPhone(), accountDTO.getPassword())) {
                 return ResponseEntity.ok(accountService.edit(accountDTO));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Your old password is wrong");
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
-
-
     }
 
     @GetMapping("remove/{id}")
     public ResponseEntity<?> removeStaff(@PathVariable Integer id) {
         try {
             Account account = accountService.findId(id);
-            if (account.getRole().getId() == 3) accountService.checkAccount(2, id);
+            if (account.getRole().getId() == Constant.ACCOUNT_ROLE_STAFF) accountService.checkAccount(Constant.ACCOUNT_STATUS_INACTIVE, id);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
         return ResponseEntity.ok("Remove Successfully");
-
-
     }
 
     @PostMapping("/ban")
     public ResponseEntity<?> banAccount(@RequestBody JsonPhone jsonPhone) {
         try {
-            int BAN_STATUS = 2;
-            accountService.editStatus(jsonPhone.getPhone(), BAN_STATUS);
+            accountService.editStatus(jsonPhone.getPhone(), Constant.ACCOUNT_STATUS_INACTIVE);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,10 +88,9 @@ public class AccountAdminController {
     @PostMapping("/unban")
     public ResponseEntity<?> unbanAccount(@RequestBody JsonPhone jsonPhone) {
         try {
-            int UN_BAN_STATUS = 1;
             Account account = accountService.findByPhone(jsonPhone.getPhone());
             if (appointmentService.isAbleToUnBan(account.getId())) {
-                accountService.editStatus(jsonPhone.getPhone(), UN_BAN_STATUS);
+                accountService.editStatus(jsonPhone.getPhone(), Constant.ACCOUNT_STATUS_ACTIVE);
                 return ResponseEntity.ok().build();
             }
         } catch (Exception e) {
@@ -109,11 +99,8 @@ public class AccountAdminController {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
 
-
     @GetMapping("profile")
     public Account viewProfile(@RequestParam String phone) {
-
         return accountService.view(phone);
-
     }
 }

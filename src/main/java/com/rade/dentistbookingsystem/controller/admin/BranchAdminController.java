@@ -56,7 +56,6 @@ public class BranchAdminController {
                 return ResponseEntity.ok(id); // lấy id gán vào cột url của serviceDTO sẽ gửi lên request
         } catch (Exception e) {
             e.printStackTrace();
-
         }
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
@@ -83,8 +82,6 @@ public class BranchAdminController {
             imageService.removeImg(branchDTO.getUrl());
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
-
-
     }
 
     @PostMapping("edit")
@@ -97,7 +94,5 @@ public class BranchAdminController {
             imageService.removeImg(branchDTO.getUrl());
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
-
     }
-
 }

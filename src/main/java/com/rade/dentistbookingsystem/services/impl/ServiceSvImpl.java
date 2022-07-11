@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.services.impl;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.componentform.ServiceDiscountComponent;
 import com.rade.dentistbookingsystem.componentform.ServiceFilter;
 import com.rade.dentistbookingsystem.domain.Service;
@@ -30,7 +31,6 @@ public class ServiceSvImpl implements ServiceSv {
     @Autowired
     DiscountService discountService;
 
-    private final int SERVICE_STATUS_INACTIVE = 2;
     public ServiceSvImpl(ServiceRepo serviceRepo) {
         this.serviceRepo = serviceRepo;
     }
@@ -112,7 +112,7 @@ public class ServiceSvImpl implements ServiceSv {
         Optional<Service> serviceData = findById(id);
         if (serviceData.isPresent()) {
             Service service = serviceData.get();
-            service.setStatus((short) SERVICE_STATUS_INACTIVE);
+            service.setStatus((short) Constant.SERVICE_STATUS_INACTIVE);
             return save(service);
         } else throw new NotFoundException("Service is not found");
 
@@ -173,7 +173,6 @@ public class ServiceSvImpl implements ServiceSv {
 
     @Override
     public List<Service> filterService(ServiceFilter serviceFilter) {
-
         return serviceRepo.filterService(serviceFilter.getServiceTypeId(), serviceFilter.getName(), Integer.valueOf(serviceFilter.getStatus()), serviceFilter.getMinPrice(), serviceFilter.getMaxPrice());
     }
 }

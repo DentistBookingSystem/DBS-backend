@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.controller.staff;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.domain.Doctor;
 import com.rade.dentistbookingsystem.services.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,9 @@ import java.util.List;
 public class DoctorStaffController {
     @Autowired
     DoctorService doctorService;
-    final int ACTIVE_DOCTOR_STATUS = 1;
+
     @GetMapping("{branchId}")
     public List<Doctor> getByBrandId(@PathVariable int branchId) {
-        return doctorService.findByBranchIdAndStatus(branchId, ACTIVE_DOCTOR_STATUS);
+        return doctorService.findByBranchIdAndStatus(branchId, Constant.DOCTOR_STATUS_ACTIVE);
     }
 }

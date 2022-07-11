@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.model;
 
+import com.rade.dentistbookingsystem.Constant;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 @Data
 public class StoreOTPList {
-    public static int VALID_TIME_FOR_VERIFICATION_AS_SECOND = 120;
     private static ArrayList<StoreOTP> storeOTPList = new ArrayList<>();
 
     public static StoreOTP getStoredOTP(String phone) {
@@ -25,7 +25,7 @@ public class StoreOTPList {
                 storeOTP.getOtp().equals(receivedOTP.getOtp()) &&
                         TimeUnit.MILLISECONDS.toSeconds(
                                 (new Date()).getTime() - storeOTP.getGeneratedDate().getTime()
-                        ) <= VALID_TIME_FOR_VERIFICATION_AS_SECOND;
+                        ) <= Constant.VALID_TIME_FOR_VERIFICATION_AS_SECOND;
     }
 
     public static void storeOTP(StoreOTP storeOTP) {

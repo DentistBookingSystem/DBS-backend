@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.controller.patient;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.componentform.*;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
@@ -41,11 +42,6 @@ public class AppointmentPatientController {
     AppointmentDetailService appointmentDetailService;
     @Autowired
     AccountService accountService;
-    final static int ACTIVE_BRANCH_STATUS = 1;
-    final static int BLOCKED_ACCOUNT_STATUS = 2;
-    final static int ACTIVE_ACCOUNT_STATUS = 1;
-    final static int APPOINTMENT_CANCEL_STATUS = 3;
-    final static int APPOINTMENT_WAITING_STATUS = 0;
     final static int SIZE_OF_PAGE_FOR_HISTORY = 3;
 
     @GetMapping("{branchId}")
@@ -63,7 +59,7 @@ public class AppointmentPatientController {
                 serviceDiscountComponentList,
                 serviceTypeSv.findAll(),
                 branchService.findId(branchId),
-                doctorService.findByBranchIdAndStatus(branchId, ACTIVE_BRANCH_STATUS)
+                doctorService.findByBranchIdAndStatus(branchId, Constant.BRANCH_STATUS_ACTIVE)
         );
     }
 
@@ -74,9 +70,9 @@ public class AppointmentPatientController {
             Account account = accountService.findByPhone(jsonAppointment.getPhone());
             if (account == null)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            if (account.getStatus() == BLOCKED_ACCOUNT_STATUS)
+            if (account.getStatus() == Constant.ACCOUNT_STATUS_INACTIVE)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            if (appointmentService.findByAccountAndStatusIn(account, new int[]{APPOINTMENT_WAITING_STATUS}) != null)
+            if (appointmentService.findByAccountAndStatusIn(account, new int[]{Constant.APPOINTMENT_STATUS_WAITING}) != null)
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
             if (jsonAppointment.getServiceIdList().length == 0)
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
@@ -98,12 +94,12 @@ public class AppointmentPatientController {
             Account account = accountService.findByPhone(jsonPhoneAndAppointmentId.getPhone());
             if (account == null)
                 return null;
-            if (account.getStatus() == BLOCKED_ACCOUNT_STATUS)
+            if (account.getStatus() == Constant.ACCOUNT_STATUS_INACTIVE)
                 return null;
             Appointment appointment = appointmentService.findId(jsonPhoneAndAppointmentId.getAppointmentId());
             if (!(appointment != null && appointment.getAccount().getId() == account.getId()))
                 return null;
-            if (appointment.getStatus() != APPOINTMENT_WAITING_STATUS)
+            if (appointment.getStatus() != Constant.APPOINTMENT_STATUS_WAITING)
                 return null;
             List<Doctor> doctorList = doctorService.findByBranchIdAndStatus(appointment.getBranch().getId(), 1);
             List<Service> serviceList = serviceSv.findByAppointmentId(appointment.getId());
@@ -121,12 +117,12 @@ public class AppointmentPatientController {
             Account account = accountService.findByPhone(jsonAppointment.getPhone());
             if (account == null)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //ko tìm thấy account
-            if (account.getStatus() == BLOCKED_ACCOUNT_STATUS)
+            if (account.getStatus() == Constant.ACCOUNT_STATUS_INACTIVE)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //account bị ban
             Appointment appointment = appointmentService.findId(jsonAppointment.getAppointmentDTO().getId());
             if (!(appointment != null && appointment.getAccount().getId() == account.getId()))
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); //appointment không tồn tại (chung với tài khoản không khớp với appointment)
-            if (!(appointment.getStatus() == APPOINTMENT_WAITING_STATUS && appointmentService.checkAppointmentToCancel(appointment.getId(), account.getId())))
+            if (!(appointment.getStatus() == Constant.APPOINTMENT_STATUS_WAITING && appointmentService.checkAppointmentToCancel(appointment.getId(), account.getId())))
                 return ResponseEntity.status(HttpStatus.GONE).build(); //appointment phải là đang chờ và chưa được edit
             if (appointmentService.checkValidAndSave(jsonAppointment) != null) {
                 return ResponseEntity.ok(appointment);
@@ -161,14 +157,14 @@ public class AppointmentPatientController {
             ;
             int appointmentId = jsonPhoneAndAppointmentId.getAppointmentId();
             Account account = accountService.findByPhone(phone);
-            if (!(account != null && account.getStatus() == ACTIVE_ACCOUNT_STATUS))
+            if (!(account != null && account.getStatus() == Constant.ACCOUNT_STATUS_ACTIVE))
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // tài khoản phải tồn tại và ko bị ban
             Appointment appointment = appointmentService.findId(appointmentId);
             if (!(appointment != null && appointment.getAccount().getId() == account.getId()))
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); //lịch cancel phải là của tài khoản đó
             if (appointmentService.checkAppointmentToCancel(appointmentId, account.getId())) {
                 if (appointmentService.checkCountAppointmentToCancel(account.getId())) {
-                    appointmentService.check(APPOINTMENT_CANCEL_STATUS, appointment.getId());
+                    appointmentService.check(Constant.APPOINTMENT_STATUS_CANCEL, appointment.getId());
                     return ResponseEntity.status(HttpStatus.OK).build();
                 } else {
                     return ResponseEntity.status(HttpStatus.LOCKED).build(); //quá 3 cancel/tháng

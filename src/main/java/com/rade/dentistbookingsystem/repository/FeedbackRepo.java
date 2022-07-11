@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.repository;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.domain.Feedback;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -47,8 +48,8 @@ public interface FeedbackRepo extends JpaRepository<Feedback, Integer> {
                     "CASE WHEN ( " +
                     "SELECT COUNT(Feedback.id) " +
                     "FROM Feedback LEFT JOIN Appointment a ON Feedback.appointment_id = a.id " +
-                    "WHERE a.account_id = :account_id AND Feedback.status = 2 " +
-                    ") >= 3 " +
+                    "WHERE a.account_id = :account_id AND Feedback.status = "+ Constant.FEEDBACK_STATUS_DISAPPROVE +" " +
+                    ") >= "+ Constant.VIOLATED_FEEDBACK_TIME_TO_BAN +" " +
                     "THEN 'TRUE' " +
                     "ELSE 'FALSE' " +
                     "END",

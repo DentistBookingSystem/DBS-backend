@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.services.impl;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.domain.Feedback;
 import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.FeedbackDTO;
@@ -30,10 +31,6 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Autowired
     AppointmentService appointmentService;
 
-    private static final int FEEDBACK_WAITING_STATUS = 0;
-    private static final int FEEDBACK_APPROVE_STATUS = 1;
-    private static final int FEEDBACK_DISAPPROVE_STATUS = 3;
-
     public FeedbackServiceImpl(FeedbackRepo feedBackRepo) {
         this.feedBackRepo = feedBackRepo;
     }
@@ -45,7 +42,7 @@ public class FeedbackServiceImpl implements FeedbackService {
                 appointmentService.findId(feedbackDTO.getAppointmentId()),
                 new Date(),
                 feedbackDTO.getContent(),
-                FEEDBACK_WAITING_STATUS);
+                Constant.FEEDBACK_STATUS_WAITING);
         return feedBackRepo.save(feedback);
     }
 
@@ -94,7 +91,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         Optional<Feedback> feedback = feedBackRepo.findById(feedbackId);
         if (feedback.isPresent()) {
             Feedback tmpFeedback = feedback.get();
-            if (tmpFeedback.getStatus() == FEEDBACK_WAITING_STATUS) {
+            if (tmpFeedback.getStatus() == Constant.FEEDBACK_STATUS_WAITING) {
                 tmpFeedback.setStatus(feedbackStatus);
                 return feedBackRepo.save(tmpFeedback);
 

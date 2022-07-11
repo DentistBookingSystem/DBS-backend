@@ -1,7 +1,9 @@
 package com.rade.dentistbookingsystem.repository;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,14 +16,6 @@ import java.util.List;
 
 @Repository
 public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
-    final static int ABSENT_TIME_IN_A_ROW_TO_BAN = 3;
-    final static int ABSENT_STATUS = 2;
-    final static int CANCEL_STATUS = 3;
-    final static int WAITING_STATUS = 0;
-    final static int CANCEL_TIMES_LIMIT = 3;
-    final static int DAYS_BEFORE_ALLOW_TO_CANCEL_OR_UPDATE = 1;
-    final static int TIME_FOR_MARK_ABSENT_AS_MINUTE = 15;
-    final static int DAYS_INTERVAL_FOR_CANCEL_APPOINTMENT = 30;
     @Modifying
     @Transactional
     @Query(value = "UPDATE Appointment SET status = :status WHERE id = :id", nativeQuery = true)
@@ -37,7 +31,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "FROM Appointment " +
                     "WHERE " +
                     "(doctor_id = :doctor_id OR :doctor_id = 0) AND " +
-                    "(status = "+WAITING_STATUS+") AND " +
+                    "(status = "+Constant.APPOINTMENT_STATUS_WAITING+") AND " +
                     "appointment_date = :time",
             nativeQuery = true)
     List<Appointment> findByDoctorIdAndTime(
@@ -51,8 +45,8 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "            CASE WHEN EXISTS ( " +
                     "                    SELECT a.*, DATEDIFF(DAY, a.appointment_date, GETDATE())  " +
                     "                    FROM Appointment a  " +
-                    "                    WHERE a.id = :id AND (a.status = "+WAITING_STATUS+") AND " +
-                    "                    DATEDIFF(DAY, a.appointment_date, GETDATE()) <= -"+DAYS_BEFORE_ALLOW_TO_CANCEL_OR_UPDATE+" AND a.account_id = :account_id)  " +
+                    "                    WHERE a.id = :id AND (a.status = "+Constant.APPOINTMENT_STATUS_WAITING+") AND " +
+                    "                    DATEDIFF(DAY, a.appointment_date, GETDATE()) <= -"+Constant.TIME_BEFORE_ALLOW_TO_CANCEL_OR_UPDATE_AS_DAY+" AND a.account_id = :account_id)  " +
                     "                    THEN 'TRUE'  " +
                     "                    ELSE 'FALSE'  " +
                     "            END",
@@ -64,14 +58,14 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "                    CASE WHEN not exists (  " +
                     "                    SELECT COUNT (a.account_id)  " +
                     "                    FROM Appointment a  " +
-                    "                    WHERE a.account_id = :account_id AND (a.status = "+CANCEL_STATUS+") AND DATEDIFF(DAY, a.appointment_date, GETDATE()) < "+DAYS_INTERVAL_FOR_CANCEL_APPOINTMENT+"  " +
+                    "                    WHERE a.account_id = :account_id AND (a.status = "+Constant.APPOINTMENT_STATUS_CANCEL+") AND DATEDIFF(DAY, a.appointment_date, GETDATE()) < "+Constant.INTERVAL_FOR_CANCEL_APPOINTMENT_AS_DAY+"  " +
                     "                    GROUP BY a.account_id  " +
                     "                    ) OR (  " +
                     "                    SELECT COUNT (a.account_id)  " +
                     "                    FROM Appointment a  " +
-                    "                    WHERE a.account_id = :account_id AND (a.status = "+CANCEL_STATUS+") AND DATEDIFF(DAY, a.appointment_date, GETDATE()) < "+DAYS_INTERVAL_FOR_CANCEL_APPOINTMENT+"  " +
+                    "                    WHERE a.account_id = :account_id AND (a.status = "+Constant.APPOINTMENT_STATUS_CANCEL+") AND DATEDIFF(DAY, a.appointment_date, GETDATE()) < "+Constant.INTERVAL_FOR_CANCEL_APPOINTMENT_AS_DAY+"  " +
                     "                    GROUP BY a.account_id  " +
-                    "                    ) < "+CANCEL_TIMES_LIMIT+"  " +
+                    "                    ) < "+Constant.CANCEL_TIMES_LIMIT_FOR_INTERVAL_FOR_CANCEL_APPOINTMENT+"  " +
                     "                    THEN 'TRUE'  " +
                     "                    ELSE 'FALSE'  " +
                     "                    END",
@@ -83,7 +77,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "FROM Appointment " +
                     "WHERE (status = 0) AND DATEDIFF(MINUTE," +
                     "(CAST(appointment_date AS varchar) + ' ' + SUBSTRING(appointment_time, 0, 6) + ':00')," +
-                    "GETDATE()) > " + TIME_FOR_MARK_ABSENT_AS_MINUTE,
+                    "GETDATE()) > " + Constant.TIME_FOR_MARK_ABSENT_AS_MINUTE,
             nativeQuery = true)
     List<Appointment> findAllAppointmentToMarkAbsent();
 
@@ -92,7 +86,7 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "FROM Appointment " +
                     "WHERE (status = 0) AND DATEDIFF(DAY, " +
                     "                    appointment_date, " +
-                    "                    GETDATE()) >  -"+ (DAYS_BEFORE_ALLOW_TO_CANCEL_OR_UPDATE + 1) +" AND " +
+                    "                    GETDATE()) >  -"+ Constant.TIME_BEFORE_TO_REMIND_APPOINTMENT_AS_DAY +" AND " +
                     "account_id = :account_id",
             nativeQuery = true)
     Appointment findAppointmentByAccountIdInNext24h(@Param("account_id") Integer accountId);
@@ -112,14 +106,17 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "    ORDER BY id DESC " +
                     "OFFSET @i ROWS  " +
                     "FETCH NEXT 1 ROWS ONLY) " +
-                    "                     WHEN " + ABSENT_STATUS + " THEN @count_absent + 1 " +
+                    "                     WHEN " + Constant.APPOINTMENT_STATUS_ABSENT + " THEN @count_absent + 1 " +
                     "ELSE 0 " +
                     "                   END  " +
-                    "IF @count_absent >= " + ABSENT_TIME_IN_A_ROW_TO_BAN +" BEGIN BREAK END " +
+                    "IF @count_absent >= " + Constant.ABSENT_TIME_IN_A_ROW_TO_BAN +" BEGIN BREAK END " +
                     "    SET @i = @i + 1 " +
                     "END " +
                     "SELECT " +
-                    "CASE WHEN @count_absent >= " + ABSENT_TIME_IN_A_ROW_TO_BAN +" " +
+                    "CASE " +
+                    "WHEN @count_absent = " + Constant.ABSENT_TIME_IN_A_ROW_TO_BAN +" " +
+                    "THEN 'TRUE' " +
+                    "WHEN @count_absent = " + Constant.ABSENT_TIME_IN_A_ROW_TO_BAN +" " +
                     "THEN 'TRUE' " +
                     "ELSE 'FALSE' " +
                     "END", nativeQuery = true)
@@ -140,11 +137,11 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "ORDER BY id DESC " +
                     "OFFSET @i ROWS " +
                     "FETCH NEXT 1 ROWS ONLY) " +
-                    "WHEN "+ ABSENT_STATUS +" " +
+                    "WHEN "+ Constant.APPOINTMENT_STATUS_ABSENT +" " +
                     "THEN @count_absent + 1 " +
                     "ELSE 0 " +
                     "END " +
-                    "IF @count_absent >= "+ ABSENT_TIME_IN_A_ROW_TO_BAN +" BEGIN BREAK END " +
+                    "IF @count_absent >= "+ Constant.ABSENT_TIME_IN_A_ROW_TO_BAN +" BEGIN BREAK END " +
                     "SET @i = @i +  1 " +
                     "END " +
                     "SET @count_absent = 0 " +
@@ -161,15 +158,15 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "ORDER BY id DESC " +
                     "OFFSET @i ROWS " +
                     "FETCH NEXT 1 ROWS ONLY) " +
-                    "WHEN "+ ABSENT_STATUS +" " +
+                    "WHEN "+ Constant.APPOINTMENT_STATUS_ABSENT +" " +
                     "THEN @count_absent + 1 " +
                     "ELSE 0 " +
                     "END " +
-                    "IF @count_absent >= "+ABSENT_TIME_IN_A_ROW_TO_BAN+" BEGIN BREAK END " +
+                    "IF @count_absent >= "+Constant.ABSENT_TIME_IN_A_ROW_TO_BAN+" BEGIN BREAK END " +
                     "SET @i = @i +  1 " +
                     "END " +
                     "SELECT " +
-                    "CASE WHEN @count_absent >= "+ ABSENT_TIME_IN_A_ROW_TO_BAN +" " +
+                    "CASE WHEN @count_absent >= "+ Constant.ABSENT_TIME_IN_A_ROW_TO_BAN +" " +
                     "THEN 'FALSE' " +
                     "ELSE 'TRUE' " +
                     "END", nativeQuery = true)
@@ -214,4 +211,15 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                                         @Param("branchId") Integer branchId,
                                         @Param("doctorId") Integer doctorId,
                                         @Param("serviceId") Integer serviceId);
+
+    @Query(value =
+            "SELECT DISTINCT Appointment.* " +
+                    "FROM " +
+                    "Appointment, Account a " +
+                    "WHERE Appointment.account_id = a.id " +
+                    "AND (Appointment.status IN (:status)) AND " +
+                    "(a.phone = :phone) " +
+                    "ORDER BY Appointment.id DESC",
+            nativeQuery = true)
+    List<Appointment> findByPhoneAndStatusInByOrderByIdDesc(@Param("phone") String phone, Integer[] status);
 }

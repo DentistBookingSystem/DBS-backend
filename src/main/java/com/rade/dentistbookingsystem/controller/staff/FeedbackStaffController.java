@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.controller.staff;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.componentform.PageForFeedback;
 import com.rade.dentistbookingsystem.domain.Feedback;
 import com.rade.dentistbookingsystem.services.AccountService;
@@ -40,8 +41,7 @@ public class FeedbackStaffController {
     @PostMapping("approve/{id}")
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> approveFeedback(@PathVariable int id) {
-        final int APPROVE_FEEDBACK_STATUS = 1;
-        Feedback feedback = feedbackService.updateFeedbackStatus(id, APPROVE_FEEDBACK_STATUS);
+        Feedback feedback = feedbackService.updateFeedbackStatus(id, Constant.FEEDBACK_STATUS_APPROVE);
         notificationService.createNotificationForApprovingFeedbackFromAdmin(feedback);
         return ResponseEntity.ok().build();
 
@@ -51,12 +51,11 @@ public class FeedbackStaffController {
     @PostMapping("disapprove/{id}")
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> disapproveFeedback(@PathVariable int id) {
-        final int DISAPPROVE_FEEDBACK_STATUS = 2;
-        Feedback feedback = feedbackService.updateFeedbackStatus(id, DISAPPROVE_FEEDBACK_STATUS);
+        Feedback feedback = feedbackService.updateFeedbackStatus(id, Constant.FEEDBACK_STATUS_DISAPPROVE);
         notificationService.createNotificationForDisapprovingFeedbackFromAdmin(feedback);
         int accountId = feedback.getAppointment().getAccount().getId();
         if (feedbackService.checkAccountToBanByFeedback(accountId)) {
-            accountService.checkAccount(2, accountId);
+            accountService.checkAccount(Constant.ACCOUNT_STATUS_INACTIVE, accountId);
         }
         return ResponseEntity.ok().build();
     }

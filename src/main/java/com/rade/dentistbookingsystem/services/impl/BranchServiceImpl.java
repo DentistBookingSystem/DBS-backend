@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.services.impl;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.componentform.JsonPhone;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Branch;
@@ -153,15 +154,14 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public List<Branch> getListForChoosing(JsonPhone jsonPhone) {
-        int available = 1;
         Account account = accountService.findByPhone(jsonPhone.getPhone());
         List<Branch> branchList = new ArrayList<>();
         if (account == null) return branchList;
-        branchList.addAll(findByDistrictIdAndStatus(account.getDistrict().getId(), available));
-        List<Branch> branchListByProvince = findByProvinceIdAndStatus(account.getDistrict().getProvince().getId(), available);
+        branchList.addAll(findByDistrictIdAndStatus(account.getDistrict().getId(), Constant.BRANCH_STATUS_ACTIVE));
+        List<Branch> branchListByProvince = findByProvinceIdAndStatus(account.getDistrict().getProvince().getId(), Constant.BRANCH_STATUS_ACTIVE);
         branchListByProvince.removeAll(branchList);
         branchList.addAll(branchListByProvince);
-        List<Branch> branchListNotRecommend = findByStatus(available);
+        List<Branch> branchListNotRecommend = findByStatus(Constant.BRANCH_STATUS_ACTIVE);
         branchListNotRecommend.removeAll(branchList);
         branchList.addAll(branchListNotRecommend);
         return branchList;

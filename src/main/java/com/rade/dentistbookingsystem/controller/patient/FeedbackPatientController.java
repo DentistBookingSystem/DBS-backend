@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.controller.patient;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.componentform.FeedbackAndPhone;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
@@ -27,18 +28,13 @@ public class FeedbackPatientController {
     @Autowired
     NotificationService notificationService;
 
-
-    final static int BLOCKED_ACCOUNT_STATUS = 2;
-    final static int APPOINTMENT_DONE_STATUS = 1;
-    final static int APPOINTMENT_FEEDBACK_STATUS = 5;
-
     @PostMapping("send")
     public ResponseEntity<?> sendFeedback(@RequestBody FeedbackAndPhone feedbackAndPhone) {
         try {
             Account account = accountService.findByPhone(feedbackAndPhone.getPhone());
             if (account == null)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            if (account.getStatus() == BLOCKED_ACCOUNT_STATUS)
+            if (account.getStatus() == Constant.ACCOUNT_STATUS_INACTIVE)
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             Appointment appointment = appointmentService.findId(feedbackAndPhone.getFeedbackDTO().getAppointmentId());
             if (appointment == null) {
@@ -48,13 +44,13 @@ public class FeedbackPatientController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             String content = feedbackAndPhone.getFeedbackDTO().getContent();
-            if (!(appointment.getStatus() == APPOINTMENT_DONE_STATUS))
+            if (!(appointment.getStatus() == Constant.APPOINTMENT_STATUS_DONE))
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
             if (!(content != null && !content.isEmpty() && content.length() <= 150))
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
             Feedback feedback = feedbackService.save(feedbackAndPhone.getFeedbackDTO());
             if (feedback != null) {
-                appointmentService.check(APPOINTMENT_FEEDBACK_STATUS, feedback.getAppointment().getId());
+                appointmentService.check(Constant.APPOINTMENT_STATUS_GAVE_FEEDBACK, feedback.getAppointment().getId());
                 notificationService.createNotificationForSendingFeedback(feedback);
                 return ResponseEntity.ok(feedback);
             } else {

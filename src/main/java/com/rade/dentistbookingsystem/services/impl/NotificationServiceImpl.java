@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.services.impl;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.componentform.PhoneAndPage;
 import com.rade.dentistbookingsystem.domain.*;
 import com.rade.dentistbookingsystem.repository.NotificationRepo;
@@ -48,7 +49,7 @@ public class NotificationServiceImpl implements NotificationService {
         for (DiscountService discountService : discountSvService.findByDiscountId(discount.getId())) {
             description += discountService.getService().getName() + ", ";
         }
-        description.substring(0, description.length() - 2);
+        description = description.substring(0, description.length() - 2);
         description += ". Chi tiết khuyến mãi: " + discount.getDescription();
         Notification notification = new Notification(
                 null,
@@ -102,7 +103,7 @@ public class NotificationServiceImpl implements NotificationService {
                 String time = appointment.getAppointmentTime().split("-")[0];
                 Date dateForNotification = sdfDate.parse(sdfDate.format(new Date()));
                 String description = "Nhắc yêu: Bạn có lịch hẹn khám răng vào lúc " + time + " ngày " + date +
-                        " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + ". Nhớ đến đúng giờ nhé <3";
+                        " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + ". Nhớ đến đúng giờ nhé <3.";
                 Notification notification = new Notification(
                         account,
                         description,
@@ -125,7 +126,7 @@ public class NotificationServiceImpl implements NotificationService {
             String date = sdfDate.format(appointment.getAppointmentDate());
             String time = appointment.getAppointmentTime().split("-")[0];
             String description = "Lịch hẹn khám răng vào lúc " + time + " ngày " + date +
-                    " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + " đã bị hủy do bạn không có mặt quá 15 phút.";
+                    " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + " đã bị hủy do bạn không có mặt quá " + Constant.MAX_LATE_TIME_TO_MARK_ABSENT_AS_MINUTE + " phút.";
             Notification notification = new Notification(
                     account,
                     description,
@@ -139,7 +140,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void createNotificationForBannedByAbsent(Integer accountId) {
         Account account = accountService.findId(accountId);
         if (account != null) {
-            String description = "Bạn đã bị liệt vào danh sách đen của trung tâm vì đã vắng liên tục quá 3 lịch hẹn. Hiện tại bạn sẽ chỉ còn có thể tham khảo các thông tin mà trung tâm cung cấp.";
+            String description = "Bạn đã bị liệt vào danh sách đen của trung tâm vì đã vắng liên tục " + Constant.ABSENT_TIME_IN_A_ROW_TO_BAN + " lịch hẹn. Hiện tại bạn sẽ chỉ còn có thể tham khảo các thông tin mà trung tâm cung cấp.";
             Notification notification = new Notification(
                     account,
                     description,
@@ -153,7 +154,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void createNotificationForBannedByFeedback(Integer accountId) {
         Account account = accountService.findId(accountId);
         if (account != null) {
-            String description = "Bạn đã bị liệt vào danh sách đen của trung tâm vì đã phản hồi vi phạm, quấy rối quá 2 lần. Hiện tại bạn sẽ chỉ còn có thể tham khảo các thông tin mà trung tâm cung cấp.";
+            String description = "Bạn đã bị liệt vào danh sách đen của trung tâm vì đã phản hồi vi phạm, quấy rối " + Constant.VIOLATED_FEEDBACK_TIME_TO_BAN + " lần. Hiện tại bạn sẽ chỉ còn có thể tham khảo các thông tin mà trung tâm cung cấp.";
             Notification notification = new Notification(
                     account,
                     description,
@@ -167,7 +168,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void createNotificationForSendingFeedback(Feedback feedback) {
         if (feedback == null) return;
         Account account = accountService.findId(feedback.getAppointment().getAccount().getId());
-        String description = "Phản hồi của bạn đã được gửi tới trung tâm, cảm ơn bãn đã để lại đánh giá cho RaDe.";
+        String description = "Phản hồi của bạn đã được gửi tới trung tâm, cảm ơn bạn đã để lại đánh giá cho RaDe.";
         Notification notification = new Notification(
                 account,
                 description,
@@ -198,7 +199,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void createNotificationForUpdatingAppointment(Appointment appointment) {
         if (appointment != null && appointment.getAccount() != null) {
-            String description = "Lịch hẹn sắp tới của bạn đã được cập nhật";
+            String description = "Lịch hẹn sắp tới của bạn đã được cập nhật.";
             Notification notification = new Notification(
                     appointment.getAccount(),
                     description,
@@ -239,7 +240,7 @@ public class NotificationServiceImpl implements NotificationService {
             String date = sdfDate.format(appointment.getAppointmentDate());
             String time = appointment.getAppointmentTime().split("-")[0];
             String description = "Phản hồi cho lịch hẹn vào lúc " + time + " ngày " + date +
-                    " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + " đã được phê duyệt, xin cảm ơn quý khách đã để lại phản hồi tới trung tâm nha khoa RaDe";
+                    " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + " đã được phê duyệt, xin cảm ơn quý khách đã để lại phản hồi tới trung tâm nha khoa RaDe.";
             Notification notification = new Notification(
                     account,
                     description,

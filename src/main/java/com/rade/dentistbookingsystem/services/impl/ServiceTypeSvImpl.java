@@ -56,7 +56,6 @@ public class ServiceTypeSvImpl implements ServiceTypeSv {
         serviceTypeRepo.deleteById(id);
     }
 
-
     @Override
     public ServiceType insert(ServiceTypeDTO serviceTypeDTO) {
 
@@ -98,6 +97,4 @@ public class ServiceTypeSvImpl implements ServiceTypeSv {
     public <S extends ServiceType> List<S> findAll(Example<S> example) {
         return serviceTypeRepo.findAll(example);
     }
-
-
 }

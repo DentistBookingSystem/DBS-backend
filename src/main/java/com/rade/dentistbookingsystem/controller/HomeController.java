@@ -5,6 +5,7 @@
  */
 package com.rade.dentistbookingsystem.controller;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.componentform.HomeComponent;
 import com.rade.dentistbookingsystem.services.BranchService;
 import com.rade.dentistbookingsystem.services.ServiceTypeSv;
@@ -29,7 +30,6 @@ public class HomeController {
 
     @GetMapping("")
     public HomeComponent list(Model model) {
-        int available = 1;
-        return new HomeComponent(serviceTypeSv.findAll(), branchService.findByStatus(available));
+        return new HomeComponent(serviceTypeSv.findAll(), branchService.findByStatus(Constant.BRANCH_STATUS_ACTIVE));
     }
 }

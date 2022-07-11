@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.controller;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.componentform.ServiceDiscountComponent;
 import com.rade.dentistbookingsystem.domain.Service;
 import com.rade.dentistbookingsystem.services.ServiceSv;
@@ -17,19 +18,16 @@ public class ServiceController {
 
     @GetMapping("{serviceTypeId}")
     public List<Service> getServiceByServiceTypeId(@PathVariable int serviceTypeId) {
-        short available = 1;
-        return serviceSv.findByServiceTypeIdAndStatus(serviceTypeId, available);
+        return serviceSv.findByServiceTypeIdAndStatus(serviceTypeId, (short)Constant.SERVICE_STATUS_ACTIVE);
     }
 
     @GetMapping("discount/{serviceTypeId}")
     public List<ServiceDiscountComponent> getServiceByServiceTypeIdIncludeDiscount(@PathVariable int serviceTypeId) {
-        short available = 1;
-        return serviceSv.findByServiceTypeIdAndStatusIncludeDiscount(serviceTypeId, available);
+        return serviceSv.findByServiceTypeIdAndStatusIncludeDiscount(serviceTypeId, (short)Constant.SERVICE_STATUS_ACTIVE);
     }
 
     @GetMapping("")
     public List<Service> getAllService() {
-        short available = 1;
         return serviceSv.findAll();
     }
 }

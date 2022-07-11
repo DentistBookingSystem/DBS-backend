@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.controller.patient;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.model.AccountDTO;
 import com.rade.dentistbookingsystem.services.AccountService;
@@ -25,8 +26,6 @@ public class AccountPatientController {
         return accountService.view(phone);
     }
 
-
-
     @PostMapping("profile/edit")
     public ResponseEntity<?> edit(@Validated @RequestBody AccountDTO accountDTO) {
         try {
@@ -49,11 +48,10 @@ public class AccountPatientController {
     @GetMapping("{phone}")
     public ResponseEntity<?> checkValidAccountToMakeAppointment(@PathVariable String phone) {
         try {
-            final int LOCKED_STATUS = 2;
             Account account = accountService.findByPhone(phone);
             if (accountService.findByPhone(phone) == null)
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build(); //406
-            if (account.getStatus() == LOCKED_STATUS)
+            if (account.getStatus() == Constant.ACCOUNT_STATUS_INACTIVE)
                 return ResponseEntity.status(HttpStatus.LOCKED).build(); //423
             if (appointmentService.findByAccountAndStatusIn(account, new int[]{0}) != null)
                 return ResponseEntity.status(HttpStatus.GONE).build(); //410

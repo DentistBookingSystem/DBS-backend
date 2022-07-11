@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.controller;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.componentform.PageForFeedback;
 import com.rade.dentistbookingsystem.domain.Feedback;
 import com.rade.dentistbookingsystem.services.FeedbackService;
@@ -20,10 +21,9 @@ public class FeedbackController {
 
     @PostMapping("")
     public List<Feedback> getFeedbackPage(@RequestBody PageForFeedback pageForFeedback) {
-        int available = 1;
         int page = pageForFeedback.getPage() - 1;
         Integer serviceId = pageForFeedback.getServiceId();
         Pageable pageable = PageRequest.of(page, 3, Sort.by("id").descending());
-        return feedbackService.filterFeedback(null, available, serviceId, null, pageable);
+        return feedbackService.filterFeedback(null, Constant.SERVICE_STATUS_ACTIVE, serviceId, null, pageable);
     }
 }

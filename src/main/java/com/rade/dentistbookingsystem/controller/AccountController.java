@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.controller;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.componentform.JsonPhone;
 import com.rade.dentistbookingsystem.model.AccountDTO;
 import com.rade.dentistbookingsystem.model.StoreOTP;
@@ -32,13 +33,13 @@ public class AccountController {
             StoreOTP storeOTP = StoreOTPList.getStoredOTP(jsonPhone.getPhone());
             if(storeOTP != null){
                 if(TimeUnit.MILLISECONDS.toSeconds((new Date()).getTime() - storeOTP.getGeneratedDate().getTime())
-                        <= StoreOTPList.VALID_TIME_FOR_VERIFICATION_AS_SECOND)
+                        <= Constant.VALID_TIME_FOR_VERIFICATION_AS_SECOND)
                 {
-                    return ResponseEntity.status(410).body("Tin nhắn chứa OTP đã được gửi đi trước đó. \nVui lòng nhấn gửi lại sau 2 phút nếu vẫn chưa nhận được tin nhắn.");
+                    return ResponseEntity.status(410).body("Tin nhắn chứa mã OTP đã được gửi đi trước đó. \nVui lòng nhấn gửi lại sau " + Constant.VALID_TIME_FOR_VERIFICATION_AS_SECOND/60 + " phút nếu vẫn chưa nhận được tin nhắn.");
                 }
             }
             otp = service.send(jsonPhone);
-            if (otp.length() != 6)
+            if (otp.length() != Constant.OTP_LENGTH)
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -71,8 +72,7 @@ public class AccountController {
     @PostMapping("registration")
     public ResponseEntity<?> register(@Validated @RequestBody AccountDTO accountDTO) {
         try {
-            final int ROLE_USER = 2;
-            accountService.registerNewUserAccount(accountDTO, ROLE_USER);
+            accountService.registerNewUserAccount(accountDTO, Constant.ACCOUNT_ROLE_USER);
             return ResponseEntity.ok("Register successfully");
         } catch (Exception e) {
             e.printStackTrace();

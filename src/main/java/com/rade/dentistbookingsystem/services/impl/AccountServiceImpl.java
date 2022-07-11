@@ -79,7 +79,7 @@ public class AccountServiceImpl implements AccountService {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         Account account = accountRepo.findByPhone(accountDTO.getPhone());
-        if (account == null || account.getStatus() == 2) {
+        if (account == null || account.getStatus() == Constant.ACCOUNT_STATUS_INACTIVE) {
             throw new Exception("Can not edit!! please try again");
         } else {
             account.setFullName(accountDTO.getFullName());
@@ -122,7 +122,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean editStatus(String phone, int status) throws Exception {
         Account account = accountRepo.findByPhone(phone);
-        if (account != null && account.getRole().getId() != Constant.ROLE_ADMIN_ID) {
+        if (account != null && account.getRole().getId() != Constant.ACCOUNT_ROLE_ADMIN) {
             account.setStatus((short) status);
             accountRepo.save(account);
             return true;

@@ -55,5 +55,7 @@ public interface AppointmentService {
     Appointment checkDoneAppointmentForAdmin(int appointmentId);
 
     boolean isAbleToUnBan(int accountId);
+
+    List<Appointment> findByPhoneAndStatusInByOrderByIdDesc(String phone, Integer[] status);
 }
 

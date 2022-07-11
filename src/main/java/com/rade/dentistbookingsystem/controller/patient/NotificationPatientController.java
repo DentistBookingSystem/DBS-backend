@@ -21,6 +21,4 @@ public class NotificationPatientController {
         notificationService.createRemindNotificationIfNeeded(phoneAndPage.getPhone());
         return notificationService.findByAccountId(phoneAndPage);
     }
-
-
 }

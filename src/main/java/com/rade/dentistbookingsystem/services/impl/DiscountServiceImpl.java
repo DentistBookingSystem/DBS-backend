@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.services.impl;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.domain.Discount;
 import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.DiscountDTO;
@@ -33,9 +34,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     public Discount findAvailableByServiceId(Integer id) {
         return discountRepo.findAvailableByServiceId(id);
-
     }
-
 
     @Override
     public List<Discount> findAll() {
@@ -49,7 +48,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Page<Discount> findAll(Pageable pageable) {
-        return discountRepo.findAllByStatus(1, pageable);
+        return discountRepo.findAllByStatus(Constant.DISCOUNT_STATUS_ACTIVE, pageable);
     }
 
     @Override
@@ -59,7 +58,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Page<Discount> findAllWithPagination() {
-        return discountRepo.findAllByStatus(1, PageRequest.of(0, 5));
+        return discountRepo.findAllByStatus(Constant.DISCOUNT_STATUS_ACTIVE, PageRequest.of(0, 5));
     }
 
 
@@ -124,7 +123,7 @@ public class DiscountServiceImpl implements DiscountService {
     public Discount deleteDiscount(int discountId) {
         Optional<Discount> discount = discountRepo.findById(discountId);
         if (discount.isPresent()) {
-            discount.get().setStatus(2);
+            discount.get().setStatus(Constant.DISCOUNT_STATUS_INACTIVE);
             return discount.get();
         } else throw new NotFoundException("Discount is not found");
     }

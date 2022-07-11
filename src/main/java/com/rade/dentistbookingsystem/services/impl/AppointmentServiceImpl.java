@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.services.impl;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.componentform.AppointmentComponentForFilter;
 import com.rade.dentistbookingsystem.componentform.DoctorAndDate;
 import com.rade.dentistbookingsystem.componentform.JsonAppointment;
@@ -32,12 +33,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     private DoctorService doctorService;
 
-    private static final int APPOINTMENT_WAITING_STATUS = 0;
-    private static final int APPOINTMENT_DONE_STATUS = 1;
-    private static final int APPOINTMENT_CANCEL_ADMIN_STATUS = 6;
-    private static final int INTERVAL_TIME_FOR_EACH_WORKING_SLOT_AS_MINUTE = 30;
-    private static final int ACTIVE_STATUS = 1;
-
     public AppointmentServiceImpl(AppointmentRepo appointmentRepo) {
         this.appointmentRepo = appointmentRepo;
     }
@@ -55,7 +50,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                         doctorService.findId(appointmentDTO.getDoctorId()),
                         dateFormat.parse(appointmentDTO.getDate()),
                         appointmentDTO.getTime(),
-                        APPOINTMENT_WAITING_STATUS,
+                        Constant.APPOINTMENT_STATUS_WAITING,
                         new Date()
                 );
             } else {
@@ -144,7 +139,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                         String end = sdf.format(cal.getTime());
                         timeOptionByDateList.add(start + "-" + end);
                         cal.setTime(sdf.parse(start));
-                        cal.add(Calendar.MINUTE, INTERVAL_TIME_FOR_EACH_WORKING_SLOT_AS_MINUTE);
+                        cal.add(Calendar.MINUTE, Constant.INTERVAL_TIME_FOR_EACH_WORKING_SLOT_AS_MINUTE);
                         startTimeAtMorning = cal.getTime();
                     } else {
                         endOfNoon = true;
@@ -184,7 +179,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         if (doctorAndDate.getDoctorId() != 0) {
             return checkTimeOptionOfDoctorByDate(doctorAndDate);
         } else {
-            List<Doctor> doctorList = doctorService.findByBranchIdAndStatus(doctorAndDate.getBranchId(), ACTIVE_STATUS);
+            List<Doctor> doctorList = doctorService.findByBranchIdAndStatus(doctorAndDate.getBranchId(), Constant.DOCTOR_STATUS_ACTIVE);
             List<String> generalOptionList = new ArrayList<>();
             for (Doctor doctor : doctorList) {
                 doctorAndDate.setDoctorId(doctor.getId());
@@ -219,7 +214,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 }
             } else {
 
-                List<Doctor> doctorList = doctorService.findByBranchIdAndStatus(branchId, ACTIVE_STATUS);
+                List<Doctor> doctorList = doctorService.findByBranchIdAndStatus(branchId, Constant.DOCTOR_STATUS_ACTIVE);
                 List<Doctor> availableDoctorList = new ArrayList<>();
                 for (Doctor doctor : doctorList) {
                     DoctorAndDate doctorAndDate = new DoctorAndDate(appointmentId, branchId, doctor.getId(), date, serviceId);
@@ -308,8 +303,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         Optional<Appointment> appointment = appointmentRepo.findById(appointmentId);
         if (appointment.isPresent()) {
             Appointment cancelAppointment = appointment.get();
-            if (cancelAppointment.getStatus() == APPOINTMENT_WAITING_STATUS) {
-                cancelAppointment.setStatus(APPOINTMENT_CANCEL_ADMIN_STATUS);
+            if (cancelAppointment.getStatus() == Constant.APPOINTMENT_STATUS_WAITING) {
+                cancelAppointment.setStatus(Constant.APPOINTMENT_STATUS_CANCEL_BY_ADMIN);
                 return appointmentRepo.save(cancelAppointment);
             } else throw new RuntimeException("Can not cancel appointment");
         } else throw new NotFoundException("Appointment not found");
@@ -321,8 +316,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         Optional<Appointment> appointment = appointmentRepo.findById(appointmentId);
         if (appointment.isPresent()) {
             Appointment acceptAppointment = appointment.get();
-            if (acceptAppointment.getStatus() == APPOINTMENT_WAITING_STATUS) {
-                acceptAppointment.setStatus(APPOINTMENT_DONE_STATUS);
+            if (acceptAppointment.getStatus() == Constant.APPOINTMENT_STATUS_WAITING) {
+                acceptAppointment.setStatus(Constant.APPOINTMENT_STATUS_DONE);
                 return appointmentRepo.save(acceptAppointment);
             } else throw new RuntimeException("Can not mark done this appointment");
         } else throw new NotFoundException("Appointment not found");
@@ -332,5 +327,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public boolean isAbleToUnBan(int accountId) {
         return appointmentRepo.isAbleToUnBan(accountId);
+    }
+
+    @Override
+    public List<Appointment> findByPhoneAndStatusInByOrderByIdDesc(String phone, Integer[] status) {
+        return appointmentRepo.findByPhoneAndStatusInByOrderByIdDesc(phone, status);
     }
 }

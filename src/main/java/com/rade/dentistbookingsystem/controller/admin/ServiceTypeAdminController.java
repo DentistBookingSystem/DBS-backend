@@ -47,9 +47,5 @@ public class ServiceTypeAdminController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
-
-
     }
-
-
 }
