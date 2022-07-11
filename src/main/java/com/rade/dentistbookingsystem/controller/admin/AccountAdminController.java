@@ -1,14 +1,11 @@
 package com.rade.dentistbookingsystem.controller.admin;
 
-import com.rade.dentistbookingsystem.componentform.AccountAndViolationTimes;
 import com.rade.dentistbookingsystem.componentform.JsonPhone;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.model.AccountDTO;
 import com.rade.dentistbookingsystem.services.AccountService;
 import com.rade.dentistbookingsystem.services.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,12 +22,6 @@ public class AccountAdminController {
 
     @Autowired
     AppointmentService appointmentService;
-
-    @GetMapping("violated/page/{page}")
-    public List<AccountAndViolationTimes> getViolatedAccounts(@PathVariable int page) {
-        Pageable pageable = PageRequest.of(page - 1, 3);
-        return accountService.findViolatedAccountsAndViolationTimes(pageable);
-    }
 
     @GetMapping("accountDetail/{phone}")
     public Account findByPhone(@PathVariable String phone) {

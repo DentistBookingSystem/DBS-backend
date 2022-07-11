@@ -28,9 +28,6 @@ public interface DiscountRepo extends JpaRepository<Discount, Integer> {
 
     public Discount findByName(String name);
 
-
-    List<Discount> findByStatus(int status);
-
     Page<Discount> findAllByStatus(int status, Pageable pageable);
 
     @Query(value =

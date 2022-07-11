@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
-public class StatusForAppointment {
-    int id;
-    int status;
+public class JsonNoteForAppointment {
+    private int id;
+    private String note;
 }

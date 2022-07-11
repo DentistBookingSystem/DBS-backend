@@ -11,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface FeedbackRepo extends JpaRepository<Feedback, Integer> {
-
     @Query(value =
             "SELECT Feedback.* \n" +
                     "FROM Feedback, Appointment ap, Account ac, Appointment_Detail ad \n" +
@@ -55,6 +54,4 @@ public interface FeedbackRepo extends JpaRepository<Feedback, Integer> {
                     "END",
             nativeQuery = true)
     boolean checkAccountToBanByFeedback(@Param("account_id") int accountId);
-
-
 }

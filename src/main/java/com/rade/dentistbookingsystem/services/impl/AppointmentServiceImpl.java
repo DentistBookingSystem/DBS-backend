@@ -3,6 +3,7 @@ package com.rade.dentistbookingsystem.services.impl;
 import com.rade.dentistbookingsystem.componentform.AppointmentComponentForFilter;
 import com.rade.dentistbookingsystem.componentform.DoctorAndDate;
 import com.rade.dentistbookingsystem.componentform.JsonAppointment;
+import com.rade.dentistbookingsystem.componentform.JsonNoteForAppointment;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.domain.Doctor;
@@ -63,6 +64,18 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointment.setAppointmentDate(dateFormat.parse(appointmentDTO.getDate()));
                 appointment.setAppointmentTime(appointmentDTO.getTime());
             }
+            return appointmentRepo.save(appointment);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Appointment addNote(JsonNoteForAppointment noteForAppointment) {
+        try {
+            Appointment appointment = findId(noteForAppointment.getId());
+            appointment.setNote(noteForAppointment.getNote());
             return appointmentRepo.save(appointment);
         } catch (Exception e) {
             e.printStackTrace();

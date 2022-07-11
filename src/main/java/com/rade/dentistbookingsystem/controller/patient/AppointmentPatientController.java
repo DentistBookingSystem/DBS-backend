@@ -5,7 +5,6 @@ import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.domain.Doctor;
 import com.rade.dentistbookingsystem.domain.Service;
-import com.rade.dentistbookingsystem.error.AppointmentError;
 import com.rade.dentistbookingsystem.model.AppointmentDTO;
 import com.rade.dentistbookingsystem.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +60,6 @@ public class AppointmentPatientController {
         }
         return new AppointmentComponent(
                 new AppointmentDTO(branchId),
-                new AppointmentError(),
                 serviceDiscountComponentList,
                 serviceTypeSv.findAll(),
                 branchService.findId(branchId),

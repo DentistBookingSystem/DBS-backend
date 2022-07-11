@@ -3,7 +3,6 @@ package com.rade.dentistbookingsystem.componentform;
 import com.rade.dentistbookingsystem.domain.Branch;
 import com.rade.dentistbookingsystem.domain.Doctor;
 import com.rade.dentistbookingsystem.domain.ServiceType;
-import com.rade.dentistbookingsystem.error.AppointmentError;
 import com.rade.dentistbookingsystem.model.AppointmentDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +16,6 @@ import java.util.List;
 @Data
 public class AppointmentComponent {
     private AppointmentDTO appointmentDTO;
-    private AppointmentError appointmentError;
     private ArrayList<ServiceDiscountComponent> serviceDiscountComponentList;
     private List<ServiceType> serviceTypeList;
     private Branch branch;

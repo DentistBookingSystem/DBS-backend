@@ -1,21 +1,18 @@
 package com.rade.dentistbookingsystem.services.impl;
 
-import com.rade.dentistbookingsystem.componentform.AccountAndViolationTimes;
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.exceptions.NotFoundException;
 import com.rade.dentistbookingsystem.model.AccountDTO;
 import com.rade.dentistbookingsystem.repository.AccountRepo;
-import com.rade.dentistbookingsystem.repository.AppointmentRepo;
 import com.rade.dentistbookingsystem.repository.DistrictRepo;
 import com.rade.dentistbookingsystem.repository.RoleRepo;
 import com.rade.dentistbookingsystem.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,14 +24,7 @@ public class AccountServiceImpl implements AccountService {
     RoleRepo roleRepo;
 
     @Autowired
-    AppointmentRepo appointmentRepo;
-
-    @Autowired
     DistrictRepo districtRepo;
-
-    private final int ROLE_ADMIN_ID = 1;
-    private final int ROLE_USER_ID = 2;
-    private final int ROLE_STAFF_ID = 3;
 
     public AccountServiceImpl(AccountRepo accountRepo) {
         this.accountRepo = accountRepo;
@@ -115,22 +105,6 @@ public class AccountServiceImpl implements AccountService {
         return false;
     }
 
-    @Override
-    public List<AccountAndViolationTimes> findViolatedAccountsAndViolationTimes(Pageable pageable) {
-        List<Account> accountList = accountRepo.findAccountViolated(pageable);
-        List<AccountAndViolationTimes> accountAndViolationTimesList = new ArrayList<>();
-        for (Account account : accountList) {
-            int violationTimes =
-                    appointmentRepo.countByAccountIdAndStatus(account.getId(), 2);
-            ;
-            accountAndViolationTimesList.add(new AccountAndViolationTimes(
-                    account,
-                    violationTimes
-            ));
-        }
-        return accountAndViolationTimesList;
-    }
-
     public Account findByPhone(String phone) {
         return accountRepo.findByPhone(phone);
     }
@@ -148,7 +122,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean editStatus(String phone, int status) throws Exception {
         Account account = accountRepo.findByPhone(phone);
-        if (account != null && account.getRole().getId() != ROLE_ADMIN_ID) {
+        if (account != null && account.getRole().getId() != Constant.ROLE_ADMIN_ID) {
             account.setStatus((short) status);
             accountRepo.save(account);
             return true;

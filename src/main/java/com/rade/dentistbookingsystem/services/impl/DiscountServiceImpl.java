@@ -124,7 +124,7 @@ public class DiscountServiceImpl implements DiscountService {
     public Discount deleteDiscount(int discountId) {
         Optional<Discount> discount = discountRepo.findById(discountId);
         if (discount.isPresent()) {
-            discount.get().setStatus(0);
+            discount.get().setStatus(2);
             return discount.get();
         } else throw new NotFoundException("Discount is not found");
     }

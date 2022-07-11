@@ -3,6 +3,7 @@ package com.rade.dentistbookingsystem.services;
 import com.rade.dentistbookingsystem.componentform.AppointmentComponentForFilter;
 import com.rade.dentistbookingsystem.componentform.DoctorAndDate;
 import com.rade.dentistbookingsystem.componentform.JsonAppointment;
+import com.rade.dentistbookingsystem.componentform.JsonNoteForAppointment;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.model.AppointmentDTO;
@@ -16,6 +17,8 @@ public interface AppointmentService {
 //    abstract Appointment save(AppointmentDTO appointmentDTO);
 
     Appointment save(AppointmentDTO appointmentDTO);
+
+    Appointment addNote(JsonNoteForAppointment noteForAppointment);
 
     Page<Appointment> findAll(Pageable pageable);
 

@@ -46,8 +46,6 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
 
     Appointment findByAccountAndStatusIn(Account account, int[] status);
 
-    int countByAccountIdAndStatus(int accountId, int status);
-
     @Query(value =
             "SELECT " +
                     "            CASE WHEN EXISTS ( " +

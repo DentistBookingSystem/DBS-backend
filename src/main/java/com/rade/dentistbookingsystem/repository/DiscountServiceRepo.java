@@ -9,6 +9,4 @@ public interface DiscountServiceRepo extends JpaRepository<DiscountService, Inte
     void deleteAllByDiscount_Id(int discount_id);
 
     List<DiscountService> findAllByDiscount_Id(int discount_id);
-
-
 }

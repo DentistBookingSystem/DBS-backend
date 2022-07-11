@@ -17,7 +17,6 @@ public interface DoctorRepo extends JpaRepository<Doctor, Integer> {
 
     int countByBranchId(int branchId);
 
-
     @Query(value =
             "SELECT Distinct  Doctor.* " +
                     "FROM " +

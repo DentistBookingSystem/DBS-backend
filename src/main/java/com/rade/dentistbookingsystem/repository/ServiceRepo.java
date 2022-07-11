@@ -15,7 +15,6 @@ public interface ServiceRepo extends JpaRepository<Service, Integer> {
 
     Service findByName(String name);
 
-
     @Query(value = "SELECT * FROM Service WHERE id = ?1", nativeQuery = true)
     Service findId(Integer id);
 
@@ -25,7 +24,6 @@ public interface ServiceRepo extends JpaRepository<Service, Integer> {
             "FROM Service, Appointment_Detail ad, Appointment a " +
             "WHERE Service.id = ad.service_id AND ad.appointment_id = a.id AND a.id = :appointment_id", nativeQuery = true)
     List<Service> findByAppointmentId(@Param("appointment_id") Integer appointmentId);
-
 
     @Query(value =
             "SELECT DISTINCT Service.* " +

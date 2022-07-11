@@ -26,5 +26,4 @@ public interface NotificationRepo extends JpaRepository<Notification, Integer> {
     Notification findDuplicateDescriptionByAccountId(@Param("account_id") Integer accountId,
                                                      @Param("description") String description,
                                                      @Param("date") String date);
-//    boolean existsBy
 }

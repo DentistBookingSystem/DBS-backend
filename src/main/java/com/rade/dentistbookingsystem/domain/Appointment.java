@@ -46,6 +46,9 @@ public class Appointment implements Serializable, Comparable<Appointment> {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeMaking;
 
+    @Column(name = "note", columnDefinition = "nvarchar(MAX)")
+    private String note;
+
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<AppointmentDetail> appointmentDetailSet;

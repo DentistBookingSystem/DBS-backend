@@ -3,6 +3,7 @@ package com.rade.dentistbookingsystem.controller.staff;
 import com.rade.dentistbookingsystem.componentform.AppointmentComponentForFilter;
 import com.rade.dentistbookingsystem.componentform.AppointmentIdListAndDescriptionToCancel;
 import com.rade.dentistbookingsystem.componentform.AppointmentWithDetails;
+import com.rade.dentistbookingsystem.componentform.JsonNoteForAppointment;
 import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.domain.AppointmentDetail;
 import com.rade.dentistbookingsystem.services.AccountService;
@@ -69,5 +70,12 @@ public class AppointmentStaffController {
     @PostMapping("markdone/{id}")
     public ResponseEntity<?> checkDoneAppointment(@PathVariable int id) {
         return ResponseEntity.ok(appointmentService.checkDoneAppointmentForAdmin(id));
+    }
+
+    @PostMapping("note")
+    public ResponseEntity<?> addNote(@RequestBody JsonNoteForAppointment noteForAppointment){
+        Appointment appointment = appointmentService.findId(noteForAppointment.getId());
+        if (appointment.getStatus() != 1) return ResponseEntity.status(410).body("Lịch hẹn này vẫn chưa được check-in bởi nhân viên");
+        return ResponseEntity.ok(appointmentService.addNote(noteForAppointment));
     }
 }
