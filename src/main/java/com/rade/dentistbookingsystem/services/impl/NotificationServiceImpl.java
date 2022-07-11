@@ -41,7 +41,7 @@ public class NotificationServiceImpl implements NotificationService {
     public Notification newDiscount(Discount discount) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         int status = 0;
-        String description = "Khuyến mãi mới" + discount.getName() + " trong thời gian giới hạn! " +
+        String description = "Khuyến mãi mới " + discount.getName() + " trong thời gian giới hạn! " +
                 "Bắt đầu từ " + sdf.format(discount.getStartDate()) + " đến " + sdf.format(discount.getEndDate()) + "! " +
                 "Ưu đãi " + discount.getPercentage() + "% áp dụng cho dịch vụ: ";
 

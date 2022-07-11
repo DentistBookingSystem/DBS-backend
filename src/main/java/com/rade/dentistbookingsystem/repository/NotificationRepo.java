@@ -14,13 +14,13 @@ public interface NotificationRepo extends JpaRepository<Notification, Integer> {
     @Query(value =
             "SELECT Notification.* " +
                     "FROM Notification " +
-                    "WHERE (account_id = :account_id OR account_id = NULL)", nativeQuery = true)
+                    "WHERE (account_id = :account_id OR account_id is NULL)", nativeQuery = true)
     List<Notification> findByAccountId(@Param("account_id") Integer accountId, Pageable pageable);
 
     @Query(value =
             "SELECT TOP 1 Notification.* " +
                     "FROM Notification " +
-                    "WHERE (account_id = :account_id OR account_id = NULL) AND " +
+                    "WHERE (account_id = :account_id OR account_id is NULL) AND " +
                     "date = CAST(:date  AS DATE) AND " +
                     "description = :description", nativeQuery = true)
     Notification findDuplicateDescriptionByAccountId(@Param("account_id") Integer accountId,

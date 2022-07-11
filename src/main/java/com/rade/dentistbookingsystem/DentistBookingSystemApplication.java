@@ -31,18 +31,18 @@ public class DentistBookingSystemApplication {
         SpringApplication.run(DentistBookingSystemApplication.class, args);
     }
 
-//    @Scheduled(fixedDelayString = "PT1M")
-//    void checkAllAppointmentToMarkAbsent() throws InterruptedException{
-//        List<Appointment> appointmentList = appointmentService.findAllAppointmentToMarkAbsent();
-//        for (Appointment appointment : appointmentList) {
-//            Integer accountId = appointment.getAccount().getId();
-//            appointmentService.check(ABSENT_STATUS, appointment.getId());
-//            notificationService.createNotificationForAbsent(appointment);
-//            if (appointmentService.checkAccountToBanByAppointment(accountId)) {
-//                accountService.checkAccount(BAN_STATUS, accountId);
-//            }
-//        }
-//    }
+    @Scheduled(fixedDelayString = "PT1M")
+    void checkAllAppointmentToMarkAbsent() throws InterruptedException{
+        List<Appointment> appointmentList = appointmentService.findAllAppointmentToMarkAbsent();
+        for (Appointment appointment : appointmentList) {
+            Integer accountId = appointment.getAccount().getId();
+            appointmentService.check(ABSENT_STATUS, appointment.getId());
+            notificationService.createNotificationForAbsent(appointment);
+            if (appointmentService.checkAccountToBanByAppointment(accountId)) {
+                accountService.checkAccount(BAN_STATUS, accountId);
+            }
+        }
+    }
 }
 
 @Configuration
