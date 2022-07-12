@@ -7,6 +7,7 @@ import com.rade.dentistbookingsystem.domain.AppointmentDetail;
 import com.rade.dentistbookingsystem.services.AppointmentDetailService;
 import com.rade.dentistbookingsystem.services.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class AppointmentAdminController {
     }
 
     @PostMapping("find/{id}")
-    public AppointmentWithDetails findAppointmentByPhone(@PathVariable Integer id) {
+    public AppointmentWithDetails findAppointmentById(@PathVariable Integer id) {
         try {
             Appointment appointment = appointmentService.findId(id);
             List<AppointmentDetail> appointmentDetailList = appointmentDetailService.findByAppointmentId(appointment.getId());
@@ -41,5 +42,10 @@ public class AppointmentAdminController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @PostMapping("markdone/{id}")
+    public ResponseEntity<?> checkDoneAppointment(@PathVariable int id) {
+        return ResponseEntity.ok(appointmentService.checkDoneAppointmentForAdmin(id));
     }
 }

@@ -45,7 +45,7 @@ public class AppointmentStaffController {
     }
 
     @PostMapping("find/{id}")
-    public AppointmentWithDetails findAppointmentByPhone(@PathVariable Integer id) {
+    public AppointmentWithDetails findAppointmentById(@PathVariable Integer id) {
         try {
             Appointment appointment = appointmentService.findId(id);
             List<AppointmentDetail> appointmentDetailList = appointmentDetailService.findByAppointmentId(appointment.getId());
