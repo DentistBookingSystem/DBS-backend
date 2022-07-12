@@ -27,5 +27,7 @@ public interface FeedbackService {
 
     Feedback updateFeedbackStatus(int feedbackId, int feedbackStatus);
 
+    Feedback updateFeedbackStatusByAdmin(int feedbackId, int feedbackStatus);
+
 //    int countByAccountIdAndStatus(int account_id, int status);
 }

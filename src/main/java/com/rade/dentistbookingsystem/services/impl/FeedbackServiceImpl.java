@@ -99,4 +99,15 @@ public class FeedbackServiceImpl implements FeedbackService {
         } else throw new NotFoundException("Feedback not found");
 
     }
+
+    @Override
+    public Feedback updateFeedbackStatusByAdmin(int feedbackId, int feedbackStatus) {
+        Optional<Feedback> feedback = feedBackRepo.findById(feedbackId);
+        if (feedback.isPresent()) {
+            Feedback tmpFeedback = feedback.get();
+                tmpFeedback.setStatus(feedbackStatus);
+                return feedBackRepo.save(tmpFeedback);
+        } else throw new NotFoundException("Feedback not found");
+
+    }
 }
