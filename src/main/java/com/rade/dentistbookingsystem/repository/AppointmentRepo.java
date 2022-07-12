@@ -116,8 +116,6 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "CASE " +
                     "WHEN @count_absent = " + Constant.ABSENT_TIME_IN_A_ROW_TO_BAN +" " +
                     "THEN 'TRUE' " +
-                    "WHEN @count_absent = " + Constant.ABSENT_TIME_IN_A_ROW_TO_BAN +" " +
-                    "THEN 'TRUE' " +
                     "ELSE 'FALSE' " +
                     "END", nativeQuery = true)
     boolean checkAccountToBanByAppointment(@Param("account_id") int accountId);

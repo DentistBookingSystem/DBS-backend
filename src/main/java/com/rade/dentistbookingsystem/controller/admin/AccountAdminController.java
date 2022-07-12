@@ -89,10 +89,10 @@ public class AccountAdminController {
     public ResponseEntity<?> unbanAccount(@RequestBody JsonPhone jsonPhone) {
         try {
             Account account = accountService.findByPhone(jsonPhone.getPhone());
-            if (appointmentService.isAbleToUnBan(account.getId())) {
+//            if (appointmentService.isAbleToUnBan(account.getId())) {
                 accountService.editStatus(jsonPhone.getPhone(), Constant.ACCOUNT_STATUS_ACTIVE);
                 return ResponseEntity.ok().build();
-            }
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
