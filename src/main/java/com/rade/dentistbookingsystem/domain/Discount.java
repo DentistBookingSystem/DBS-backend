@@ -28,17 +28,17 @@ public class Discount implements Serializable {
     @Column(nullable = false)
     private float percentage;
 
-    @Column(columnDefinition = "nvarchar(MAX)")
+    @Column(columnDefinition = "nvarchar(MAX)", nullable = false)
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "decimal(1,0)")
     private int status;
 
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date startDate;
 
-    @Column(name = "end_date")
+    @Column(name = "end_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date endDate;
 

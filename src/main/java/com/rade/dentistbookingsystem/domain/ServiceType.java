@@ -24,7 +24,7 @@ public class ServiceType implements Serializable {
     @Column(name = "name", nullable = false, columnDefinition = "nvarchar(30)", unique = true)
     private String name;
 
-    @Column(name = "description", columnDefinition = "nvarchar(MAX)")
+    @Column(name = "description", columnDefinition = "nvarchar(MAX)", nullable = false)
     private String description;
     @JsonIgnore
     @OneToMany(mappedBy = "serviceType", cascade = CascadeType.ALL)

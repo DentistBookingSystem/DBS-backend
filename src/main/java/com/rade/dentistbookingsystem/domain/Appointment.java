@@ -21,7 +21,7 @@ public class Appointment implements Serializable, Comparable<Appointment> {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "account_id", nullable = true)
+    @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
     @ManyToOne
@@ -29,7 +29,7 @@ public class Appointment implements Serializable, Comparable<Appointment> {
     private Branch branch;
 
     @ManyToOne()
-    @JoinColumn(name = "doctor_id")
+    @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
     @Column(name = "appointment_date", nullable = false)
@@ -39,7 +39,7 @@ public class Appointment implements Serializable, Comparable<Appointment> {
     @Column(name = "appointment_time", nullable = false)
     private String appointmentTime;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status", nullable = false, columnDefinition = "decimal(1,0)")
     private int status;
 
     @Column(name = "time_making", nullable = false)

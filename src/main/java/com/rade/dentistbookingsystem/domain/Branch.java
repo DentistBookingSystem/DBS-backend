@@ -39,7 +39,7 @@ public class Branch implements Serializable {
     @Temporal(TemporalType.TIME)
     private Date closeTime;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "decimal(1,0)")
     private int status;
 
     @JsonIgnore

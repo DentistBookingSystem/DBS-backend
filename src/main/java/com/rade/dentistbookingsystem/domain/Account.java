@@ -34,7 +34,7 @@ public class Account implements Serializable {
     @Column(name = "gender", nullable = false)
     private int gender;
 
-    @Column(name = "phone", length = 10)
+    @Column(name = "phone", length = 10, unique = true)
     private String phone;
 
 
@@ -46,7 +46,7 @@ public class Account implements Serializable {
     private District district;
 
     @JsonIgnore
-    @Column(name = "status", nullable = false)
+    @Column(name = "status", nullable = false, columnDefinition = "decimal(1,0)")
     private short status;
 
     @ManyToOne

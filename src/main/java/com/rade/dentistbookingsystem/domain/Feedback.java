@@ -30,7 +30,7 @@ public class Feedback implements Serializable {
     @Column(nullable = false, columnDefinition = "nvarchar(150)")
     private String content;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "decimal(1,0)")
     private int status;
 
     public Feedback(Appointment appointment, Date time, String content, int status) {

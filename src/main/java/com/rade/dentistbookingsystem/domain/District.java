@@ -20,7 +20,7 @@ public class District implements Serializable {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "province_id")
+    @JoinColumn(name = "province_id", nullable = false)
     private Province province;
 
     @Column(nullable = false, columnDefinition = "nvarchar(30)")
