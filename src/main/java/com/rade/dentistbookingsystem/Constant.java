@@ -42,6 +42,7 @@ public class Constant {
     public static final int APPOINTMENT_STATUS_CANCEL = 3;
     public static final int APPOINTMENT_STATUS_GAVE_FEEDBACK = 5;
     public static final int APPOINTMENT_STATUS_CANCEL_BY_ADMIN = 6;
+    public static final int SIZE_OF_PAGE_FOR_HISTORY_OF_PATIENT_VIEW = 5;
 
 
     //BUSINESS RULE

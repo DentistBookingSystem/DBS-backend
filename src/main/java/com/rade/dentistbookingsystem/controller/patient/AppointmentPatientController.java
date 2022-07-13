@@ -42,7 +42,7 @@ public class AppointmentPatientController {
     AppointmentDetailService appointmentDetailService;
     @Autowired
     AccountService accountService;
-    final static int SIZE_OF_PAGE_FOR_HISTORY = 3;
+
 
     @GetMapping("{branchId}")
     public AppointmentComponent chooseBranch(@PathVariable int branchId) {
@@ -140,7 +140,7 @@ public class AppointmentPatientController {
         String phone = phoneAndPage.getPhone();
         int accountId = accountService.findByPhone(phone).getId();
         int page = phoneAndPage.getPage();
-        Pageable pageable = PageRequest.of(page - 1, SIZE_OF_PAGE_FOR_HISTORY, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(page - 1, Constant.SIZE_OF_PAGE_FOR_HISTORY_OF_PATIENT_VIEW, Sort.by("id").descending());
         return appointmentService.findByAccountId(accountId, pageable);
     }
 

@@ -105,6 +105,7 @@ public class AccountServiceImpl implements AccountService {
         return false;
     }
 
+    @Override
     public Account findByPhone(String phone) {
         return accountRepo.findByPhone(phone);
     }
