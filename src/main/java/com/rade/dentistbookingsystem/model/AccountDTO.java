@@ -26,11 +26,11 @@ public class AccountDTO implements Serializable {
     @NotNull(message = "District is required")
     private int districtId;
     @Pattern(regexp = "[0-9]+")
-    @Length(min = 10, max = 11)
+    @Length(min = 10, max = 10)
     @NotNull(message = "Phone is required")
     private String phone;
-    @Pattern(regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-            + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", message = "Email not valid")
+//    @Pattern(regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+//            + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", message = "Email not valid")
     private String email;
     private int status;
 

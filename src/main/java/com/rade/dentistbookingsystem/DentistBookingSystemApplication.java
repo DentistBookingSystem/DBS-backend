@@ -25,8 +25,6 @@ public class DentistBookingSystemApplication {
     NotificationService notificationService;
     @Autowired
     FeedbackService feedbackService;
-    final static int ABSENT_STATUS = 2;
-    final static int BAN_STATUS = 2;
     public static void main(String[] args) {
         SpringApplication.run(DentistBookingSystemApplication.class, args);
     }
@@ -36,10 +34,10 @@ public class DentistBookingSystemApplication {
 //        List<Appointment> appointmentList = appointmentService.findAllAppointmentToMarkAbsent();
 //        for (Appointment appointment : appointmentList) {
 //            Integer accountId = appointment.getAccount().getId();
-//            appointmentService.check(ABSENT_STATUS, appointment.getId());
+//            appointmentService.check(Constant.APPOINTMENT_STATUS_ABSENT, appointment.getId());
 //            notificationService.createNotificationForAbsent(appointment);
 //            if (appointmentService.checkAccountToBanByAppointment(accountId)) {
-//                accountService.checkAccount(BAN_STATUS, accountId);
+//                accountService.checkAccount(Constant.ACCOUNT_STATUS_INACTIVE, accountId);
 //            }
 //        }
 //    }
