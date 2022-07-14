@@ -54,7 +54,7 @@ public class AccountController {
         try {
             StoreOTP storeOTP = StoreOTPList.getStoredOTP(receivedOTP.getPhone());
             if (storeOTP == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-            return StoreOTPList.verifyOTP(storeOTP, receivedOTP) ? ResponseEntity.status(HttpStatus.OK).build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return StoreOTPList.verifyOTP(storeOTP, receivedOTP) ? ResponseEntity.status(HttpStatus.OK).build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

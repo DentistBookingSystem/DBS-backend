@@ -259,7 +259,8 @@ public class NotificationServiceImpl implements NotificationService {
             String date = sdfDate.format(appointment.getAppointmentDate());
             String time = appointment.getAppointmentTime().split("-")[0];
             String description = "Phản hồi cho lịch hẹn vào lúc " + time + " ngày " + date +
-                    " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + " không được phê duyệt vi phạm quy tắc cộng động.";
+                    " tại trung tâm nha khoa RaDe " + appointment.getBranch().getName() + " không được phê duyệt vi phạm quy tắc cộng động. " +
+                    "Chi tiết phản hồi: " + feedback.getContent();
             Notification notification = new Notification(
                     account,
                     description,

@@ -1,6 +1,7 @@
 package com.rade.dentistbookingsystem.jwt;
 
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.domain.AccountDetail;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -14,7 +15,6 @@ public class JwtTokenUtil {
 
     private static final long EXPIRE_DURATION = 60 * 60 * 1000;
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
-    private String SECRET_KEY = "7DE2F49FA1691939F7A8A9951E2EB7DE2F49FA1691939F7A8A9951E2EB7DE2F49FA1691939F7A8A9951E2EB7DE2F49FA1691939F7A8A9951E2EB";
 
     public String generateAccessToken(AccountDetail user) {
         return Jwts.builder()
@@ -23,14 +23,14 @@ public class JwtTokenUtil {
                 .setIssuer("CodeJava")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .signWith(SignatureAlgorithm.HS512, Constant.SECRET_KEY)
                 .compact();
 
     }
 
     public boolean validateAccessToken(String token) {
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(Constant.SECRET_KEY).parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException ex) {
             LOGGER.error("JWT expired", ex.getMessage());
@@ -53,7 +53,7 @@ public class JwtTokenUtil {
 
     public Claims parseClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(Constant.SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody();
     }

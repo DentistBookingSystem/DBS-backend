@@ -63,4 +63,8 @@ public class Constant {
     public static final String AUTH_TOKEN = "448e6878cb3563e7eb06a9b722923e32";
     public static final String FROM_NUMBER = "+14323005761";
     public static final int OTP_LENGTH = 6;
+
+    //JWT
+    public static final String SECRET_KEY = "7DE2F49FA1691939F7A8A9951E2EB7DE2F49FA1691939F7A8A9951E2EB7DE2F49FA1691939F7A8A9951E2EB7DE2F49FA1691939F7A8A9951E2EB";
+
 }
