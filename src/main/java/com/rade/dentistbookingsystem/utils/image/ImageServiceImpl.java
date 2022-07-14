@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ImageServiceImpl implements ImageService {
-    private static String[] imgType = {".png", ".jpg", ".jpeg"};
+    private static String[] imgType = {".png", ".jpg", ".jpeg", ".jfif"};
     @Autowired
     GoogleDriveFileService googleDriveFileService;
 
