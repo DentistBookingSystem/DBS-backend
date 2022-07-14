@@ -30,7 +30,7 @@ public class AccountPatientController {
     public ResponseEntity<?> edit(@Validated @RequestBody AccountDTO accountDTO) {
         try {
 
-            if (accountService.confirmPassword(accountDTO.getPhone(), accountDTO.getPassword())) {
+            if (accountService.confirmPassword(accountDTO.getPhone(), accountDTO.getConfirmPassword())) {
                 return ResponseEntity.ok(accountService.edit(accountDTO));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Your old password is wrong");
