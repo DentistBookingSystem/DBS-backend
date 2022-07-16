@@ -30,6 +30,6 @@ public class HomeController {
 
     @GetMapping("")
     public HomeComponent list(Model model) {
-        return new HomeComponent(serviceTypeSv.findAll(), branchService.findByStatus(Constant.BRANCH_STATUS_ACTIVE));
+        return new HomeComponent(serviceTypeSv.findAllHavingService(), branchService.findByStatus(Constant.BRANCH_STATUS_ACTIVE));
     }
 }

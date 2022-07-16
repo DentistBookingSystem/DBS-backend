@@ -33,4 +33,6 @@ public interface ServiceTypeSv {
     Optional<ServiceType> findById(Integer integer);
 
     ServiceType edit(ServiceTypeDTO serviceTypeDT);
+
+    List<ServiceType> findAllHavingService();
 }

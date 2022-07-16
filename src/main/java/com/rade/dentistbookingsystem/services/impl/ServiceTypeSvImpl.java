@@ -93,8 +93,8 @@ public class ServiceTypeSvImpl implements ServiceTypeSv {
 
 
     }
-
-    public <S extends ServiceType> List<S> findAll(Example<S> example) {
-        return serviceTypeRepo.findAll(example);
+    @Override
+    public List<ServiceType> findAllHavingService() {
+        return serviceTypeRepo.findAllHavingService();
     }
 }
