@@ -60,7 +60,7 @@ public class Constant {
 
     //TWILIO
     public static final String ACCOUNT_SID = "AC0dcea50829a1f572a348d76ece647dff";
-    public static final String AUTH_TOKEN = "448e6878cb3563e7eb06a9b722923e32";
+    public static final String AUTH_TOKEN = "abc039d72c36968b1bbb5aa53ac833da";
     public static final String FROM_NUMBER = "+14323005761";
     public static final int OTP_LENGTH = 6;
 
