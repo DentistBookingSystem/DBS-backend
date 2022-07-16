@@ -88,8 +88,13 @@ public class DiscountServiceImpl implements DiscountService {
         discount.setStatus(discountDTO.getStatus());
         discount.setPercentage(discountDTO.getPercentage());
         discount.setDescription(discountDTO.getDescription());
-        discount.setStartDate(dateFormat.parse(discountDTO.getStartDate()));
-        discount.setEndDate(dateFormat.parse(discountDTO.getEndDate()));
+        Date today = new Date();
+        Date startDate = dateFormat.parse(discountDTO.getStartDate());
+        Date endDate =  dateFormat.parse(discountDTO.getEndDate());
+        if(startDate.before(today) || startDate.after(endDate))
+            throw new ValidationException("Invalid time");
+        discount.setStartDate(startDate);
+        discount.setEndDate(endDate);
 
         return save(discount);
 
