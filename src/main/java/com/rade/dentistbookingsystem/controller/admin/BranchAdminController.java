@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @CrossOrigin
 @RequestMapping("rade/admin/branch")
+
 public class BranchAdminController {
 
     @Autowired
@@ -53,7 +54,7 @@ public class BranchAdminController {
         try {
             id = imageService.validateAndDownload(url);
             if (id != null)
-                return ResponseEntity.ok(id); // lấy id gán vào cột url của serviceDTO sẽ gửi lên request
+                return ResponseEntity.ok(id);
         } catch (Exception e) {
             e.printStackTrace();
         }

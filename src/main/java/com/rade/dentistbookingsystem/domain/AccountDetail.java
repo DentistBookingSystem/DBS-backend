@@ -42,6 +42,10 @@ public class AccountDetail implements UserDetails {
         return account.getRole().getName();
     }
 
+    public int getStatus(){
+        return account.getStatus();
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -49,6 +53,8 @@ public class AccountDetail implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
+
+
         return account.getStatus() == 1;
     }
 

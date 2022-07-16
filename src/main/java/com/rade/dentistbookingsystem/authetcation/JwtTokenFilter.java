@@ -4,6 +4,8 @@ import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.AccountDetail;
 import com.rade.dentistbookingsystem.domain.Role;
 import com.rade.dentistbookingsystem.jwt.JwtTokenUtil;
+import com.rade.dentistbookingsystem.services.AccountService;
+import com.rade.dentistbookingsystem.services.impl.AccountServiceImpl;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +27,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtTokenUtil jwtUtil;
+
+
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -62,8 +67,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         return token;
     }
 
+
     private void setAuthenticationContext(String token, HttpServletRequest request) {
         UserDetails userDetails = getUserDetails(token);
+
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
@@ -91,6 +98,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         account.setPhone(jwtSubject[0]);
         account.setPassword(jwtSubject[1]);
+        System.out.println(account.getStatus());
 
         return accountDetail;
     }
