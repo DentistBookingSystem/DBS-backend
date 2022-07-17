@@ -13,7 +13,7 @@ import java.util.Date;
 @Component
 public class JwtTokenUtil {
 
-    private static final long EXPIRE_DURATION = 60 * 60 * 1000;
+    private static final long EXPIRE_DURATION = 60 * 60 * 1000 * 24;
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
 
     public String generateAccessToken(AccountDetail user) {
