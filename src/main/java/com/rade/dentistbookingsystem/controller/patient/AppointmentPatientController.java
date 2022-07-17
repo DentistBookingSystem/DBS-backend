@@ -57,7 +57,7 @@ public class AppointmentPatientController {
         return new AppointmentComponent(
                 new AppointmentDTO(branchId),
                 serviceDiscountComponentList,
-                serviceTypeSv.findAll(),
+                serviceTypeSv.findAllHavingService(),
                 branchService.findId(branchId),
                 doctorService.findByBranchIdAndStatus(branchId, Constant.BRANCH_STATUS_ACTIVE)
         );
