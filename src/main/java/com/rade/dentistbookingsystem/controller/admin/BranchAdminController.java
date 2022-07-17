@@ -57,6 +57,7 @@ public class BranchAdminController {
                 return ResponseEntity.ok(id);
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(e);
         }
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
