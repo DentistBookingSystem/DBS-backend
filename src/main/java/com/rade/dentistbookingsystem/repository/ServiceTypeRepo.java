@@ -16,6 +16,7 @@ public interface ServiceTypeRepo extends JpaRepository<ServiceType, Integer> {
 
     @Query(value = "SELECT ServiceType.*\n" +
             "FROM ServiceType LEFT JOIN Service s ON ServiceType.id = s.service_type_id\n" +
+            "WHERE ServiceType.status = 1\n" +
             "GROUP BY ServiceType.id, ServiceType.name, ServiceType.description\n" +
             "HAVING COUNT(s.id) > 0", nativeQuery = true)
     List<ServiceType> findAllHavingService();
