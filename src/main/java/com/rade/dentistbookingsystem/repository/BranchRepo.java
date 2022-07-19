@@ -1,5 +1,6 @@
 package com.rade.dentistbookingsystem.repository;
 
+import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.domain.Branch;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,17 +22,35 @@ public interface BranchRepo extends JpaRepository<Branch, Integer> {
             nativeQuery = true)
     public Branch findId(int id);
 
-    public List<Branch> findByDistrictIdAndStatus(int districtId, int status);
+    @Query(value =
+            "SELECT Branch.*  \n" +
+                    "FROM Branch " +
+                    "LEFT JOIN Doctor d ON Branch.id = d.branch_id\n" +
+                    "WHERE Branch.status = " + Constant.BRANCH_STATUS_ACTIVE + " AND d.status = "+ Constant.DOCTOR_STATUS_ACTIVE +" AND Branch.district_id = :districtId\n" +
+                    "GROUP BY Branch.id, Branch.close_time, Branch.open_time, Branch.district_id, Branch.name, Branch.status, Branch.url\n" +
+                    "HAVING COUNT(d.id) > 0", nativeQuery = true
+    )
+    public List<Branch> findAvailablePriorityByDistrictId(@Param("districtId") int districtId);
 
     @Query(value =
-            "SELECT Branch.* " +
-                    "FROM Branch, District d " +
-                    "WHERE Branch.district_id = d.id AND Branch.status = :status " +
-                    "AND d.province_id = :province_id", nativeQuery = true
+            "SELECT Branch.*  \n" +
+                    "FROM Branch " +
+                    "LEFT JOIN Doctor d ON Branch.id = d.branch_id\n" +
+                    "LEFT JOIN District di ON Branch.district_id = di.id\n" +
+                    "WHERE Branch.status = " + Constant.BRANCH_STATUS_ACTIVE + " AND d.status = "+ Constant.DOCTOR_STATUS_ACTIVE +" AND di.province_id = :provinceId\n" +
+                    "GROUP BY Branch.id, Branch.close_time, Branch.open_time, Branch.district_id, Branch.name, Branch.status, Branch.url\n" +
+                    "HAVING COUNT(d.id) > 0", nativeQuery = true
     )
-    public List<Branch> findByProvinceIdAndStatus(@Param("province_id") int provinceId, @Param("status") int status);
+    public List<Branch> findAvailablePriorityByProvinceId(@Param("provinceId") int provinceId);
 
-    public List<Branch> findByStatus(int status);
+    @Query(value =
+            "SELECT Branch.*  \n" +
+                    "FROM Branch LEFT JOIN Doctor d ON Branch.id = d.branch_id\n" +
+                    "WHERE Branch.status = " + Constant.BRANCH_STATUS_ACTIVE + " AND d.status = "+ Constant.DOCTOR_STATUS_ACTIVE +"\n" +
+                    "GROUP BY Branch.id, Branch.close_time, Branch.open_time, Branch.district_id, Branch.name, Branch.status, Branch.url\n" +
+                    "HAVING COUNT(d.id) > 0", nativeQuery = true
+    )
+    public List<Branch> findAvailable();
 
     @Query(value = "SELECT Branch.* FROM Branch WHERE " +
             "(Branch.name LIKE CONCAT('%', :name, '%') OR :name IS NULL OR :name LIKE '')" +

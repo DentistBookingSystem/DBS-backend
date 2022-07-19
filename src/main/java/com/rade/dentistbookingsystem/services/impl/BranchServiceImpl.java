@@ -110,13 +110,13 @@ public class BranchServiceImpl implements BranchService {
     }
 
     @Override
-    public List<Branch> findByDistrictIdAndStatus(int districtId, int status) {
-        return branchRepo.findByDistrictIdAndStatus(districtId, status);
+    public List<Branch> findAvailablePriorityByDistrictId(int districtId) {
+        return branchRepo.findAvailablePriorityByDistrictId(districtId);
     }
 
     @Override
-    public List<Branch> findByProvinceIdAndStatus(int provinceId, int status) {
-        return branchRepo.findByProvinceIdAndStatus(provinceId, status);
+    public List<Branch> findAvailablePriorityByProvinceId(int provinceId) {
+        return branchRepo.findAvailablePriorityByProvinceId(provinceId);
     }
 
     public Optional<Branch> findById(Integer id) {
@@ -148,8 +148,8 @@ public class BranchServiceImpl implements BranchService {
     }
 
     @Override
-    public List<Branch> findByStatus(int status) {
-        return branchRepo.findByStatus(status);
+    public List<Branch> findAvailable() {
+        return branchRepo.findAvailable();
     }
 
     @Override
@@ -157,11 +157,11 @@ public class BranchServiceImpl implements BranchService {
         Account account = accountService.findByPhone(jsonPhone.getPhone());
         List<Branch> branchList = new ArrayList<>();
         if (account == null) return branchList;
-        branchList.addAll(findByDistrictIdAndStatus(account.getDistrict().getId(), Constant.BRANCH_STATUS_ACTIVE));
-        List<Branch> branchListByProvince = findByProvinceIdAndStatus(account.getDistrict().getProvince().getId(), Constant.BRANCH_STATUS_ACTIVE);
+        branchList.addAll(findAvailablePriorityByDistrictId(account.getDistrict().getId()));
+        List<Branch> branchListByProvince = findAvailablePriorityByProvinceId(account.getDistrict().getProvince().getId());
         branchListByProvince.removeAll(branchList);
         branchList.addAll(branchListByProvince);
-        List<Branch> branchListNotRecommend = findByStatus(Constant.BRANCH_STATUS_ACTIVE);
+        List<Branch> branchListNotRecommend = findAvailable();
         branchListNotRecommend.removeAll(branchList);
         branchList.addAll(branchListNotRecommend);
         return branchList;

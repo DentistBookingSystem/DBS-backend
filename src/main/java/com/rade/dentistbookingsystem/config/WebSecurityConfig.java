@@ -78,6 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/rade/appointment",
                         "/rade/appointment/**",
                         "/rade/home",
+                        "/rade/home/**",
                         "/rade/service/**",
                         "/rade/account/**",
                         "/rade/account",

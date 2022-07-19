@@ -29,9 +29,10 @@ public interface BranchService {
 
     Branch updateBranch(BranchDTO branchDTO, int id);
 
-    List<Branch> findByDistrictIdAndStatus(int districtId, int status);
 
-    List<Branch> findByProvinceIdAndStatus(int provinceId, int status);
+    List<Branch> findAvailablePriorityByDistrictId(int districtId);
+
+    List<Branch> findAvailablePriorityByProvinceId(int provinceId);
 
     Optional<Branch> findById(Integer id);
 
@@ -41,7 +42,7 @@ public interface BranchService {
 
     Branch findId(int id);
 
-    List<Branch> findByStatus(int status);
+    List<Branch> findAvailable();
 
     List<Branch> getListForChoosing(JsonPhone jsonPhone);
 
