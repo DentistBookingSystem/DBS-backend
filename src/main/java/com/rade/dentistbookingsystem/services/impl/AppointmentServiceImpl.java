@@ -1,10 +1,7 @@
 package com.rade.dentistbookingsystem.services.impl;
 
 import com.rade.dentistbookingsystem.Constant;
-import com.rade.dentistbookingsystem.componentform.AppointmentComponentForFilter;
-import com.rade.dentistbookingsystem.componentform.DoctorAndDate;
-import com.rade.dentistbookingsystem.componentform.JsonAppointment;
-import com.rade.dentistbookingsystem.componentform.JsonNoteForAppointment;
+import com.rade.dentistbookingsystem.componentform.*;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.domain.Doctor;
@@ -13,8 +10,10 @@ import com.rade.dentistbookingsystem.model.AppointmentDTO;
 import com.rade.dentistbookingsystem.repository.AppointmentRepo;
 import com.rade.dentistbookingsystem.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -332,5 +331,40 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<Appointment> findByPhoneAndStatusInByOrderByIdDesc(String phone, Integer[] status) {
         return appointmentRepo.findByPhoneAndStatusInByOrderByIdDesc(phone, status);
+    }
+
+    public long getTotalReport(Integer month, int year) {
+        return appointmentRepo.getTotalReport(month, year);
+    }
+
+    public long getDoneReport(Integer month, int year) {
+        return appointmentRepo.getDoneReport(month, year);
+    }
+
+    public long getCancelByCustomerReport(Integer month, int year) {
+        return appointmentRepo.getCancelByCustomerReport(month, year);
+    }
+
+    public long getCancelByStaffReport(Integer month, int year) {
+        return appointmentRepo.getCancelByStaffReport(month, year);
+    }
+
+    public long getAbsentReport(Integer month, int year) {
+        return appointmentRepo.getAbsentReport(month, year);
+    }
+
+    @Override
+    public ReportData getReportData(Integer month, int year){
+        return new ReportData(
+                getTotalReport(month, year),
+                getDoneReport(month, year),
+                getCancelByCustomerReport(month, year),
+                getCancelByStaffReport(month, year),
+                getAbsentReport(month, year)
+        );
+    }
+
+    public <S extends Appointment> List<S> findAll(Example<S> example, Sort sort) {
+        return appointmentRepo.findAll(example, sort);
     }
 }

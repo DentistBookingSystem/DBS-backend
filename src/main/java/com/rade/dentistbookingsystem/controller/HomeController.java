@@ -8,16 +8,16 @@ package com.rade.dentistbookingsystem.controller;
 import com.rade.dentistbookingsystem.Constant;
 import com.rade.dentistbookingsystem.componentform.BranchListInProvince;
 import com.rade.dentistbookingsystem.componentform.HomeComponent;
+import com.rade.dentistbookingsystem.componentform.ReportData;
 import com.rade.dentistbookingsystem.domain.Province;
+import com.rade.dentistbookingsystem.repository.AppointmentRepo;
+import com.rade.dentistbookingsystem.services.AppointmentService;
 import com.rade.dentistbookingsystem.services.BranchService;
 import com.rade.dentistbookingsystem.services.ProvinceService;
 import com.rade.dentistbookingsystem.services.ServiceTypeSv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,8 @@ public class HomeController {
     ServiceTypeSv serviceTypeSv;
     @Autowired
     ProvinceService provinceService;
-
+    @Autowired
+    AppointmentService appointmentService;
     @GetMapping("")
     public HomeComponent list(Model model) {
         return new HomeComponent(serviceTypeSv.findAllHavingService(), branchService.findAvailable());

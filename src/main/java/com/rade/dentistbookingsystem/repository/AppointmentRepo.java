@@ -1,6 +1,7 @@
 package com.rade.dentistbookingsystem.repository;
 
 import com.rade.dentistbookingsystem.Constant;
+import com.rade.dentistbookingsystem.componentform.ReportData;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
 import org.apache.tomcat.util.bcel.Const;
@@ -220,4 +221,53 @@ public interface AppointmentRepo extends JpaRepository<Appointment, Integer> {
                     "ORDER BY Appointment.id DESC",
             nativeQuery = true)
     List<Appointment> findByPhoneAndStatusInByOrderByIdDesc(@Param("phone") String phone, Integer[] status);
+
+    @Query(value =
+            "SELECT Count(id)\n" +
+                    "\tFROM Appointment\n" +
+                    "\tWHERE " +
+                    "(MONTH(appointment_date) = :month OR :month IS NULL) AND " +
+                    "YEAR(appointment_date) = :year",
+            nativeQuery = true)
+    long getTotalReport(@Param("month") Integer month, @Param("year") int year);
+
+    @Query(value =
+            "SELECT Count(id)\n" +
+                    "\tFROM Appointment\n" +
+                    "\tWHERE " +
+                    "(MONTH(appointment_date) = :month OR :month IS NULL) AND " +
+                    "YEAR(appointment_date) = :year AND " +
+                    "status IN (" + Constant.APPOINTMENT_STATUS_DONE + ", " + Constant.APPOINTMENT_STATUS_GAVE_FEEDBACK + ")",
+            nativeQuery = true)
+    long getDoneReport(@Param("month") Integer month, @Param("year") int year);
+
+    @Query(value =
+            "SELECT Count(id)\n" +
+                    "\tFROM Appointment\n" +
+                    "\tWHERE " +
+                    "(MONTH(appointment_date) = :month OR :month IS NULL) AND " +
+                    "YEAR(appointment_date) = :year AND " +
+                    "status = " + Constant.APPOINTMENT_STATUS_CANCEL + " ",
+            nativeQuery = true)
+    long getCancelByCustomerReport(@Param("month") Integer month, @Param("year") int year);
+
+    @Query(value =
+            "SELECT Count(id)\n" +
+                    "\tFROM Appointment\n" +
+                    "\tWHERE " +
+                    "(MONTH(appointment_date) = :month OR :month IS NULL) AND " +
+                    "YEAR(appointment_date) = :year AND " +
+                    "status = " + Constant.APPOINTMENT_STATUS_CANCEL_BY_ADMIN + " ",
+            nativeQuery = true)
+    long getCancelByStaffReport(@Param("month") Integer month, @Param("year") int year);
+
+    @Query(value =
+            "SELECT Count(id)\n" +
+                    "\tFROM Appointment\n" +
+                    "\tWHERE " +
+                    "(MONTH(appointment_date) = :month OR :month IS NULL) AND " +
+                    "YEAR(appointment_date) = :year AND " +
+                    "status = " + Constant.APPOINTMENT_STATUS_ABSENT + " ",
+            nativeQuery = true)
+    long getAbsentReport(@Param("month") Integer month, @Param("year") int year);
 }

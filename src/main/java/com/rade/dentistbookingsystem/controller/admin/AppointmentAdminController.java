@@ -2,6 +2,7 @@ package com.rade.dentistbookingsystem.controller.admin;
 
 import com.rade.dentistbookingsystem.componentform.AppointmentComponentForFilter;
 import com.rade.dentistbookingsystem.componentform.AppointmentWithDetails;
+import com.rade.dentistbookingsystem.componentform.ReportData;
 import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.domain.AppointmentDetail;
 import com.rade.dentistbookingsystem.services.AppointmentDetailService;
@@ -47,5 +48,15 @@ public class AppointmentAdminController {
     @PostMapping("markdone/{id}")
     public ResponseEntity<?> checkDoneAppointment(@PathVariable int id) {
         return ResponseEntity.ok(appointmentService.checkDoneAppointmentForAdmin(id));
+    }
+
+    @GetMapping("month/{month}/{year}")
+    public ReportData showReportByMonth(@PathVariable Integer month, @PathVariable int year) {
+        return appointmentService.getReportData(month, year);
+    }
+
+    @GetMapping("year/{year}")
+    public ReportData showReportByYear(@PathVariable int year) {
+        return appointmentService.getReportData(null, year);
     }
 }

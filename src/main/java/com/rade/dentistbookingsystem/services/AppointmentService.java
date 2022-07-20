@@ -1,9 +1,6 @@
 package com.rade.dentistbookingsystem.services;
 
-import com.rade.dentistbookingsystem.componentform.AppointmentComponentForFilter;
-import com.rade.dentistbookingsystem.componentform.DoctorAndDate;
-import com.rade.dentistbookingsystem.componentform.JsonAppointment;
-import com.rade.dentistbookingsystem.componentform.JsonNoteForAppointment;
+import com.rade.dentistbookingsystem.componentform.*;
 import com.rade.dentistbookingsystem.domain.Account;
 import com.rade.dentistbookingsystem.domain.Appointment;
 import com.rade.dentistbookingsystem.model.AppointmentDTO;
@@ -57,5 +54,7 @@ public interface AppointmentService {
     boolean isAbleToUnBan(int accountId);
 
     List<Appointment> findByPhoneAndStatusInByOrderByIdDesc(String phone, Integer[] status);
+
+    ReportData getReportData(Integer month, int year);
 }
 
